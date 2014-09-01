@@ -89,8 +89,8 @@ add_executable(pi0-example
    inc/GHistManager.h
    inc/GTreeManager.h
    inc/GConfigFile.h
-   inc/GHistTaggerBinning.h
-   inc/GHistBGSub.h
+   #inc/GHistTaggerBinning.h
+   #inc/GHistBGSub.h
    inc/GHistScaCor.h
    inc/GH1.h
    inc/PPhysics.h
@@ -108,8 +108,8 @@ add_executable(pi0-example
    src/GHistManager.cc
    src/GTreeManager.cc
    src/GConfigFile.cc
-   src/GHistTaggerBinning.cc
-   src/GHistBGSub.cc
+   #src/GHistTaggerBinning.cc
+   #src/GHistBGSub.cc
    src/GHistScaCor.cc
    src/PPhysics.cc
    src/PPi0Example.cc

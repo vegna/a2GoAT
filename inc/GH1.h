@@ -4,7 +4,7 @@
 
 #include "GHistBGSub.h"
 
-#define GH1 GHistBGSub
+#define GH1 GHistScaCor
 
 
 #endif

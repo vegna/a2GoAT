@@ -2,8 +2,8 @@
 
 PPi0Example::PPi0Example()
 { 
-    GHistBGSub::InitCuts(-20, 15, -100, -40);
-    GHistBGSub::AddRandCut(35, 95);
+    //GHistBGSub::InitCuts(-20, 15, -100, -40);
+    //GHistBGSub::AddRandCut(35, 95);
     
   	SetTarget(938); 
         
@@ -68,6 +68,12 @@ void	PPi0Example::ProcessEvent()
 
 void	PPi0Example::ProcessScalerRead()
 {
+    time->ScalerReadCorrection(5);
+    time_2g->ScalerReadCorrection(5);
 
-    //time.ScalerReadCorrection(5);
+    IM->ScalerReadCorrection(5);
+    IM_2g->ScalerReadCorrection(5);
+
+    MM->ScalerReadCorrection(5);
+    MM_2g->ScalerReadCorrection(5);
 }
