@@ -92,6 +92,18 @@ void    GHistScaCor::Reset(Option_t* option)
     corrected   = kFALSE;
 }
 
+void	GHistScaCor::Scale(Double_t c1, Option_t* option)
+{
+    GHistLinked::Scale(c1, option);
+    accumulated.Scale(c1, option);
+    accumulatedCorrected.Scale(c1, option);
+    for(int i=0; i<singleScalerReads.GetEntriesFast(); i++)
+    {
+        ((TH1D*)singleScalerReads.At(i))->Scale(c1, option);
+        ((TH1D*)singleScalerReadsCorrected.At(i))->Scale(c1, option);
+    }
+}
+
 void    GHistScaCor::ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads)
 {
     accumulated.Add(this);
