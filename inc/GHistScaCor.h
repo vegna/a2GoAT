@@ -38,6 +38,9 @@ public:
     const   TH1D&   GetAccumulated()            const   {return accumulated;}
     const   TH1D&   GetAccumulatedCorrected()   const   {return accumulatedCorrected;}
             Int_t   GetNScalerReadCorrections() const   {return singleScalerReads.GetEntriesFast();}
+            Int_t   GetNbinsX()                 const   {return accumulatedCorrected.GetNbinsX();}
+            Int_t   GetXmin()                   const   {return accumulatedCorrected.GetXaxis()->GetXmin();}
+            Int_t   GetXmax()                   const   {return accumulatedCorrected.GetXaxis()->GetXmax();}
     virtual void    Reset(Option_t* option = "");
     virtual void	Scale(Double_t c1 = 1, Option_t* option = "");
     virtual void    ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
