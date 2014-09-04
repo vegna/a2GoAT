@@ -93,7 +93,7 @@ add_executable(pi0-example
    #inc/GHistBGSub.h
    inc/GHistScaCor.h
    inc/GH1.h
-   inc/PPhysics.h
+   #inc/PPhysics.h
    inc/PPi0Example.h
    src/GTree.cc
    src/GTreeRawEvent.cc
@@ -111,7 +111,7 @@ add_executable(pi0-example
    #src/GHistTaggerBinning.cc
    #src/GHistBGSub.cc
    src/GHistScaCor.cc
-   src/PPhysics.cc
+   #src/PPhysics.cc
    src/PPi0Example.cc
    src/pi0_example_main.cc
    )

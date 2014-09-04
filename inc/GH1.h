@@ -2,7 +2,7 @@
 #define __GH1_h__
 
 
-#include "GHistBGSub.h"
+#include "GHistScaCor.h"
 
 #define GH1 GHistScaCor
 

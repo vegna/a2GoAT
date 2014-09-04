@@ -7,9 +7,9 @@
 #include <string> 
 
 #include "GTreeManager.h"
-#include "PPhysics.h"
+#include "GH1.h"
 
-class	PPi0Example  : public PPhysics
+class	PPi0Example : public GTreeManager
 {
 private:
     GH1*	time;
