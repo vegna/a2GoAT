@@ -129,11 +129,6 @@ void	GHistScaCor::SetBins(Int_t nx, Double_t xmin, Double_t xmax)
     }
 }
 
-Int_t   GHistScaCor::PrepareWriteList()
-{
-
-}
-
 TDirectory* GHistScaCor::GetCreateDirectory(const char* name)
 {
     TDirectory* ret = gDirectory->GetDirectory(name);
@@ -144,6 +139,23 @@ TDirectory* GHistScaCor::GetCreateDirectory(const char* name)
             ret = gDirectory;
     }
     return ret;
+}
+
+void    GHistScaCor::PrepareWrite()
+{
+    if(corrected==kFALSE)
+        return;
+
+    TDirectory* parentDir   = gDirectory;
+    TDirectory* dir         = GetCreateDirectory("ScalerCorrection");
+
+    for(int i=0; i<singleScalerReads.GetEntriesFast(); i++)
+    {
+        dir->cd();
+        GetCreateDirectory(TString("SingleScalerRead").Append(TString::Itoa(i, 10)).Data())->cd();
+    }
+
+    parentDir->cd();
 }
 
 Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
@@ -157,7 +169,7 @@ Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
     if(name)
         nameBuffer  = name;
     else
-        nameBuffer  = GetName();
+        nameBuffer  = accumulatedCorrected.GetName();
     nameBuffer.Append("_UnCor");
 
     TDirectory* parentDir   = gDirectory;
@@ -173,14 +185,14 @@ Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
         if(name)
             nameBuffer  = name;
         else
-            nameBuffer  = GetName();
+            nameBuffer  = accumulatedCorrected.GetName();
         nameBuffer.Append("_UnCor_ScalerRead");
         nameBuffer.Append(TString::Itoa(i, 10));
         ret += singleScalerReads.At(i)->Write(nameBuffer.Data(), option, bufsize);
         if(name)
             nameBuffer  = name;
         else
-            nameBuffer  = GetName();
+            nameBuffer  = accumulatedCorrected.GetName();
         nameBuffer.Append("_Cor_ScalerRead");
         nameBuffer.Append(TString::Itoa(i, 10));
         ret += singleScalerReadsCorrected.At(i)->Write(nameBuffer.Data(), option, bufsize);
@@ -190,7 +202,7 @@ Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
     if(name)
         nameBuffer  = name;
     else
-        nameBuffer  = GetName();
+        nameBuffer  = accumulatedCorrected.GetName();
     ret += accumulatedCorrected.Write(nameBuffer.Data(), option, bufsize);
     return ret;
 }

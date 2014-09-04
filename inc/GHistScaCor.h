@@ -9,7 +9,7 @@
 #include "GHistManager.h"
 
 
-
+class   GTreeTagger;
 
 
 class   GHistScaCor : public GHistLinked
@@ -26,7 +26,7 @@ private:
 
 protected:
     static  TDirectory* GetCreateDirectory(const char* name);
-    virtual Int_t   PrepareWriteList();
+    virtual void        PrepareWrite();
 
 public:
     GHistScaCor();

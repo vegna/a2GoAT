@@ -37,10 +37,21 @@ void GHistManager::ClearLinkedHistograms()
 
 void GHistManager::WriteLinkedHistograms(TDirectory* dir)
 {
-    TIter   iter(&histList);
-    GHistLinked*    hist;
-    while(hist=(GHistLinked*)iter.Next())
-        hist->Write(0, TObject::kWriteDelete);
+    std::cout << "Prepare Write." << std::endl;
+    {
+        TIter   iter(&histList);
+        GHistLinked*    hist;
+        while(hist=(GHistLinked*)iter.Next())
+            hist->PrepareWrite();
+    }
+
+    std::cout << "Write." << std::endl;
+    {
+        TIter   iter(&histList);
+        GHistLinked*    hist;
+        while(hist=(GHistLinked*)iter.Next())
+            hist->Write(0, TObject::kWriteDelete);
+    }
 }
 
 
