@@ -2,9 +2,9 @@
 #define __GH1_h__
 
 
-#include "GHistScaCor.h"
+#include "GHistTaggerBinning.h"
 
-#define GH1 GHistScaCor
+#define GH1 GHistTaggerBinning
 
 
 #endif
