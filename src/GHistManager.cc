@@ -47,18 +47,10 @@ void GHistManager::WriteLinkedHistograms(TDirectory* dir)
 
 
 
-
-GHistLinked::GHistLinked() :
-    TH1D(),
-    linked(kFALSE)
-{
-}
-
-GHistLinked::GHistLinked(const char* name, const char* title, Int_t nbinsx, Double_t xlow, Double_t xup, Bool_t linkHistogram) :
-    TH1D(name, title, nbinsx, xlow, xup),
+GHistLinked::GHistLinked(Bool_t linkHistogram) :
+    TObject(),
     linked(linkHistogram)
 {
-    Sumw2();
     if(linked == kTRUE)
         Link();
 }
