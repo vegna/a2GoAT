@@ -50,7 +50,10 @@ void GHistManager::WriteLinkedHistograms(TDirectory* dir)
         TIter   iter(&histList);
         GHistLinked*    hist;
         while(hist=(GHistLinked*)iter.Next())
+        {
+            std::cout << "process: " << hist->GetName() << std::endl;
             hist->Write(0, TObject::kWriteDelete);
+        }
     }
 }
 

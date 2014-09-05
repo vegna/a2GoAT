@@ -20,7 +20,7 @@ GHistScaCor::GHistScaCor() :
 }
 
 GHistScaCor::GHistScaCor(const char* name, const char* title, const Int_t nbinsx, const Double_t xlow, const Double_t xup, const Bool_t linkHistogram) :
-    GHistLinked(),
+    GHistLinked(linkHistogram),
     buffer(TString(name).Append("_Buffer").Data(),
            TString(title).Append(" Buffer"),
            nbinsx, xlow, xup),
@@ -160,6 +160,7 @@ void    GHistScaCor::PrepareWrite()
 
 Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
 {
+    std::cout << name << std::endl;
     if(corrected==kFALSE)
     {
         return buffer.Write(name, option, bufsize);

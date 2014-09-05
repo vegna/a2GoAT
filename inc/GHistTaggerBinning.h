@@ -28,10 +28,13 @@ public:
     virtual ~GHistTaggerBinning();
 
     virtual Bool_t	Add(const GHistTaggerBinning* h, Double_t c = 1);
+    const   GHistScaCor&   GetTaggerBin(const Int_t channel)    const   {return *((GHistScaCor*)bin.At(channel));}
+    const   GHistScaCor&   GetSum()                             const   {return *((GHistScaCor*)this);}
     static  void    InitTaggerBinning(const Int_t min, const Int_t max);
     virtual Int_t   Fill(const Double_t value, const Int_t taggerChannel = 0);
     virtual Int_t   Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
     virtual void    Reset(Option_t* option = "");
+    virtual void	Scale(Double_t c1 = 1, Option_t* option = "");
     virtual void    ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
     virtual Int_t   Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
 };
