@@ -153,24 +153,7 @@ TDirectory* GHistScaCor::GetCreateDirectory(const char* name)
     return ret;
 }
 
-void    GHistScaCor::PrepareWrite()
-{
-    if(corrected==kFALSE)
-        return;
-
-    TDirectory* parentDir   = gDirectory;
-    TDirectory* dir         = GetCreateDirectory("ScalerCorrection");
-
-    for(int i=0; i<singleScalerReads.GetEntriesFast(); i++)
-    {
-        dir->cd();
-        GetCreateDirectory(TString("SingleScalerRead").Append(TString::Itoa(i, 10)).Data())->cd();
-    }
-
-    parentDir->cd();
-}
-
-Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
+Int_t   GHistScaCor::WritePrepared(const char* name, Int_t option, Int_t bufsize)
 {
     if(corrected==kFALSE)
     {

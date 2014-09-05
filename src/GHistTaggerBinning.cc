@@ -112,11 +112,25 @@ void    GHistTaggerBinning::ScalerReadCorrection(const Double_t CorrectionFactor
         ((GHistScaCor*)bin.At(i))->ScalerReadCorrection(CorrectionFactor, CreateHistogramsForSingleScalerReads);
 }
 
-Int_t   GHistTaggerBinning::Write(const char* name, Int_t option, Int_t bufsize)
+
+void    GHistTaggerBinning::PrepareWrite()
+{
+    for(int i=0; i<bin.GetEntriesFast(); i++)
+        ((GHistScaCor*)bin.At(i))->PrepareWrite();
+
+    if(bin.GetEntriesFast()>0)
+    {
+        for(int i=0; i<bin.GetEntriesFast(); i++)
+            GHistScaCor::Add((GHistScaCor*)bin.At(i));
+    }
+    GHistScaCor::PrepareWrite();
+}
+
+Int_t   GHistTaggerBinning::WritePrepared(const char* name, Int_t option, Int_t bufsize)
 {
     if(bin.GetEntriesFast()==0)
     {
-        return  GHistScaCor::Write(name, option, bufsize);
+        return  GHistScaCor::WritePrepared(name, option, bufsize);
     }
 
     TDirectory* parentDir   = gDirectory;
@@ -136,8 +150,7 @@ Int_t   GHistTaggerBinning::Write(const char* name, Int_t option, Int_t bufsize)
         dir->cd();
         GetCreateDirectory(TString("Channel_").Append(TString::Itoa(i+TaggerBinningRangeMin, 10)).Data())->cd();
 
-        res += ((GHistScaCor*)bin.At(i))->Write(nameBuffer.Data(), option, bufsize);
-        GHistScaCor::Add((GHistScaCor*)bin.At(i));
+        res += ((GHistScaCor*)bin.At(i))->WritePrepared(nameBuffer.Data(), option, bufsize);
     }
 
     parentDir->cd();
@@ -145,6 +158,6 @@ Int_t   GHistTaggerBinning::Write(const char* name, Int_t option, Int_t bufsize)
         nameBuffer  = name;
     else
         nameBuffer  = GetName();
-    res += GHistScaCor::Write(nameBuffer.Data(), option, bufsize);
+    res += GHistScaCor::WritePrepared(nameBuffer.Data(), option, bufsize);
 }
 

@@ -52,7 +52,7 @@ void GHistManager::WriteLinkedHistograms(TDirectory* dir)
         while(hist=(GHistLinked*)iter.Next())
         {
             std::cout << "process: " << hist->GetName() << std::endl;
-            hist->Write(0, TObject::kWriteDelete);
+            hist->WritePrepared(0, TObject::kWriteDelete);
         }
     }
 }

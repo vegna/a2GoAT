@@ -26,7 +26,6 @@ private:
 
 protected:
     static  TDirectory* GetCreateDirectory(const char* name);
-    virtual void        PrepareWrite();
 
 public:
     GHistScaCor();
@@ -42,11 +41,13 @@ public:
             Int_t   GetNbinsX()                 const   {return accumulatedCorrected.GetNbinsX();}
             Int_t   GetXmin()                   const   {return accumulatedCorrected.GetXaxis()->GetXmin();}
             Int_t   GetXmax()                   const   {return accumulatedCorrected.GetXaxis()->GetXmax();}
+    virtual void    PrepareWrite()  {}
     virtual void    Reset(Option_t* option = "");
     virtual void	Scale(Double_t c1 = 1, Option_t* option = "");
     virtual void    ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
     virtual void	SetBins(Int_t nx, Double_t xmin, Double_t xmax);
-    virtual Int_t   Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
+    virtual Int_t   WritePrepared(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
+    virtual Int_t   Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0)            {WritePrepared(name, option, bufsize);}
 };
 
 

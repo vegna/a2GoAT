@@ -52,6 +52,7 @@ public:
     virtual void    PrepareWrite() = 0;
     virtual void    Reset(Option_t* option = "") = 0;
             void    Unlink();
+    virtual Int_t   WritePrepared(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) = 0;
     virtual Int_t   Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0) = 0;
 };
 
