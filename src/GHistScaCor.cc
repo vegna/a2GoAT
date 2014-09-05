@@ -46,7 +46,19 @@ GHistScaCor::~GHistScaCor()
 
 Bool_t	GHistScaCor::Add(const GHistScaCor *h, Double_t c)
 {
-    /*TH1D::Add(h, c);
+    if(corrected!=h->corrected)
+    {
+        std::cout << "ERROR: GHistScaCor::Add. Tried to add a corrected and an uncorrected GHistScaCor" << std::endl;
+        return kFALSE;
+    }
+
+    if(corrected==kFALSE)
+    {
+        buffer.Add(&h->buffer, c);
+        return kTRUE;
+    }
+
+    buffer.Add(&h->buffer, c);
     accumulated.Add(&h->accumulated, c);
     accumulatedCorrected.Add(&h->accumulatedCorrected, c);
     for(int i=0; i<h->GetNScalerReadCorrections(); i++)
@@ -55,11 +67,11 @@ Bool_t	GHistScaCor::Add(const GHistScaCor *h, Double_t c)
             CreateSingleScalerRead();
         else
         {
-            ((GHistLinked*)singleScalerReads.At(i))->Add((GHistLinked*)h->singleScalerReads.At(i), c);
-            ((GHistLinked*)singleScalerReadsCorrected.At(i))->Add(((GHistLinked*)h->singleScalerReadsCorrected.At(i)), c);
+            ((TH1D*)singleScalerReads.At(i))->Add((TH1D*)h->singleScalerReads.At(i), c);
+            ((TH1D*)singleScalerReadsCorrected.At(i))->Add(((TH1D*)h->singleScalerReadsCorrected.At(i)), c);
         }
     }
-    corrected = h->corrected;*/
+    return kTRUE;
 }
 
 void    GHistScaCor::CreateSingleScalerRead()
@@ -160,7 +172,6 @@ void    GHistScaCor::PrepareWrite()
 
 Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
 {
-    std::cout << name << std::endl;
     if(corrected==kFALSE)
     {
         return buffer.Write(name, option, bufsize);

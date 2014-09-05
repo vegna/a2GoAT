@@ -33,7 +33,7 @@ public:
     GHistScaCor(const char* name, const char* title, const Int_t nbinsx, const Double_t xlow, const Double_t xup, const Bool_t linkHistogram = kTRUE);
     virtual ~GHistScaCor();
 
-    virtual Bool_t	Add(const GHistScaCor* h, Double_t c = 1);
+    virtual Bool_t	Add(const GHistScaCor *h, Double_t c = 1);
     virtual Int_t	Fill(Double_t x)    {return buffer.Fill(x);}
     const   TH1D&   GetAccumulated()            const   {return accumulated;}
     const   TH1D&   GetAccumulatedCorrected()   const   {return accumulatedCorrected;}

@@ -114,7 +114,6 @@ void    GHistTaggerBinning::ScalerReadCorrection(const Double_t CorrectionFactor
 
 Int_t   GHistTaggerBinning::Write(const char* name, Int_t option, Int_t bufsize)
 {
-    std::cout << "start" << std::endl;
     if(bin.GetEntriesFast()==0)
     {
         return  GHistScaCor::Write(name, option, bufsize);
