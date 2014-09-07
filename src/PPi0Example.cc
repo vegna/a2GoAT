@@ -37,19 +37,18 @@ void	PPi0Example::ProcessEvent()
         for(int t=0; t<tagger->GetNTagged(); t++)
         {
             time->Fill(tagger->GetTagged_t(t));
-            MM->Fill((tagger->GetVectorProtonTarget(t)-eta->Particle(i)).M()); //, tagger->GetTagged_ch(t));
-            IM->Fill(eta->Particle(i).M());
+            MM->Fill((tagger->GetVectorProtonTarget(t)-eta->Particle(i)).M(), tagger->GetTagged_ch(t));
         }
-        //IM->Fill(eta->Particle(i).M(), *tagger);
+        IM->Fill(eta->Particle(i).M(), *tagger);
 	}
 	
 }
 
 void	PPi0Example::ProcessScalerRead()
 {
-    time->ScalerReadCorrection(5, kTRUE);
+    time->ScalerReadCorrection(5);
 
-    IM->ScalerReadCorrection(5, kTRUE);
+    IM->ScalerReadCorrection(5);
 
-    MM->ScalerReadCorrection(5, kTRUE);
+    MM->ScalerReadCorrection(5);
 }
