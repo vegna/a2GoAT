@@ -37,7 +37,15 @@ void GHistManager::ClearLinkedHistograms()
 
 void GHistManager::WriteLinkedHistograms(TDirectory* dir)
 {
-    std::cout << "Prepare Write." << std::endl;
+    std::cout << "Calc Result." << std::endl;
+    {
+        TIter   iter(&histList);
+        GHistLinked*    hist;
+        while(hist=(GHistLinked*)iter.Next())
+            hist->CalcResult();
+    }
+
+    std::cout << "Prepare Write List." << std::endl;
     GHistWriteList  writeList;
     {
         TIter   iter(&histList);
@@ -193,5 +201,8 @@ Int_t	GHistWriteListEntry::Write(const char* NotUsed, Int_t option, Int_t bufsiz
 {
     if(!obj)
         return 0;
-    return obj->Write(name, option, bufsize);
+    Int_t   res = obj->Write(name, option, bufsize);
+    if(isDirectory==kFALSE)
+        ((TH1D*)obj)->SetDirectory(0);
+    return  res;
 }

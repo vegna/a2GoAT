@@ -2,8 +2,9 @@
 
 PPi0Example::PPi0Example()
 { 
-    //GHistBGSub::InitCuts(-20, 15, -100, -40);
-    //GHistBGSub::AddRandCut(35, 95);
+    GHistBGSub::InitCuts(-20, 15, -100, -40);
+    GHistBGSub::AddRandCut(35, 95);
+    //GHistTaggerBinning::InitTaggerBinning(10, 20);
         
     time 	= new GH1("time", 	"time", 	1400, -700,	700);
 
@@ -37,9 +38,9 @@ void	PPi0Example::ProcessEvent()
         for(int t=0; t<tagger->GetNTagged(); t++)
         {
             time->Fill(tagger->GetTagged_t(t));
-            MM->Fill((tagger->GetVectorProtonTarget(t)-eta->Particle(i)).M(), tagger->GetTagged_ch(t));
+            MM->Fill((tagger->GetVectorProtonTarget(t)-eta->Particle(i)).M(), tagger->GetTagged_t(t), tagger->GetTagged_ch(t));
         }
-        IM->Fill(eta->Particle(i).M(), *tagger);
+        IM->Fill(eta->Particle(i).M(), *tagger, kTRUE);
 	}
 	
 }

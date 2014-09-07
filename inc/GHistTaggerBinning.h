@@ -40,7 +40,7 @@ public:
     virtual void            Reset(Option_t* option = "");
     virtual void        	Scale(Double_t c1 = 1, Option_t* option = "");
     virtual void            ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
-    virtual Int_t           Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
+    virtual Int_t           WriteWithoutCalcResult(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
 };
 
 
