@@ -141,23 +141,51 @@ void	GHistScaCor::SetBins(Int_t nx, Double_t xmin, Double_t xmax)
     }
 }
 
-TDirectory* GHistScaCor::GetCreateDirectory(const char* name)
+void    GHistScaCor::PrepareWriteList(GHistWriteList* arr, const char *name)
 {
-    TDirectory* ret = gDirectory->GetDirectory(name);
-    if(!ret)
+    if(!arr)
+        return;
+
+    TString     nameBuffer;
+    if(name)
+        nameBuffer  = name;
+    else
+        nameBuffer  = accumulatedCorrected.GetName();
+    if(corrected==kFALSE)
+        return  arr->AddHistogram(&buffer, nameBuffer);
+    arr->AddHistogram(&accumulatedCorrected, nameBuffer);
+
+    GHistWriteList* ScalerCorrection    = arr->GetDirectory(TString("ScalerCorrection"));
+    if(name)
+        nameBuffer  = name;
+    else
+        nameBuffer  = accumulatedCorrected.GetName();
+    nameBuffer.Append("_NoScaCor");
+    ScalerCorrection->AddHistogram(&accumulated, nameBuffer);
+
+    for(int i=0; i<singleScalerReads.GetEntriesFast(); i++)
     {
-        ret = gDirectory->mkdir(name);
-        if(!ret)
-            ret = gDirectory;
+        GHistWriteList* SingleScalerRead    = arr->GetDirectory(TString("SingleScalerRead").Append(TString::Itoa(i, 10)));
+        if(name)
+            nameBuffer  = name;
+        else
+            nameBuffer  = accumulatedCorrected.GetName();
+        nameBuffer.Append("_NoScaCor_ScaRead").Append(TString::Itoa(i, 10)),
+        SingleScalerRead->AddHistogram((TH1D*)singleScalerReads.At(i), nameBuffer);
+        if(name)
+            nameBuffer  = name;
+        else
+            nameBuffer  = accumulatedCorrected.GetName();
+        nameBuffer.Append("_ScaRead").Append(TString::Itoa(i, 10)),
+        SingleScalerRead->AddHistogram((TH1D*)singleScalerReads.At(i), nameBuffer);
     }
-    return ret;
 }
 
-Int_t   GHistScaCor::WritePrepared(const char* name, Int_t option, Int_t bufsize)
+Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
 {
     if(corrected==kFALSE)
     {
-        return buffer.Write(name, option, bufsize);
+        return buffer.Write(accumulatedCorrected.GetName(), option, bufsize);
     }
 
     TString     nameBuffer;

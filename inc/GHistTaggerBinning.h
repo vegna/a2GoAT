@@ -35,12 +35,11 @@ public:
     static  void    InitTaggerBinning(const Int_t min, const Int_t max);
     virtual Int_t   Fill(const Double_t value, const Int_t taggerChannel = 0);
     virtual Int_t   Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
-    virtual void    PrepareWrite();
+    virtual void    PrepareWriteList(GHistWriteList* arr, const char* name = 0);
     virtual void    Reset(Option_t* option = "");
     virtual void	Scale(Double_t c1 = 1, Option_t* option = "");
     virtual void    ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
-    virtual Int_t   WritePrepared(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
-    virtual Int_t   Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0)            {PrepareWrite(); WritePrepared(name, option, bufsize);}
+    virtual Int_t   Write(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
 };
 
 
