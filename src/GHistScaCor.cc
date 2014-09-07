@@ -120,7 +120,12 @@ void    GHistScaCor::ScalerReadCorrection(const Double_t CorrectionFactor, const
     accumulated.Add(&buffer);
 
     if(CreateHistogramsForSingleScalerReads)
+    {
         CreateSingleScalerRead();
+        ((TH1D*)singleScalerReads.Last())->Add(&buffer);
+        buffer.Scale(CorrectionFactor);
+        ((TH1D*)singleScalerReadsCorrected.Last())->Add(&buffer);
+    }
     else
         buffer.Scale(CorrectionFactor);
 
@@ -165,7 +170,7 @@ void    GHistScaCor::PrepareWriteList(GHistWriteList* arr, const char *name)
 
     for(int i=0; i<singleScalerReads.GetEntriesFast(); i++)
     {
-        GHistWriteList* SingleScalerRead    = arr->GetDirectory(TString("SingleScalerRead").Append(TString::Itoa(i, 10)));
+        GHistWriteList* SingleScalerRead    = ScalerCorrection->GetDirectory(TString("SingleScalerRead").Append(TString::Itoa(i, 10)));
         if(name)
             nameBuffer  = name;
         else
@@ -177,16 +182,14 @@ void    GHistScaCor::PrepareWriteList(GHistWriteList* arr, const char *name)
         else
             nameBuffer  = accumulatedCorrected.GetName();
         nameBuffer.Append("_ScaRead").Append(TString::Itoa(i, 10)),
-        SingleScalerRead->AddHistogram((TH1D*)singleScalerReads.At(i), nameBuffer);
+        SingleScalerRead->AddHistogram((TH1D*)singleScalerReadsCorrected.At(i), nameBuffer);
     }
 }
 
 Int_t   GHistScaCor::Write(const char* name, Int_t option, Int_t bufsize)
 {
     if(corrected==kFALSE)
-    {
         return buffer.Write(accumulatedCorrected.GetName(), option, bufsize);
-    }
 
     TString     nameBuffer;
     if(name)

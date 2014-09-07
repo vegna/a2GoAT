@@ -32,6 +32,7 @@ public:
     virtual ~GHistScaCor();
 
     virtual Bool_t	Add(const GHistScaCor *h, Double_t c = 1);
+    virtual void 	CalcResult()    {}
     virtual Int_t	Fill(Double_t x)    {return buffer.Fill(x);}
     const   TH1D&   GetAccumulated()            const   {return accumulated;}
     const   TH1D&   GetAccumulatedCorrected()   const   {return accumulatedCorrected;}
