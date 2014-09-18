@@ -37,15 +37,16 @@ void GHistManager::ClearLinkedHistograms()
 
 void GHistManager::WriteLinkedHistograms(TDirectory* dir)
 {
-    std::cout << "Calc Result." << std::endl;
+    std::cout << "Calc Result -->";
     {
         TIter   iter(&histList);
         GHistLinked*    hist;
         while(hist=(GHistLinked*)iter.Next())
             hist->CalcResult();
     }
+    std::cout << " Done." << std::endl;
 
-    std::cout << "Prepare Write List." << std::endl;
+    std::cout << "Prepare Write List -->";
     GHistWriteList  writeList;
     {
         TIter   iter(&histList);
@@ -53,10 +54,12 @@ void GHistManager::WriteLinkedHistograms(TDirectory* dir)
         while(hist=(GHistLinked*)iter.Next())
             hist->PrepareWriteList(&writeList);
     }
+    std::cout << " Done." << std::endl;
 
-    std::cout << "Write." << std::endl;
+    std::cout << "Write -->";
     dir->cd();
     writeList.Write();
+    std::cout << " Done." << std::endl;
 }
 
 
