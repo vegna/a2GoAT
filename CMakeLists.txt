@@ -22,7 +22,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(ROOT "5.30" REQUIRED)
 
 # since all subprojects need ROOT, set that up here
-include_directories(${ROOT_INCLUDES})
+include_directories(${ROOT_INCLUDES} ${CMAKE_SOURCE_DIR}/inc)
 link_directories(${ROOT_LIBRARY_DIR})
 
 include_directories(inc)
