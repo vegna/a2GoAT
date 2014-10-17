@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <TH1.h>
+#include <TH2.h>
 #include <TObjArray.h>
 #include <TDirectory.h>
 
