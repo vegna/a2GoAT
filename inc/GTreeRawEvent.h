@@ -25,6 +25,8 @@ private:
     Double_t 	Phi[GTreeRawEvent_MAX];
     Double_t	time[GTreeRawEvent_MAX];
     UChar_t     clusterSize[GTreeRawEvent_MAX];
+    Int_t       centralCrys[GTreeRawEvent_MAX];
+    Int_t       centralVeto[GTreeRawEvent_MAX];
     UChar_t 	Apparatus[GTreeRawEvent_MAX];
     //Charged detector energies
     Double_t	d_E[GTreeRawEvent_MAX];
@@ -47,7 +49,12 @@ public:
 
     const	UChar_t*        GetApparatus()                      const	{return Apparatus;}
             UChar_t         GetApparatus(const Int_t index)     const	{return Apparatus[index];}
+    const	UChar_t*        GetClusterSize()                      const	{return clusterSize;}
             UChar_t         GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
+    const	Int_t*          GetCentralCrys()                      const	{return centralCrys;}
+            Int_t           GetCentralCrys(const Int_t index)   const 	{return centralCrys[index];}
+    const	Int_t*          GetCentralVeto()                      const	{return centralVeto;}
+            Int_t           GetCentralVeto(const Int_t index)   const 	{return centralVeto[index];}
     const	Double_t*       Get_dE()                            const	{return d_E;}
             Double_t        Get_dE(const Int_t index)           const	{return d_E[index];}
     const	Double_t*       GetEk()                             const	{return Ek;}

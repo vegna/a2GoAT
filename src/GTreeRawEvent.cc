@@ -11,6 +11,8 @@ GTreeRawEvent::GTreeRawEvent(GTreeManager *Manager)    :
         Phi[i] = 0;
         time[i] = 0;
         clusterSize[i] = 0;
+        centralCrys[i] = 0;
+        centralVeto[i] = 0;
         Apparatus[i] = 0;
         //Charged detector energies
         d_E[i] = 0;
@@ -36,6 +38,8 @@ void    GTreeRawEvent::SetBranchAdresses()
     tree_in->SetBranchAddress("Phi",  Phi);
     tree_in->SetBranchAddress("time", time);
     tree_in->SetBranchAddress("clusterSize", clusterSize);
+    tree_in->SetBranchAddress("centralCrys", centralCrys);
+    tree_in->SetBranchAddress("centralVeto", centralVeto);
     tree_in->SetBranchAddress("Apparatus", Apparatus);
     tree_in->SetBranchAddress("d_E", d_E);
     tree_in->SetBranchAddress("WC0_E", WC0_E);
@@ -53,6 +57,8 @@ void    GTreeRawEvent::SetBranches()
     tree_out->Branch("Phi",  Phi,  "Phi[nParticles]/D");
     tree_out->Branch("time", time, "time[nParticles]/D");
     tree_out->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+    tree_out->Branch("centralCrys", centralCrys, "centralCrys[nParticles]/I");
+    tree_out->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
     tree_out->Branch("Apparatus", Apparatus, "Apparatus[nParticles]/b");
     tree_out->Branch("d_E", d_E, "d_E[nParticles]/D");
     tree_out->Branch("WC0_E", WC0_E, "WC0_E[nParticles]/D");
