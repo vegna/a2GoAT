@@ -33,8 +33,8 @@ void    GTreeTrigger::SetBranchAdresses()
     tree_in->SetBranchAddress("Helicity", 	&Helicity);
     tree_in->SetBranchAddress("nError", 	&nError);
     tree_in->SetBranchAddress("ErrModID", ErrModID);
-    tree_in->SetBranchAddress("ErrModIndex.", ErrModIndex);
-    tree_in->SetBranchAddress("ErrCode.", ErrCode);
+    tree_in->SetBranchAddress("ErrModIndex", ErrModIndex);
+    tree_in->SetBranchAddress("ErrCode", ErrCode);
 
 }
 
