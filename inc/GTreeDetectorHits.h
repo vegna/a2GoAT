@@ -10,12 +10,14 @@ class  GTreeDetectorHits    : public GTree
 private:
     Int_t		nNaI_Hits;
     Int_t		NaI_Hits[720];
+    Int_t		NaI_Cluster[720];
     Int_t		nPID_Hits;
     Int_t		PID_Hits[24];
     Int_t		nWC_Hits;
     Int_t		WC_Hits[860];
     Int_t		nBaF2_PbWO4_Hits;
     Int_t		BaF2_PbWO4_Hits[438];
+    Int_t		BaF2_PbWO4_Cluster[438];
     Int_t		nVeto_Hits;
     Int_t		Veto_Hits[438];
 
@@ -32,6 +34,8 @@ public:
             Int_t		GetNNaI_Hits()              	const	{return nNaI_Hits;}
     const	Int_t*		GetNaI_Hits()           		const	{return NaI_Hits;}
             Int_t		GetNaI_Hits(const Int_t index)	const	{return NaI_Hits[index];}
+    const	Int_t*		GetNaI_Cluster()           		const	{return NaI_Cluster;}
+            Int_t		GetNaI_Cluster(const Int_t index)	const	{return NaI_Cluster[index];}
 
             Int_t		GetNPID_Hits()      			const	{return nPID_Hits;}
     const	Int_t*		GetPID_Hits()               	const	{return PID_Hits;}
@@ -44,6 +48,8 @@ public:
             Int_t		GetNBaF2_PbWO4_Hits()                   const	{return nBaF2_PbWO4_Hits;}
     const	Int_t*		GetBaF2_PbWO4_Hits()                    const	{return BaF2_PbWO4_Hits;}
             Int_t		GetBaF2_PbWO4_Hits(const Int_t index)	const	{return BaF2_PbWO4_Hits[index];}
+    const	Int_t*		GetBaF2_PbWO4_Cluster()                    const	{return BaF2_PbWO4_Cluster;}
+            Int_t		GetBaF2_PbWO4_Cluster(const Int_t index)	const	{return BaF2_PbWO4_Cluster[index];}
 
             Int_t		GetNVeto_Hits()                 const	{return nVeto_Hits;}
     const	Int_t*		GetVeto_Hits()                  const	{return Veto_Hits;}
