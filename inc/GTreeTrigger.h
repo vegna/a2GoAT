@@ -14,7 +14,7 @@ private:
     Int_t 		Mult;
     Int_t 		nTriggerPattern;
     Int_t 		TriggerPattern[GTreeTrigger_MAX];
-    UChar_t     helicityBit;
+    Bool_t              Helicity;
     Int_t 		nError;
     Int_t 		ErrModID[GTreeTrigger_MAX];
     Int_t 		ErrModIndex[GTreeTrigger_MAX];
@@ -32,7 +32,7 @@ public:
     virtual void        Clear()                         {nTriggerPattern = 0; nError = 0;}
             Int_t 		GetMult()        		const	{return Mult;}
             Double_t	GetESum()           	const	{return ESum;}
-            UChar_t 	GetHelicityBit()    	const	{return helicityBit;}
+            Bool_t 	GetHelicity()    	const	{return Helicity;}
             Int_t		GetNTriggerPattern()    const	{return	nTriggerPattern;}
     const   Int_t*		GetTriggerPattern()     const	{return	TriggerPattern;}
             Int_t		GetNError()             const {return nError;}

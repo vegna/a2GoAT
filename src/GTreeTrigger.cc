@@ -7,7 +7,7 @@ GTreeTrigger::GTreeTrigger(GTreeManager* Manager)    :
     ESum(0),
     Mult(0),
     nTriggerPattern(0),
-    helicityBit(0),
+    Helicity(0),
     nError(0)
 {
     for(int i=0; i<GTreeTrigger_MAX; i++)
@@ -30,7 +30,7 @@ void    GTreeTrigger::SetBranchAdresses()
     tree_in->SetBranchAddress("Mult", 	&Mult);
     tree_in->SetBranchAddress("nTriggerPattern", &nTriggerPattern);
     tree_in->SetBranchAddress("TriggerPattern", TriggerPattern);
-    tree_in->SetBranchAddress("HelicityBit", 	&helicityBit);
+    tree_in->SetBranchAddress("Helicity", 	&Helicity);
     tree_in->SetBranchAddress("nError", 	&nError);
     tree_in->SetBranchAddress("ErrModID", ErrModID);
     tree_in->SetBranchAddress("ErrModIndex.", ErrModIndex);
@@ -42,7 +42,7 @@ void    GTreeTrigger::SetBranches()
 {
     tree_out->Branch("ESum", &ESum,"ESum/D");
     tree_out->Branch("Mult", &Mult, "Mult/I");
-    tree_out->Branch("HelicityBit", &helicityBit, "HelicityBit/b");
+    tree_out->Branch("Helicity", &Helicity, "Helicity/O");
     tree_out->Branch("nTriggerPattern", &nTriggerPattern, "nTriggerPattern/I");
     tree_out->Branch("TriggerPattern", TriggerPattern, "TriggerPattern[nTriggerPattern]/I");
     tree_out->Branch("nError", &nError, "nError/I");
