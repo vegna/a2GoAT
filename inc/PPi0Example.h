@@ -21,13 +21,16 @@ private:
     GH1*	IM_2g;
     
     GH1*	MM;
-    GH1*	MM_2g; 
+    GH1*	MM_2g;
+
+    TH1*	TaggerAccScal;
     
 protected:
     virtual Bool_t  Start();
 
     virtual void    ProcessEvent();
     virtual void	ProcessScalerRead();
+    virtual Bool_t    Write();
 			
 public:
     PPi0Example();

@@ -5,7 +5,7 @@ PPi0Example::PPi0Example()
     GHistBGSub::InitCuts(-20, 15, -100, -40);
     GHistBGSub::AddRandCut(35, 95);
     
-  	SetTarget(938); 
+    SetTarget(938); 
         
     time 	= new GH1("time", 	"time", 	1400, -700, 700);
     time_cut 	= new GH1("time_cut", 	"time_cut", 	1400, -700, 700);
@@ -17,7 +17,9 @@ PPi0Example::PPi0Example()
     IM_2g 	= new GH1("IM_2g", 	"IM_2g", 	400,   0, 400);
   
     MM		= new GH1("MM", 	"MM", 	 	400,   800, 1200);     
-    MM_2g	= new GH1("MM_2g", 	"MM_2g", 	400,   800, 1200); 
+    MM_2g	= new GH1("MM_2g", 	"MM_2g", 	400,   800, 1200);
+
+    TaggerAccScal = new TH1D("TaggerAccScal","TaggerAccScal",352,0,352);
 }
 
 PPi0Example::~PPi0Example()
@@ -35,6 +37,7 @@ Bool_t	PPi0Example::Start()
 
     TraverseValidEvents();
 
+//    Write();
 	return kTRUE;
 }
 
@@ -73,6 +76,14 @@ void	PPi0Example::ProcessEvent()
 
 void	PPi0Example::ProcessScalerRead()
 {
+    FillScalers(200,552,TaggerAccScal);
+}
 
-    //time.ScalerReadCorrection(5);
+Bool_t	PPi0Example::Write()
+{
+	// Write some TH1s
+	GTreeManager::Write(TaggerAccScal);
+
+	// Write all GH1's easily
+	GTreeManager::Write();
 }
