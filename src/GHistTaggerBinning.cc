@@ -101,6 +101,11 @@ void    GHistTaggerBinning::Reset(Option_t* option)
     GHistScaCor::Reset(option);
 }
 
+Int_t   GHistTaggerBinning::Fill(const Double_t value)
+{
+    return GHistScaCor::Fill(value);
+}
+
 Int_t   GHistTaggerBinning::Fill(const Double_t value, const Int_t taggerChannel)
 {
     if(TaggerBinningRangeMax==-1)

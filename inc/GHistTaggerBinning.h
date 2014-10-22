@@ -29,7 +29,8 @@ public:
     virtual Bool_t	Add(const GHistTaggerBinning* h, Double_t c = 1);
     virtual void    AddOutputDirectory(const TString& directoryName);
     static  void    InitTaggerBinning(const Int_t min, const Int_t max);
-    virtual Int_t   Fill(const Double_t value, const Int_t taggerChannel = 0);
+    virtual Int_t   Fill(const Double_t value);
+    virtual Int_t   Fill(const Double_t value, const Int_t taggerChannel);
     virtual Int_t   Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
     virtual void    Reset(Option_t* option = "");
     virtual void    ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);

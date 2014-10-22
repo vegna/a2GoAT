@@ -111,6 +111,11 @@ void    GHistBGSub::ExpandRand(const Int_t newSize)
     }
 }
 
+Int_t   GHistBGSub::Fill(const Double_t value)
+{
+    return GHistTaggerBinning::Fill(value);
+}
+
 Int_t   GHistBGSub::Fill(const Double_t value, const Double_t taggerTime, const Int_t taggerChannel)
 {
     if(taggerTime>=cutPromptMin && taggerTime<=cutPromptMax)
