@@ -17,14 +17,14 @@ void DrawCluster(TString sData, Int_t iMinEvn=0, Int_t iMinPart=0, Int_t iMinNaI
 
   TGraph2D *gBox3 = new TGraph2D(8);
   gBox3->SetName("gBox3");
-  gBox3->SetPoint(0,-50,-50,-50);
-  gBox3->SetPoint(1,-50,-50,150);
-  gBox3->SetPoint(2,-50, 50,-50);
-  gBox3->SetPoint(3,-50, 50,150);
-  gBox3->SetPoint(4, 50,-50,-50);
-  gBox3->SetPoint(5, 50,-50,150);
-  gBox3->SetPoint(6, 50, 50,-50);
-  gBox3->SetPoint(7, 50, 50,150);
+  gBox3->SetPoint(0,-60,-60,-50);
+  gBox3->SetPoint(1,-60,-60,150);
+  gBox3->SetPoint(2,-60, 60,-50);
+  gBox3->SetPoint(3,-60, 60,150);
+  gBox3->SetPoint(4, 60,-60,-50);
+  gBox3->SetPoint(5, 60,-60,150);
+  gBox3->SetPoint(6, 60, 60,-50);
+  gBox3->SetPoint(7, 60, 60,150);
   gBox3->SetMarkerStyle(1);
   gBox3->SetMarkerColor(0);
   
