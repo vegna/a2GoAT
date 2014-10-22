@@ -7,7 +7,7 @@
 #include "GTree.h"
 
 
-#define GTreeScaler_MAX 4096
+#define GTreeScaler_MAX 16384
 
 class  GTreeScaler : public GTree
 {
