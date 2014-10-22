@@ -24,7 +24,36 @@ void	PPhysics::Reconstruct()
 // ----------------------------------------------------------------------------------------
 // TH1 routines
 // ----------------------------------------------------------------------------------------
+void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist)
+{	
+	// To properly accumulate, create a histogram for this scaler read
+	// cloning input histogram means the axis will be equivalent
+	TH1* hist_current_SR = (TH1D*) hist->Clone();
+	hist_current_SR->Reset();
 
+	// Loop over scaler range, don't pull anything higher than the real # scalers
+	if (low_scaler_number  < 0)
+	{
+		cout << "FillScalers given scaler number outside range: " << low_scaler_number << endl;
+		cout << "Setting lower limit to zero and continuing" << endl;
+		low_scaler_number = 0;
+	}
+	if (high_scaler_number > scalers->GetNScaler())
+	{
+		cout << "FillScalers given scaler number outside range: " << high_scaler_number << endl;
+		cout << "Setting upper limit to "<< high_scaler_number << " and continuing" << endl;	
+		high_scaler_number = scalers->GetNScaler();
+	}
+
+	for (int i = low_scaler_number; i <= high_scaler_number; i++) 
+	{
+		Int_t bin = hist_current_SR->GetXaxis()->FindBin(i);
+		hist_current_SR->SetBinContent(bin,scalers->GetScaler(i));
+	}
+
+	// Add to accumulated
+	hist->Add(hist_current_SR);
+}	
 
 void PPhysics::FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom)
 {
