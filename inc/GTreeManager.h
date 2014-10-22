@@ -78,7 +78,7 @@ protected:
             Bool_t  TraverseEntries(const UInt_t min, const UInt_t max);
             Bool_t  TraverseScalerEntries(const UInt_t min, const UInt_t max);
             Bool_t  TraverseValidEvents()   {if(IsAcquFile()) return TraverseValidEvents_AcquTreeFile(); return TraverseValidEvents_GoATTreeFile();}
-            Bool_t  Write();
+    virtual Bool_t  Write();
             Bool_t  Write(const TNamed* object);
 
 public:
