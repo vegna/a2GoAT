@@ -153,6 +153,19 @@ GHistWriteList* GHistWriteList::GetDirectory(const TString& _Name)
     return (GHistWriteList*)AddDirectory(_Name)->obj;
 }
 
+void    GHistWriteList::Print()
+{
+    printf("Print GHistWriteList:\n");
+    TIter next(this);
+    GHistWriteListEntry *obj;
+    while ((obj = (GHistWriteListEntry*)next()))
+    {
+        if(obj->isDirectory==kTRUE)
+            printf("Directory: ");
+        printf("%s\n", obj->name.Data());
+    }
+}
+
 Int_t	GHistWriteList::Write(const char* NotUsed, Int_t option, Int_t bufsize)
 {
     Int_t nbytes = 0;

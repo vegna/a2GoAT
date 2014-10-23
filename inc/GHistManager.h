@@ -73,6 +73,7 @@ public:
 
             void    AddHistogram(TH1D* _Hist, const TString& _Name);
     GHistWriteList* GetDirectory(const TString& _Name);
+    virtual void    Print();
     virtual Int_t	Write(const char* NotUsed = 0, Int_t option = 0, Int_t bufsize = 0);
 };
 
