@@ -30,7 +30,7 @@ Bool_t	PPi0Example::Init(const char* configfile)
 	if(!InitBackgroundCuts()) return kFALSE;
 	if(!InitTargetMass()) return kFALSE;
 	if(!InitTaggerChannelCuts()) return kFALSE;
-
+	if(!InitTaggerScalers()) return kFALSE;
 	cout << "--------------------------------------------------" << endl;
 	return kTRUE;
 }
@@ -85,7 +85,8 @@ void	PPi0Example::ProcessEvent()
 
 void	PPi0Example::ProcessScalerRead()
 {
-    FillScalers(200,552,TaggerAccScal);
+	// Fill Tagger Scalers
+	FillScalers(GetTC_scaler_min(),GetTC_scaler_max(),TaggerAccScal);
 }
 
 Bool_t	PPi0Example::Write()
