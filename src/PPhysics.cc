@@ -25,7 +25,15 @@ void	PPhysics::Reconstruct()
 // TH1 routines
 // ----------------------------------------------------------------------------------------
 void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist)
-{	
+{
+	Int_t nFillScalers = high_scaler_number - low_scaler_number + 1;
+
+	if( nFillScalers < hist->GetNbinsX())
+	{
+	    cout << "Error: FillScalers - histogram has insufficient bins for range" << endl;
+	    return;
+	}
+	
 	// To properly accumulate, create a histogram for this scaler read
 	// cloning input histogram means the axis will be equivalent
 	TH1* hist_current_SR = (TH1D*) hist->Clone();
@@ -47,7 +55,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 
 	for (int i = low_scaler_number; i <= high_scaler_number; i++) 
 	{
-		Int_t bin = hist_current_SR->GetXaxis()->FindBin(i);
+		Int_t bin = i - low_scaler_number;
 		hist_current_SR->SetBinContent(bin,scalers->GetScaler(i));
 	}
 
@@ -407,7 +415,7 @@ Bool_t 	PPhysics::InitTargetMass()
 	}
 	else if(sscanf( config.c_str(), "%lf\n", &mass) == 1)
 	{
-		cout << "Setting Target mass to " << mass << " MeV" << endl;
+		cout << "Setting Target mass: " << mass << " MeV" << endl;
 		SetTarget(mass);		
 	}
 	else 
@@ -438,7 +446,7 @@ Bool_t 	PPhysics::InitTaggerChannelCuts()
 		   return kFALSE;
 		}
 		
-		cout << "Setting cut on tagger channels" << tc1 << " to " << tc2 << endl;
+		cout << "Setting cut on tagger channels: " << tc1 << " to " << tc2 << endl;
 		SetTC_cut(tc1,tc2);
 	}
 	else if(strcmp(config.c_str(), "nokey") != 0)
@@ -452,5 +460,23 @@ Bool_t 	PPhysics::InitTaggerChannelCuts()
 
 }
 
+Bool_t 	PPhysics::InitTaggerScalers()
+{
+	Int_t sc1, sc2;
+	string config = ReadConfig("Tagger-Scalers");
+	if(sscanf( config.c_str(), "%d %d\n", &sc1, &sc2) == 2)
+	{
+		cout << "Setting Tagger scaler channels: " << sc1 << " to " << sc2 << endl;
+		SetTC_scalers(sc1,sc2);
+	}
+	else if(strcmp(config.c_str(), "nokey") != 0)
+	{
+		cout << "Tagger Channel scalers not set correctly" << endl; 
+		return kFALSE;
+	}
 
+	cout << endl;
+	return kTRUE;
+
+}
 #endif

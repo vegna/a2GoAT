@@ -36,6 +36,10 @@ private:
 
 	Int_t TC_cut_min;
 	Int_t TC_cut_max;
+
+	Int_t TC_scaler_min;
+	Int_t TC_scaler_max;
+	
 	
 protected:
 
@@ -71,9 +75,13 @@ public:
 	void	SetTarget(Double_t mass) {target = TLorentzVector(0.,0.,0.,mass);}
 	TLorentzVector GetTarget() {return target;}
 
-	void 	SetTC_cut(Double_t cut_min, Double_t cut_max) { TC_cut_min = cut_min; TC_cut_max = cut_max; }
-	Int_t GetTC_cut_min() { return TC_cut_min;}
-	Int_t GetTC_cut_max() { return TC_cut_max;}
+	void 	SetTC_cut(Int_t cut_min, Int_t cut_max) { TC_cut_min = cut_min; TC_cut_max = cut_max; }
+	Int_t 	GetTC_cut_min() { return TC_cut_min;}
+	Int_t 	GetTC_cut_max() { return TC_cut_max;}
+
+	void 	SetTC_scalers(Int_t sc_min, Int_t sc_max) { TC_scaler_min = sc_min; TC_scaler_max = sc_max; }
+	Int_t 	GetTC_scaler_min() { return TC_scaler_min;}
+	Int_t 	GetTC_scaler_max() { return TC_scaler_max;}	
 
 	// TH1 routines
 	void FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom);
@@ -95,6 +103,6 @@ public:
 	Bool_t InitBackgroundCuts();
 	Bool_t InitTargetMass();
 	Bool_t InitTaggerChannelCuts();
-
+	Bool_t InitTaggerScalers();
 };
 #endif
