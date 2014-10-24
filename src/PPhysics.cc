@@ -351,4 +351,106 @@ Bool_t 	PPhysics::Write()
 {
 	return kTRUE;
 }
+
+// Some common initialisation stuff
+Bool_t 	PPhysics::InitBackgroundCuts()
+{
+	// Set background cuts
+	Double_t p1, p2, r1, r2;
+	string config = ReadConfig("Set-Prompt-Cut");
+	if(strcmp(config.c_str(), "nokey") == 0) 
+		cout << "No BG subtraction - At least 1 prompt and random cut required" << endl;
+	else if(sscanf( config.c_str(), "%lf %lf\n", &p1, &p2) == 2)
+	{
+	   config = ReadConfig("Add-Random-Cut",0);
+	   if(strcmp(config.c_str(), "nokey") == 0) 
+	   	cout << "No BG subtraction - At least 1 random cut required" << endl;
+	   else if(sscanf( config.c_str(), "%lf %lf\n", &r1, &r2) == 2)
+	   {
+		cout << "Init BG cuts:" << endl;
+		cout << "prompt(" << p1 << "," << p2 << ") ";
+		cout << "random(" << r1 << "," << r2 << ") " << endl;
+
+		GHistBGSub::InitCuts(p1,p2,r1,r2);
+
+		// Look for additional random windows
+		Int_t instance = 1;
+		do
+		{
+			config = ReadConfig("Add-Random-Cut",instance);
+			if(sscanf( config.c_str(), "%lf %lf\n", &r1, &r2) == 2)
+			{
+				cout << "Adding random cuts: ";
+				cout << "random(" << r1 << "," << r2 << ") " << endl;
+
+				GHistBGSub::AddRandCut(r1,r2);
+			}		
+			instance++;
+		} while (strcmp(config.c_str(), "nokey") != 0);
+	   }
+	   else {cout << "Random window not set correctly" << endl; return kFALSE;}
+	}
+	else {cout << "Prompt window not set correctly" << endl; return kFALSE;}
+
+	cout << endl;
+	return kTRUE;
+
+}
+
+Bool_t 	PPhysics::InitTargetMass()
+{
+	Double_t mass;
+	string config = ReadConfig("Target-Mass");
+	if(strcmp(config.c_str(), "nokey") == 0)
+	{
+		cout << "Target mass unknown!" << endl;
+	}
+	else if(sscanf( config.c_str(), "%lf\n", &mass) == 1)
+	{
+		cout << "Setting Target mass to " << mass << " MeV" << endl;
+		SetTarget(mass);		
+	}
+	else 
+	{
+		cout << "Target Mass not set correctly" << endl; 
+		return kFALSE;
+	}
+
+	cout << endl;
+	return kTRUE;
+
+}
+
+Bool_t 	PPhysics::InitTaggerChannelCuts()
+{
+	Double_t tc1, tc2;
+	string config = ReadConfig("Tagger-Channel-Cut");
+	if(sscanf( config.c_str(), "%lf %lf\n", &tc1, &tc2) == 2)
+	{
+		if ((tc1 < 0) || (tc1 > 352))
+		{
+		   cout << "Invalid tagger channel cut: " << tc1 << endl;
+		   return kFALSE;
+		}
+		else if ((tc2 < 0) || (tc2 > 352))
+		{
+		   cout << "Invalid tagger channel cut: " << tc2 << endl;
+		   return kFALSE;
+		}
+		
+		cout << "Setting cut on tagger channels" << tc1 << " to " << tc2 << endl;
+		SetTC_cut(tc1,tc2);
+	}
+	else if(strcmp(config.c_str(), "nokey") != 0)
+	{
+		cout << "Tagger Channel cut not set correctly" << endl; 
+		return kFALSE;
+	}
+
+	cout << endl;
+	return kTRUE;
+
+}
+
+
 #endif
