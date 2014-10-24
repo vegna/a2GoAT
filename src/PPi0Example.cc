@@ -2,11 +2,6 @@
 
 PPi0Example::PPi0Example()
 { 
-    GHistBGSub::InitCuts(-20, 15, -100, -40);
-    GHistBGSub::AddRandCut(35, 95);
-    
-    SetTarget(938); 
-        
     time 	= new GH1("time", 	"time", 	1400, -700, 700);
     time_cut 	= new GH1("time_cut", 	"time_cut", 	1400, -700, 700);
 
@@ -24,6 +19,20 @@ PPi0Example::PPi0Example()
 
 PPi0Example::~PPi0Example()
 {
+}
+
+Bool_t	PPi0Example::Init(const char* configfile)
+{
+	cout << "Initialising physics analysis..." << endl;
+	cout << "--------------------------------------------------" << endl << endl;
+	if(configfile) SetConfigFile(configfile);
+
+	if(!InitBackgroundCuts()) return kFALSE;
+	if(!InitTargetMass()) return kFALSE;
+	if(!InitTaggerChannelCuts()) return kFALSE;
+
+	cout << "--------------------------------------------------" << endl;
+	return kTRUE;
 }
 
 Bool_t	PPi0Example::Start()

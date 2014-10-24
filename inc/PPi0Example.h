@@ -24,10 +24,10 @@ private:
     GH1*	MM_2g;
 
     TH1*	TaggerAccScal;
-    
+
+    string  	config;
 protected:
     virtual Bool_t  Start();
-
     virtual void    ProcessEvent();
     virtual void	ProcessScalerRead();
     virtual Bool_t    Write();
@@ -35,8 +35,7 @@ protected:
 public:
     PPi0Example();
     virtual ~PPi0Example();
-
-    //virtual Bool_t	Init(const char* configfile);
+    virtual Bool_t  Init(const char* configfile);
 
 };
 #endif
