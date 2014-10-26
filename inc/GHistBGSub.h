@@ -34,7 +34,9 @@ public:
     virtual Bool_t	Add(const GHistBGSub* h, Double_t c = 1);
     static  void    AddRandCut(const Double_t RandMin, const Double_t RandMax);
     virtual void    CalcResult();
-    virtual Int_t   Fill(const Double_t value, const Double_t taggerTime = 0, const Int_t taggerChannel = -1);
+    virtual Int_t   Fill(const Double_t value)                                                                      {GHistTaggerBinning::Fill(value);}
+    virtual Int_t   Fill(const Double_t value, const Double_t taggerTime);
+    virtual Int_t   Fill(const Double_t value, const Double_t taggerTime, const Int_t taggerChannel);
     virtual Int_t   Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t DoTaggerBinning = kFALSE);
     static  Int_t   GetNRandCuts()   {cutRandMin.size();}
     static  void    InitCuts(const Double_t PromptMin, const Double_t PromptMax, const Double_t RandMin, const Double_t RandMax);

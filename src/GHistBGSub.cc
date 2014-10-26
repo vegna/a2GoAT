@@ -123,6 +123,19 @@ void    GHistBGSub::ExpandRandBins(const Int_t newSize)
         CreateRandBin();
 }
 
+Int_t   GHistBGSub::Fill(const Double_t value, const Double_t taggerTime)
+{
+    if(taggerTime>=cutPromptMin && taggerTime<=cutPromptMax)
+        return prompt.Fill(value);
+    for(int i=0; i<GetNRandCuts(); i++)
+    {
+        if(i>=rand.GetEntriesFast())
+            ExpandRandBins(i+1);
+        if(taggerTime>=cutRandMin[i] && taggerTime<=cutRandMax[i])
+            return ((GHistTaggerBinning*)rand.At(i))->Fill(value);
+    }
+}
+
 Int_t   GHistBGSub::Fill(const Double_t value, const Double_t taggerTime, const Int_t taggerChannel)
 {
     if(taggerTime>=cutPromptMin && taggerTime<=cutPromptMax)
