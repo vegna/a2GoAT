@@ -66,6 +66,7 @@ Bool_t	GHistScaCor::Add(const GHistScaCor *h, Double_t c)
             std::cout << "ERROR: GHistScaCor::Add. Tried to add a corrected and an uncorrected GHistScaCor" << std::endl;
             return kFALSE;
         }
+        corrected   = h->corrected;
     }
 
     if(h->corrected==kFALSE)

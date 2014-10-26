@@ -71,18 +71,8 @@ Bool_t	GHistTaggerBinning::Add(const GHistTaggerBinning* h, Double_t c)
 
 void    GHistTaggerBinning::CalcResult()
 {
-    if(bin.GetEntriesFast()==0)
-    {
-        GHistScaCor::CalcResult();
-        return;
-    }
-
-    //GHistScaCor::Reset();
     for(int i=0; i<bin.GetEntriesFast(); i++)
-    {
-        ((GHistScaCor*)bin.At(i))->CalcResult();
         GHistScaCor::Add((GHistScaCor*)bin.At(i));
-    }
 }
 
 void    GHistTaggerBinning::Reset(Option_t* option)
