@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-#include <string> 
+#include <string>
 
 #include "GTreeManager.h"
 #include "PPhysics.h"
@@ -19,7 +19,7 @@ private:
      
     GH1*	IM;
     GH1*	IM_2g;
-    
+
     GH1*	MM;
     GH1*	MM_2g;
 

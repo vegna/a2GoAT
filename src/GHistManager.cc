@@ -37,41 +37,38 @@ void GHistManager::ClearLinkedHistograms()
 
 void GHistManager::WriteLinkedHistograms(TDirectory* dir)
 {
-    TIter   iter(&histList);
-    GHistLinked*    hist;
-    while(hist=(GHistLinked*)iter.Next())
-        hist->Write(0, TObject::kWriteDelete);
-}
-
-
-
-
-
-TDirectory* GHistLinked::GetCreateDirectory(TDirectory* dir, const TString& dirName)
-{
-    dir->cd();
-    TDirectory* curDir  = dir->GetDirectory(dirName);
-    if(!curDir)
+    std::cout << "Calc Result -->";
     {
-        dir->cd();
-        curDir  = gDirectory->mkdir(dirName);
+        TIter   iter(&histList);
+        GHistLinked*    hist;
+        while(hist=(GHistLinked*)iter.Next())
+            hist->CalcResult();
     }
+    std::cout << " Done." << std::endl;
+
+    std::cout << "Prepare Write List -->";
+    GHistWriteList  writeList;
+    {
+        TIter   iter(&histList);
+        GHistLinked*    hist;
+        while(hist=(GHistLinked*)iter.Next())
+            hist->PrepareWriteList(&writeList);
+    }
+    std::cout << " Done." << std::endl;
+
+    std::cout << "Write -->";
     dir->cd();
-    return curDir;
+    writeList.Write();
+    std::cout << " Done." << std::endl;
 }
 
 
-GHistLinked::GHistLinked() :
-    TH1D(),
-    linked(kFALSE),
-    dir()
-{
-}
 
-GHistLinked::GHistLinked(const char* name, const char* title, Int_t nbinsx, Double_t xlow, Double_t xup, Bool_t linkHistogram, const char* dirName) :
-    TH1D(name, title, nbinsx, xlow, xup),
-    linked(linkHistogram),
-    dir(dirName)
+
+
+GHistLinked::GHistLinked(Bool_t linkHistogram) :
+    TObject(),
+    linked(linkHistogram)
 {
     if(linked == kTRUE)
         Link();
@@ -82,21 +79,16 @@ GHistLinked::~GHistLinked()
     Unlink();
 }
 
-void        GHistLinked::AddOutputDirectory(const TString& directoryName)
+TDirectory* GHistLinked::GetCreateDirectory(const char* name)
 {
-    if(dir.Length()==0)
-        dir = directoryName;
-    else
-        dir.Append("/").Append(directoryName);
-}
-
-TDirectory*    GHistLinked::GetOutputDirectory()
-{
-    if(gGHistManager)
+    TDirectory* ret = gDirectory->GetDirectory(name);
+    if(!ret)
     {
-        return GetCreateDirectory((TDirectory*)gGHistManager->GetOutputDirectory(), dir);
+        ret = gDirectory->mkdir(name);
+        if(!ret)
+            ret = gDirectory;
     }
-    return  GetCreateDirectory((TDirectory*)GetDirectory(), dir);
+    return ret;
 }
 
 void    GHistLinked::Link()
@@ -117,9 +109,116 @@ void    GHistLinked::Unlink()
         gGHistManager->RemoveHistogramFromList(this);
 }
 
-Int_t   GHistLinked::Write(const char* name, Int_t option, Int_t bufsize)
+
+
+
+
+GHistWriteList::~GHistWriteList()
 {
-    if(GetOutputDirectory())
-        GetOutputDirectory()->cd();
-    TH1D::Write(name, option, bufsize);
+    TIter next(this);
+    GHistWriteListEntry *obj;
+    while ((obj = (GHistWriteListEntry*)next()))
+        delete obj;
+}
+
+GHistWriteListEntry*    GHistWriteList::AddDirectory(const TString& _Name)
+{
+    GHistWriteListEntry*    entry = new GHistWriteListEntry(_Name);
+    if(entry)
+        AddAtFree(entry);
+    return entry;
+}
+
+void    GHistWriteList::AddHistogram(TH1D* _Hist, const TString& _Name)
+{
+    if(!_Hist)
+        return;
+    GHistWriteListEntry*    entry = new GHistWriteListEntry(_Hist, _Name);
+    if(entry)
+        AddAtFree(entry);
+}
+
+GHistWriteList* GHistWriteList::GetDirectory(const TString& _Name)
+{
+    TIter next(this);
+    GHistWriteListEntry *obj;
+    while ((obj = (GHistWriteListEntry*)next()))
+    {
+        if(obj->isDirectory==kTRUE)
+        {
+            if(obj->name.EqualTo(_Name))
+                return (GHistWriteList*)obj->obj;
+        }
+    }
+    return (GHistWriteList*)AddDirectory(_Name)->obj;
+}
+
+void    GHistWriteList::Print()
+{
+    printf("Print GHistWriteList:\n");
+    TIter next(this);
+    GHistWriteListEntry *obj;
+    while ((obj = (GHistWriteListEntry*)next()))
+    {
+        if(obj->isDirectory==kTRUE)
+            printf("Directory: ");
+        printf("%s\n", obj->name.Data());
+    }
+}
+
+Int_t	GHistWriteList::Write(const char* NotUsed, Int_t option, Int_t bufsize)
+{
+    Int_t nbytes = 0;
+    {
+        TIter next(this);
+        GHistWriteListEntry *obj;
+        while ((obj = (GHistWriteListEntry*)next()))
+        {
+            if(obj->isDirectory==kFALSE)
+                nbytes += obj->Write(NotUsed, option, bufsize);
+        }
+    }
+
+    {
+        TIter next(this);
+        GHistWriteListEntry *obj;
+        while ((obj = (GHistWriteListEntry*)next()))
+        {
+            if(obj->isDirectory==kTRUE)
+            {
+                TDirectory* parentDir   = gDirectory;
+                GHistLinked::GetCreateDirectory(obj->name)->cd();
+                nbytes += obj->Write(NotUsed, option, bufsize);
+                parentDir->cd();
+            }
+        }
+    }
+    return nbytes;
+}
+
+
+
+
+
+
+GHistWriteListEntry::GHistWriteListEntry(const TString& _Name)  : obj(0), name(_Name), isDirectory(kTRUE)
+{
+    GHistWriteList* list = new GHistWriteList();
+    obj = list;
+}
+
+GHistWriteListEntry::~GHistWriteListEntry()
+{
+    if(isDirectory==kTRUE)
+        delete obj;
+}
+
+Int_t	GHistWriteListEntry::Write(const char* NotUsed, Int_t option, Int_t bufsize)
+{
+    if(!obj)
+        return 0;
+    Int_t   res = obj->Write(name, option, bufsize);
+    if(isDirectory==kFALSE)
+        ((TH1D*)obj)->SetDirectory(0);
+    return  res;
 }

@@ -46,8 +46,7 @@ Bool_t	PPi0Example::Start()
 
     TraverseValidEvents();
 
-//    Write();
-	return kTRUE;
+    return kTRUE;
 }
 
 void	PPi0Example::ProcessEvent()
@@ -62,9 +61,9 @@ void	PPi0Example::ProcessEvent()
 	// fill invariant mass, all pi0
 	FillMass(*pi0,IM);
 		
-	// Some neutral decays
+    // Some neutral decays
     for (Int_t i = 0; i < pi0->GetNParticles(); i++)
-	{		
+    {
         // Fill MM for 2 photon decay
         if ((pi0->GetNSubParticles(i) == 2) & (pi0->GetNSubPhotons(i) == 2))
         {
@@ -76,11 +75,11 @@ void	PPi0Example::ProcessEvent()
             	FillMissingMass(*pi0,i,MM_2g);
             
 		// fill invariant mass, this pi0
-        	FillMass(*pi0,i,IM_2g);
+            FillMass(*pi0,i,IM_2g);
         }
 
-	}
-	
+    }
+
 }
 
 void	PPi0Example::ProcessScalerRead()
