@@ -34,7 +34,7 @@ public:
     const   GHistScaCor&    GetTaggerBin(const Int_t channel)    const   {return *((GHistScaCor*)bin.At(channel));}
     const   GHistScaCor&    GetSum()                             const   {return *((GHistScaCor*)this);}
     static  void            InitTaggerBinning(const Int_t min, const Int_t max);
-    virtual Int_t           Fill(const Double_t value)                   {GHistScaCor::Fill(value);}
+    virtual Int_t           Fill(const Double_t value)                   {return GHistScaCor::Fill(value);}
     virtual Int_t           Fill(const Double_t value, const Int_t taggerChannel);
     virtual Int_t           Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
     virtual void            PrepareWriteList(GHistWriteList* arr, const char* name = 0);
