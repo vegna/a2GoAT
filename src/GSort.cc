@@ -384,6 +384,14 @@ Bool_t	GSort::SortOnNeutrality(Bool_t charge, Int_t Num, Sort_Condition cond, Do
                 continue;
             NumberFound++;
         }
+        for (Int_t i = 0; i <rootinos->GetNParticles(); i++)
+        {
+            //Check theta limits
+            if ((rootinos->Particle(i).Theta() <= ThetaMin) ||
+                (rootinos->Particle(i).Theta() >= ThetaMax))
+                continue;
+            NumberFound++;
+        }
     }
     else
     {
