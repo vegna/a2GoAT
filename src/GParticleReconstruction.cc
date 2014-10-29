@@ -243,7 +243,7 @@ Bool_t	GParticleReconstruction::Init()
     {
         if(sscanf( config.c_str(), "%lf %lf\n", &TAPSTimeCut[0], &TAPSTimeCut[1]) != 2)
         {
-            cout << "ERROR: CB-PARTICLE-TIME-CUT set improperly" << endl;
+            cout << "ERROR: TAPS-PARTICLE-TIME-CUT set improperly" << endl;
             return kFALSE;
         }
     }
