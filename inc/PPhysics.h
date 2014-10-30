@@ -93,6 +93,9 @@ public:
 	void FillTimeCut(const GTreeParticle& tree, TH1* Hist);
 	void FillTimeCut(const GTreeParticle& tree, Int_t particle_index, TH1* Hist);
 
+	void FillMass(const GTreeParticle& tree, TH1* Hist);
+	void FillMass(const GTreeParticle& tree, Int_t particle_index, TH1* Hist);
+
 	void FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index, TH1* Hprompt, TH1* Hrandom, Double_t MM_min, Double_t MM_max);
 	void FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index, Int_t tagger_index, TH1* Hprompt, TH1* Hrandom, Double_t MM_min, Double_t MM_max);
 

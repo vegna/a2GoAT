@@ -149,6 +149,19 @@ void PPhysics::FillTimeCut(const GTreeParticle& tree, Int_t particle_index, TH1*
 	}
 }
 
+void PPhysics::FillMass(const GTreeParticle& tree, TH1* Hist)
+{
+    for (Int_t i = 0; i < tree.GetNParticles(); i++)
+	{
+		Hist->Fill(tree.Particle(i).M());
+	}
+}
+
+void PPhysics::FillMass(const GTreeParticle& tree, Int_t particle_index, TH1* Hist)
+{
+	Hist->Fill(tree.Particle(particle_index).M());
+}
+
 void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index, TH1* Hprompt, TH1* Hrandom, Double_t MM_min, Double_t MM_max)
 {
     for (Int_t i = 0; i < tagger->GetNTagged(); i++)
