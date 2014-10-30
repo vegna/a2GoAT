@@ -200,13 +200,13 @@ void    GHistBGSub::PrepareWriteList(GHistWriteList* arr, const char *name)
     if(name)
     {
         if(GetNRandCuts()==0 || rand.GetEntriesFast()==0)
-            return prompt.PrepareWriteList(arr, name);
+            return GHistTaggerBinning::PrepareWriteList(arr, name);
         GHistTaggerBinning::PrepareWriteList(arr, name);
     }
     else
     {
         if(GetNRandCuts()==0 || rand.GetEntriesFast()==0)
-            return prompt.PrepareWriteList(arr, GHistTaggerBinning::GetName());
+            return GHistTaggerBinning::PrepareWriteList(arr);
         GHistTaggerBinning::PrepareWriteList(arr);
     }
 
