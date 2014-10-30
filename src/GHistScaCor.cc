@@ -6,7 +6,7 @@
 #define GHSC_folderName                  "ScalerCorrection"
 #define GHSC_singleScalerReadFolderName  "SingleScalerRead_"
 #define GHSC_bufferNameSuffix            "_Buffer"
-#define GHSC_bufferTitleSuffix           " Buffer"
+#define GHSC_bufferTitleSuffix           ""
 #define GHSC_accumulatedNameSuffix       "_NoScaCor"
 #define GHSC_accumulatedTitleSuffix      " NoScaCor"
 #define GHSC_singleScalerReadNameSuffix              "_NoScaCor_ScaRead"
