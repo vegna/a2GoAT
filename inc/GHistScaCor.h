@@ -9,22 +9,40 @@
 #include "GHistManager.h"
 
 
-class   GTreeTagger;
+#define GHSC_folderName                  "ScalerCorrection"
+#define GHSC_singleScalerReadFolderName  "SingleScalerRead_"
+#define GHSC_bufferNameSuffix            "_Buffer"
+#define GHSC_bufferTitleSuffix           ""
+#define GHSC_accumulatedNameSuffix       "_NoScaCor"
+#define GHSC_accumulatedTitleSuffix      " NoScaCor"
+#define GHSC_singleScalerReadNameSuffix              "_NoScaCor_ScaRead"
+#define GHSC_singleScalerReadTitleSuffix             " NoScaCor ScaRead "
+#define GHSC_singleScalerReadCorrectedNameSuffix     "_ScaRead"
+#define GHSC_singleScalerReadCorrectedTitleSuffix    " ScaRead "
 
+
+
+
+
+class   GTreeTagger;
 
 class   GHistScaCor : public GHistLinked
 {
 private:
-    TH1D        buffer;
-    TH1D        accumulated;
-    TH1D        accumulatedCorrected;
-    TObjArray   singleScalerReads;
-    TObjArray   singleScalerReadsCorrected;
     Bool_t      corrected;
 
-    void    CreateSingleScalerRead();
-
 protected:
+    TH1*        buffer;
+    TH1*        accumulated;
+    TH1*        accumulatedCorrected;
+
+    TObjArray   singleScalerReads;
+    TObjArray   singleScalerReadsCorrected;
+
+
+    GHistScaCor(const Bool_t linkHistogram);
+
+    virtual void    CreateSingleScalerRead();
 
 public:
     GHistScaCor();
@@ -33,14 +51,14 @@ public:
 
     virtual Bool_t	Add(const GHistScaCor *h, Double_t c = 1);
     virtual void 	CalcResult()    {}
-    virtual Int_t	Fill(Double_t x)    {return buffer.Fill(x);}
-    const   TH1D&   GetAccumulated()            const   {return accumulated;}
-    const   TH1D&   GetAccumulatedCorrected()   const   {return accumulatedCorrected;}
-    const   char*   GetName()                   const   {return accumulatedCorrected.GetName();}
+    virtual Int_t	Fill(Double_t x)    {return buffer->Fill(x);}
+    const   TH1*    GetAccumulated()            const   {return accumulated;}
+    const   TH1*    GetAccumulatedCorrected()   const   {return accumulatedCorrected;}
+    const   char*   GetName()                   const   {return accumulatedCorrected->GetName();}
             Int_t   GetNScalerReadCorrections() const   {return singleScalerReads.GetEntriesFast();}
-            Int_t   GetNbinsX()                 const   {return accumulatedCorrected.GetNbinsX();}
-            Int_t   GetXmin()                   const   {return accumulatedCorrected.GetXaxis()->GetXmin();}
-            Int_t   GetXmax()                   const   {return accumulatedCorrected.GetXaxis()->GetXmax();}
+            Int_t   GetNbinsX()                 const   {return accumulatedCorrected->GetNbinsX();}
+            Int_t   GetXmin()                   const   {return accumulatedCorrected->GetXaxis()->GetXmin();}
+            Int_t   GetXmax()                   const   {return accumulatedCorrected->GetXaxis()->GetXmax();}
     virtual void    PrepareWriteList(GHistWriteList* arr, const char* name = 0);
     virtual void    Reset(Option_t* option = "");
     virtual void	Scale(Double_t c1 = 1, Option_t* option = "");
