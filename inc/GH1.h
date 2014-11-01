@@ -5,6 +5,8 @@
 #include "GHistBGSub.h"
 
 #define GH1 GHistBGSub
+#define GH2 GHistScaCor2
+#define GH3 GHistScaCor3
 
 
 #endif
