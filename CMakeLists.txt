@@ -121,7 +121,7 @@ add_executable(pi0-example
    src/GHistBGSub3.cc
    src/GHistTaggerBinning.cc
    src/GHistTaggerBinning2.cc
-   #src/PPhysics.cc
+   src/PPhysics.cc
    src/PPi0Example.cc
    src/pi0_example_main.cc
    )
