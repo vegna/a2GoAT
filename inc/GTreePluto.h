@@ -11,6 +11,8 @@ class  GTreePluto : public GTree
 {
 private:
     TClonesArray*   PlutoMCTrue;
+    Long64_t        plutoID;
+    Long64_t        plutoRandomID;
 
    protected:
     virtual void    SetBranchAdresses();
@@ -21,9 +23,10 @@ public:
     virtual ~GTreePluto();
 
 
-    virtual void                Clear()                 { PlutoMCTrue->Clear(); }
+    virtual void                Clear()                 { PlutoMCTrue->Clear(); plutoID=-1; plutoRandomID=1; }
     virtual TClonesArray* 		GetMCTrue()        		{ return PlutoMCTrue; }
-
+    virtual Long64_t            GetPlutoID()            { return plutoID; }
+    virtual Long64_t            GetPlutoRandomID()      { return plutoRandomID; }
 
 };
 
