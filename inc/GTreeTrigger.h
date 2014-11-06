@@ -19,6 +19,8 @@ private:
     Int_t 		ErrModID[GTreeTrigger_MAX];
     Int_t 		ErrModIndex[GTreeTrigger_MAX];
     Int_t 		ErrCode[GTreeTrigger_MAX];
+    Long64_t    MC_evt_id;
+    Long64_t    MC_rnd_id;
 
    protected:
     virtual void    SetBranchAdresses();
