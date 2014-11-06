@@ -30,7 +30,7 @@ GTreeParticle::~GTreeParticle()
 void    GTreeParticle::SetBranchAdresses()
 {
     tree_in->SetBranchAddress("nParticles",&nParticles);
-    tree_in->SetBranchAddress("particles.", &particles);
+    tree_in->SetBranchAddress("particles", &particles);
     tree_in->SetBranchAddress("Apparatus",Apparatus);
     tree_in->SetBranchAddress("time", time);
     tree_in->SetBranchAddress("clusterSize", clusterSize);
@@ -42,7 +42,7 @@ void    GTreeParticle::SetBranchAdresses()
 void    GTreeParticle::SetBranches()
 {
     tree_out->Branch("nParticles",&nParticles, "nParticles/i");
-    tree_out->Branch("particles.", &particles, 32000, 0);
+    tree_out->Branch("particles", &particles, 32000, 0);
     tree_out->Branch("Apparatus", Apparatus, "Apparatus[nParticles]/b");
     tree_out->Branch("time", time, "time[nParticles]/D");
     tree_out->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
