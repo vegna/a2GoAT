@@ -37,15 +37,15 @@ GTreeManager::GTreeManager()    :
 {
     pdgDB = TDatabasePDG::Instance();
 
-    etap = new GTreeMeson(this, TString(pdgDB->GetParticle("eta'")->GetName()));
-    eta = new GTreeMeson(this, TString(pdgDB->GetParticle("eta")->GetName()));
-    pi0 = new GTreeMeson(this, TString(pdgDB->GetParticle("pi0")->GetName()));
-    rootinos = new GTreeParticle(this, TString("rootino"));
-    photons = new GTreeParticle(this, TString(pdgDB->GetParticle("gamma")->GetName()));
-    electrons = new GTreeParticle(this, TString(pdgDB->GetParticle("e-")->GetName()));
-    chargedPi = new GTreeParticle(this, TString(pdgDB->GetParticle("pi+")->GetName()));
-    protons = new GTreeParticle(this, TString(pdgDB->GetParticle("proton")->GetName()));
-    neutrons = new GTreeParticle(this, TString(pdgDB->GetParticle("neutron")->GetName()));
+    etap = new GTreeMeson(this, "etaprime");
+    eta = new GTreeMeson(this, "eta");
+    pi0 = new GTreeMeson(this, "pi0");
+    rootinos = new GTreeParticle(this, "rootino");
+    photons = new GTreeParticle(this, "gamma");
+    electrons = new GTreeParticle(this, "e_charged");
+    chargedPi = new GTreeParticle(this, "pi_charged");
+    protons = new GTreeParticle(this, "proton");
+    neutrons = new GTreeParticle(this, "neutron");
     eventParameters = new GTreeEventParameters(this);
     detectorHits = new GTreeDetectorHits(this);
     rawEvent = new GTreeRawEvent(this);
