@@ -80,6 +80,31 @@ set(GOAT_GHIST
    src/GHistTaggerBinning2.cc
 )
 
+if( PLUTO )
+
+    find_package(Pluto)
+
+    if( PLUTO_FOUND )
+
+           set(GOAT_BASE
+              ${GOAT_BASE}
+              inc/GTreePluto.h
+              src/GTreePluto.cc
+           )
+
+           add_definitions( -DhasPluto )
+
+           include_directories(${PLUTO_INCLUDE_PATH})
+           link_directories(${PLUTO_LIBRARY_PATH})
+
+           set(LIBS ${LIB} ${PLUTO_LIBRARY})
+    endif()
+
+else()
+    message(STATUS "Pluto disabled")
+endif()
+
+
 add_executable(goat
    ${GOAT_BASE}
    inc/GDataChecks.h

@@ -18,6 +18,9 @@
 #include "GTreeEventParameters.h"
 #include "GHistManager.h"
 
+#ifdef hasPluto
+#include "GTreePluto.h"
+#endif
 
 #include <stdio.h>
 #include <TSystem.h>
@@ -65,6 +68,10 @@ protected:
     GTreeMeson*         pi0;
     GTreeMeson*         eta;
     GTreeMeson*         etap;
+
+#ifdef hasPluto
+    GTreePluto*         pluto;
+#endif
 
     TDatabasePDG *pdgDB;
 
