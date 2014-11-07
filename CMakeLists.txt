@@ -29,11 +29,9 @@ include_directories(inc)
 set(ROOT_LIBRARIES "${ROOT_LIBRARIES} -lEG")
 message(${ROOT_LIBRARIES})
 
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
-
-add_executable(goat
+set(GOAT_BASE
    inc/GTree.h
    inc/GTreeRawEvent.h
    inc/GTreeDetectorHits.h
@@ -46,13 +44,7 @@ add_executable(goat
    inc/GTreeEventParameters.h
    inc/GHistManager.h
    inc/GTreeManager.h
-   inc/GConfigFile.h
-   inc/GDataChecks.h
-   inc/GParticleReconstruction.h
-   inc/GMesonReconstruction.h
-   inc/GSort.h
-   inc/GoAT.h
-   src/GTree.cc
+   inc/GConfigFile.h   src/GTree.cc
    src/GTreeRawEvent.cc
    src/GTreeDetectorHits.cc
    src/GTreeTagger.cc
@@ -65,67 +57,56 @@ add_executable(goat
    src/GHistManager.cc
    src/GTreeManager.cc
    src/GConfigFile.cc
+)
+
+set(GOAT_GHIST
+   inc/GH1.h
+   inc/GHistBGSub.h
+   src/GHistBGSub.cc
+   inc/GHistScaCor.h
+   src/GHistScaCor.cc
+   inc/GHistScaCor2.h
+   src/GHistScaCor2.cc
+   inc/GHistScaCor3.h
+   src/GHistScaCor3.cc
+   inc/GHistBGSub.h
+   src/GHistBGSub.cc
+   inc/GHistBGSub2.h
+   src/GHistBGSub2.cc
+   inc/GHistBGSub3.h
+   src/GHistBGSub3.cc
+   inc/GHistTaggerBinning.h
+   src/GHistTaggerBinning.cc
+   inc/GHistTaggerBinning2.h
+   src/GHistTaggerBinning2.cc
+)
+
+add_executable(goat
+   ${GOAT_BASE}
+   inc/GDataChecks.h
    src/GDataChecks.cc
+   inc/GParticleReconstruction.h
    src/GParticleReconstruction.cc
+   inc/GMesonReconstruction.h
    src/GMesonReconstruction.cc
+   inc/GSort.h
    src/GSort.cc
+   inc/GoAT.h
    src/GoAT.cc
    src/goat_main.cc
    )
-target_link_libraries(goat ${ROOT_LIBRARIES})
-
+target_link_libraries(goat ${LIBS} ${ROOT_LIBRARIES})
 
 add_executable(pi0-example
-   inc/GTree.h
-   inc/GTreeRawEvent.h
-   inc/GTreeDetectorHits.h
-   inc/GTreeTagger.h
-   inc/GTreeLinPol.h
-   inc/GTreeScaler.h
-   inc/GTreeParticle.h
-   inc/GTreeMeson.h
-   inc/GTreeTrigger.h
-   inc/GTreeEventParameters.h
-   inc/GHistManager.h
-   inc/GTreeManager.h
-   inc/GConfigFile.h
-   inc/GHistScaCor.h
-   inc/GHistScaCor2.h
-   inc/GHistScaCor3.h
-   inc/GHistBGSub.h
-   inc/GHistBGSub2.h
-   inc/GHistBGSub3.h
-   inc/GHistTaggerBinning.h
-   inc/GHistTaggerBinning2.h
-   inc/GH1.h
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
    inc/PPhysics.h
-   inc/PPi0Example.h
-   src/GTree.cc
-   src/GTreeRawEvent.cc
-   src/GTreeDetectorHits.cc
-   src/GTreeTagger.cc
-   src/GTreeLinPol.cc
-   src/GTreeScaler.cc
-   src/GTreeParticle.cc
-   src/GTreeMeson.cc
-   src/GTreeTrigger.cc
-   src/GTreeEventParameters.cc
-   src/GHistManager.cc
-   src/GTreeManager.cc
-   src/GConfigFile.cc
-   src/GHistScaCor.cc
-   src/GHistScaCor2.cc
-   src/GHistScaCor3.cc
-   src/GHistBGSub.cc
-   src/GHistBGSub2.cc
-   src/GHistBGSub3.cc
-   src/GHistTaggerBinning.cc
-   src/GHistTaggerBinning2.cc
    src/PPhysics.cc
+   inc/PPi0Example.h
    src/PPi0Example.cc
    src/pi0_example_main.cc
    )
-target_link_libraries(pi0-example ${ROOT_LIBRARIES})
+target_link_libraries(pi0-example ${LIBS} ${ROOT_LIBRARIES})
 
 # install some scripts to the bin directory
 # by creating symlinks
