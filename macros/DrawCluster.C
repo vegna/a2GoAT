@@ -115,8 +115,8 @@ void DrawCluster(TString sData, Int_t iMinEvn=0, Int_t iMinPart=0, Int_t iMinNaI
 
     if(iNParticles >= iMinPart) bPart = true;
     for(j=0; j<iNParticles; j++){
-      if(iClusterSize[j] > iMinNaI && iApparatus[j] == 1) bNaI = true;
-      if(iClusterSize[j] > iMinBaF && iApparatus[j] == 2) bBaF = true;
+      if(iClusterSize[j] >= iMinNaI && iApparatus[j] == 1) bNaI = true;
+      if(iClusterSize[j] >= iMinBaF && iApparatus[j] == 2) bBaF = true;
     }
     if(bPart && bNaI && bBaF) break;
   }
