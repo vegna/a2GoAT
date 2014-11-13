@@ -132,7 +132,7 @@ Bool_t  GTreeManager::StartFile(const char* input_filename, const char* output_f
     }
 
     if(file_out)
-        delete file_out;
+        file_out->Close();
     file_out = TFile::Open(output_filename, "RECREATE");
     if(!file_out)
     {
@@ -152,14 +152,14 @@ Bool_t  GTreeManager::StartFile(const char* input_filename, const char* output_f
         Write();
     cache->Flush();
 
-    /*for(int l=0; l<treeList.GetEntries(); l++)
+    for(int l=0; l<treeList.GetEntries(); l++)
         ((GTree*)treeList[l])->Close();
     for(int l=0; l<treeCorreleatedToScalerReadList.GetEntries(); l++)
-        ((GTree*)treeCorreleatedToScalerReadList[l])->Close();*/
+        ((GTree*)treeCorreleatedToScalerReadList[l])->Close();
 
 
-    //if(file_in)    file_in->Close();
-    //if(file_out)    file_out->Close();
+    if(file_in)     file_in->Close();
+    if(file_out)    file_out->Close();
     //delete  cache;
 
     return kTRUE;
