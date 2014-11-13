@@ -29,8 +29,8 @@ public:
 
     virtual Int_t           Fill(const Double_t value);
     virtual Int_t           Fill(const Double_t x, const Double_t y)                                                          {return ((GHistBGSub2*)sum)->Fill(x, y);}
-    virtual Int_t           Fill(const Double_t x, const Double_t y, const Int_t taggerChannel)                               {return ((GHistBGSub3*)array)->Fill(x, y, taggerChannel);}
-    virtual Int_t           Fill(const Double_t x, const Double_t y, const Int_t taggerTime, const Int_t taggerChannel)       {return ((GHistBGSub3*)array)->Fill(x, y, taggerChannel, taggerTime);}
+    virtual Int_t           Fill(const Double_t x, const Double_t y, const Double_t taggerTime)                               {return ((GHistBGSub2*)sum)->Fill(x, y, taggerTime);}
+    virtual Int_t           Fill(const Double_t x, const Double_t y, const Double_t taggerTime, const Int_t taggerChannel)    {return ((GHistBGSub3*)array)->Fill(x, y, taggerChannel, taggerTime);}
     virtual Int_t           Fill(const Double_t x, const Double_t y, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
 };
 
