@@ -11,27 +11,23 @@
 class	GParticleReconstruction : public GDataChecks
 {
 public:
-    enum ReconstructionType
+    enum ReconType
     {
-        ReconstructionType_AllPhotons,
-        ReconstructionType_AllProtons,
-        ReconstructionType_dEoverE
-    };
-    enum dEoverE_Type
-    {
-        dEoverE_Cut_None     = 0,
-        dEoverE_Cut_Proton   = 1,
-        dEoverE_Cut_PiPlus   = 2,
-        dEoverE_Cut_Electron = 4
+        Recon_None         = 0,
+        Recon_dE_Proton    = 1,
+        Recon_dE_Pion      = 2,
+        Recon_dE_Electron  = 4,
+        Recon_TOF          = 8,
+        Recon_ClustSize    = 16,
+        Recon_AllPhotons   = 32,
+        Recon_AllProtons   = 64
     };
 
 private:
 	std::string config;
 
-    ReconstructionType                 CB_type;
-    dEoverE_Type    CB_dEoverE_type;
-    ReconstructionType                 TAPS_type;
-    dEoverE_Type    TAPS_dEoverE_type;
+    ReconType   CB_type;
+    ReconType   TAPS_type;
 
     char 		cutfilename[256];
     char 		cutname[256];
@@ -45,24 +41,18 @@ private:
     TCutG* 		Cut_TAPS_pion;
     TCutG*		Cut_TAPS_electron;
 
+    TCutG* 		Cut_CB_TOF;
+    TCutG* 		Cut_CB_ClustSize;
+    TCutG* 		Cut_TAPS_TOF;
+    TCutG* 		Cut_TAPS_ClustSize;
+
     Double_t	charged_theta_min;
     Double_t	charged_theta_max;
 
-    Int_t		Cut_CB_proton_active;
-    Int_t		Cut_TAPS_proton_active;
-    Int_t 		Cut_proton_active;
-
-    Int_t		Cut_CB_pion_active;
-    Int_t		Cut_TAPS_pion_active;
-    Int_t 		Cut_pion_active;
-
-    Int_t		Cut_CB_electron_active;
-    Int_t		Cut_TAPS_electron_active;
-    Int_t 		Cut_electron_active;
-
     Int_t* 		Identified;
     Int_t* 		Charge;
-    
+    Int_t* 		Hadron;
+
     Bool_t 		charge_ignore_PID;
     Bool_t 		charge_ignore_WC0;
     Bool_t 		charge_ignore_WC1;
@@ -93,17 +83,7 @@ public:
     void    SetTAPSTimeCut(const Double_t min, const Double_t max)  {TAPSTimeCut[0]=min; TAPSTimeCut[1]=max;}
     void    SetScalerCorrection(const Bool_t value)                 {DoScalerCorrection = value;}
     void    SetTrigger(const Double_t esum, const Int_t mult)       {DoTrigger = kTRUE; E_Sum = esum; multiplicity = mult;}
-    void    SetCBType(const ReconstructionType type, const dEoverE_Type dEoverE_type = dEoverE_Cut_None)    {CB_type = type; CB_dEoverE_type = dEoverE_type;}
-    void    SetTAPSType(const ReconstructionType type, const dEoverE_Type dEoverE_type = dEoverE_Cut_None)  {TAPS_type = type; TAPS_dEoverE_type = dEoverE_type;}
     void    SetThetaRangeChargedParticles(const Double_t min, const Double_t max)  {charged_theta_min = min; charged_theta_max = max;}
-
-    //void	CheckNeutrality();
-    //void 	PhotonReconstruction();
-    void 	ChargedReconstructionCB(const Int_t index);
-    void 	ChargedReconstructionTAPS(const Int_t index);
-    void 	MesonReconstruction();
-    //void	AddParticle(Int_t pdg_code, Int_t nindex, Int_t index_list[]);
-    //void	AddParticle(Int_t pdg_code, Int_t i)                    {Int_t index_list[1]; index_list[0] = i; AddParticle(pdg_code, 1, index_list);}
 };
 
 #endif
