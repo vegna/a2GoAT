@@ -44,7 +44,8 @@ set(GOAT_BASE
    inc/GTreeEventParameters.h
    inc/GHistManager.h
    inc/GTreeManager.h
-   inc/GConfigFile.h   src/GTree.cc
+   inc/GConfigFile.h
+   src/GTree.cc
    src/GTreeRawEvent.cc
    src/GTreeDetectorHits.cc
    src/GTreeTagger.cc
@@ -61,8 +62,6 @@ set(GOAT_BASE
 
 set(GOAT_GHIST
    inc/GH1.h
-   inc/GHistBGSub.h
-   src/GHistBGSub.cc
    inc/GHistScaCor.h
    src/GHistScaCor.cc
    inc/GHistScaCor2.h
