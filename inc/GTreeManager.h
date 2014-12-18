@@ -21,6 +21,7 @@
 #ifdef hasPluto
 #include "GTreePluto.h"
 #endif
+#include "GTreeA2Geant.h"
 
 #include <stdio.h>
 #include <TSystem.h>
@@ -72,6 +73,7 @@ protected:
 #ifdef hasPluto
     GTreePluto*         pluto;
 #endif
+    GTreeA2Geant*       geant;
 
     TDatabasePDG *pdgDB;
 

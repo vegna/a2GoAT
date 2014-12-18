@@ -35,10 +35,11 @@ GTreeManager::GTreeManager()    :
     etap(0),
 #ifdef hasPluto
     linpol(0),
-    pluto(NULL)
+    pluto(NULL),
 #else
-    linpol(0)
+    linpol(0),
 #endif
+    geant(NULL)
 
 {
     pdgDB = TDatabasePDG::Instance();
@@ -62,6 +63,7 @@ GTreeManager::GTreeManager()    :
 #ifdef hasPluto
     pluto = new GTreePluto(this);
 #endif
+    geant = new GTreeA2Geant(this);
 }
 
 GTreeManager::~GTreeManager()

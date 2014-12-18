@@ -62,6 +62,8 @@ set(GOAT_BASE
    src/GMesonReconstruction.cc
    src/GSort.cc
    src/GoAT.cc
+   inc/GTreeA2Geant.h
+   src/GTreeA2Geant.cc
 )
 
 set(GOAT_GHIST
