@@ -27,7 +27,6 @@ link_directories(${ROOT_LIBRARY_DIR})
 
 include_directories(inc)
 set(ROOT_LIBRARIES "${ROOT_LIBRARIES} -lEG")
-message(${ROOT_LIBRARIES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
@@ -58,6 +57,11 @@ set(GOAT_BASE
    src/GHistManager.cc
    src/GTreeManager.cc
    src/GConfigFile.cc
+   src/GDataChecks.cc
+   src/GParticleReconstruction.cc
+   src/GMesonReconstruction.cc
+   src/GSort.cc
+   src/GoAT.cc
 )
 
 set(GOAT_GHIST
