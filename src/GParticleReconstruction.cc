@@ -4,9 +4,9 @@
 using namespace std;
 
 GParticleReconstruction::GParticleReconstruction() :
-    Identified(new Int_t[GTreeRawEvent_MAX]),
-    Charge(new Int_t[GTreeRawEvent_MAX]),
-    Hadron(new Int_t[GTreeRawEvent_MAX]),
+    Identified(new Int_t[GTreeRawParticle_MAX]),
+    Charge(new Int_t[GTreeRawParticle_MAX]),
+    Hadron(new Int_t[GTreeRawParticle_MAX]),
     DoScalerCorrection(kFALSE),
     DoTrigger(kFALSE),
     E_Sum(50),
@@ -341,11 +341,11 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
     protons->Clear();
     neutrons->Clear();
 
-    for(Int_t i=0; i<rawEvent->GetNParticles(); i++)
+    for(Int_t i=0; i<rawParticle->GetNParticles(); i++)
     {
-        if(rawEvent->GetApparatus(i) == GTreeRawEvent::APPARATUS_CB)
+        if(rawParticle->GetApparatus(i) == GTreeRawParticle::APPARATUS_CB)
         {
-            if(rawEvent->GetTime(i)<CBTimeCut[0] || rawEvent->GetTime(i)>CBTimeCut[1])
+            if(rawParticle->GetTime(i)<CBTimeCut[0] || rawParticle->GetTime(i)>CBTimeCut[1])
                 return kFALSE;
 
             Identified[i] = pdg_rootino;
@@ -364,19 +364,19 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if ((!charge_ignore_PID) && (rawEvent->Get_dE(i) > 0.0))	Charge[i] = 1;
-            if ((!charge_ignore_WC0) && (rawEvent->GetWC0_E(i) > 0.0))	Charge[i] = 1;
-            if ((!charge_ignore_WC1) && (rawEvent->GetWC1_E(i) > 0.0))	Charge[i] = 1;
+            if ((!charge_ignore_PID) && (rawParticle->Get_dE(i) > 0.0))	Charge[i] = 1;
+            if ((!charge_ignore_WC0) && (rawParticle->GetWC0_E(i) > 0.0))	Charge[i] = 1;
+            if ((!charge_ignore_WC1) && (rawParticle->GetWC1_E(i) > 0.0))	Charge[i] = 1;
 
             if(CB_type & Recon_TOF)
             {
-                if(Cut_CB_TOF->IsInside(rawEvent->GetEk(i),rawEvent->GetTime(i)))
+                if(Cut_CB_TOF->IsInside(rawParticle->GetEk(i),rawParticle->GetTime(i)))
                     Hadron[i] = 1;
             }
 
             if(CB_type & Recon_ClustSize)
             {
-                if(Cut_CB_ClustSize->IsInside(rawEvent->GetEk(i),rawEvent->GetClusterSize(i)))
+                if(Cut_CB_ClustSize->IsInside(rawParticle->GetEk(i),rawParticle->GetClusterSize(i)))
                     Hadron[i] = 1;
             }
 
@@ -387,8 +387,8 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if (rawEvent->GetTheta(i) < charged_theta_min) break; // user rejected theta region
-            if (rawEvent->GetTheta(i) > charged_theta_max) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) < charged_theta_min) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) > charged_theta_max) break; // user rejected theta region
 
             if(Hadron[i] == 1)
             {
@@ -398,26 +398,26 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 
             if(CB_type & Recon_dE_Proton)
             {
-                if(Cut_CB_proton->IsInside(rawEvent->GetEk(i),rawEvent->Get_dE(i)))
+                if(Cut_CB_proton->IsInside(rawParticle->GetEk(i),rawParticle->Get_dE(i)))
                     Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
             if(CB_type & Recon_dE_Pion)
             {
-                if(Cut_CB_pion->IsInside(rawEvent->GetEk(i),rawEvent->Get_dE(i)))
+                if(Cut_CB_pion->IsInside(rawParticle->GetEk(i),rawParticle->Get_dE(i)))
                     Identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
             if(CB_type & Recon_dE_Electron)
             {
-                if(Cut_CB_electron->IsInside(rawEvent->GetEk(i),rawEvent->Get_dE(i)))
+                if(Cut_CB_electron->IsInside(rawParticle->GetEk(i),rawParticle->Get_dE(i)))
                     Identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
 
-        if(rawEvent->GetApparatus(i) == GTreeRawEvent::APPARATUS_TAPS)
+        if(rawParticle->GetApparatus(i) == GTreeRawParticle::APPARATUS_TAPS)
         {
-            if(rawEvent->GetTime(i)<TAPSTimeCut[0] || rawEvent->GetTime(i)>TAPSTimeCut[1])
+            if(rawParticle->GetTime(i)<TAPSTimeCut[0] || rawParticle->GetTime(i)>TAPSTimeCut[1])
                 return kFALSE;
 
             Identified[i] = pdg_rootino;
@@ -436,17 +436,17 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if ((!charge_ignore_VETO) && (rawEvent->Get_dE(i) > 0.0))	Charge[i] = 1;
+            if ((!charge_ignore_VETO) && (rawParticle->Get_dE(i) > 0.0))	Charge[i] = 1;
 
             if(TAPS_type & Recon_TOF)
             {
-                if(Cut_TAPS_TOF->IsInside(rawEvent->GetEk(i),rawEvent->GetTime(i)))
+                if(Cut_TAPS_TOF->IsInside(rawParticle->GetEk(i),rawParticle->GetTime(i)))
                     Hadron[i] = 1;
             }
 
             if(TAPS_type & Recon_ClustSize)
             {
-                if(Cut_TAPS_ClustSize->IsInside(rawEvent->GetEk(i),rawEvent->GetClusterSize(i)))
+                if(Cut_TAPS_ClustSize->IsInside(rawParticle->GetEk(i),rawParticle->GetClusterSize(i)))
                     Hadron[i] = 1;
             }
 
@@ -457,8 +457,8 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if (rawEvent->GetTheta(i) < charged_theta_min) break; // user rejected theta region
-            if (rawEvent->GetTheta(i) > charged_theta_max) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) < charged_theta_min) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) > charged_theta_max) break; // user rejected theta region
 
             if(Hadron[i] == 1)
             {
@@ -468,39 +468,39 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 
             if(TAPS_type & Recon_dE_Proton)
             {
-                if(Cut_TAPS_proton->IsInside(rawEvent->GetEk(i),rawEvent->Get_dE(i)))
+                if(Cut_TAPS_proton->IsInside(rawParticle->GetEk(i),rawParticle->Get_dE(i)))
                     Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
             if(TAPS_type & Recon_dE_Pion)
             {
-                if(Cut_TAPS_pion->IsInside(rawEvent->GetEk(i),rawEvent->Get_dE(i)))
+                if(Cut_TAPS_pion->IsInside(rawParticle->GetEk(i),rawParticle->Get_dE(i)))
                     Identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
             if(TAPS_type & Recon_dE_Electron)
             {
-                if(Cut_TAPS_electron->IsInside(rawEvent->GetEk(i),rawEvent->Get_dE(i)))
+                if(Cut_TAPS_electron->IsInside(rawParticle->GetEk(i),rawParticle->Get_dE(i)))
                     Identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
     }
 
-    for (int i = 0; i < rawEvent->GetNParticles(); i++)
+    for (int i = 0; i < rawParticle->GetNParticles(); i++)
     {
         // Finally add particles which were temporarily identified
         if (Identified[i] == pdgDB->GetParticle("proton")->PdgCode())
-            protons->AddParticle(rawEvent->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), rawEvent->GetApparatus(i), rawEvent->Get_dE(i), rawEvent->GetWC0_E(i), rawEvent->GetWC1_E(i), rawEvent->GetTime(i), rawEvent->GetClusterSize(i));
+            protons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->Get_dE(i), rawParticle->GetWC0_E(i), rawParticle->GetWC1_E(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (Identified[i] == pdgDB->GetParticle("pi+")->PdgCode())
-            chargedPi->AddParticle(rawEvent->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), rawEvent->GetApparatus(i), rawEvent->Get_dE(i), rawEvent->GetWC0_E(i), rawEvent->GetWC1_E(i), rawEvent->GetTime(i), rawEvent->GetClusterSize(i));
+            chargedPi->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->Get_dE(i), rawParticle->GetWC0_E(i), rawParticle->GetWC1_E(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (Identified[i] == pdgDB->GetParticle("e-")->PdgCode())
-            electrons->AddParticle(rawEvent->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), rawEvent->GetApparatus(i), rawEvent->Get_dE(i), rawEvent->GetWC0_E(i), rawEvent->GetWC1_E(i), rawEvent->GetTime(i), rawEvent->GetClusterSize(i));
+            electrons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->Get_dE(i), rawParticle->GetWC0_E(i), rawParticle->GetWC1_E(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (Identified[i] == pdgDB->GetParticle("neutron")->PdgCode())
-            neutrons->AddParticle(rawEvent->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), rawEvent->GetApparatus(i), rawEvent->Get_dE(i), rawEvent->GetWC0_E(i), rawEvent->GetWC1_E(i), rawEvent->GetTime(i), rawEvent->GetClusterSize(i));
+            neutrons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->Get_dE(i), rawParticle->GetWC0_E(i), rawParticle->GetWC1_E(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (Identified[i] == pdgDB->GetParticle("gamma")->PdgCode())
-            photons->AddParticle(rawEvent->GetVector(i), rawEvent->GetApparatus(i), rawEvent->Get_dE(i), rawEvent->GetWC0_E(i), rawEvent->GetWC1_E(i), rawEvent->GetTime(i), rawEvent->GetClusterSize(i));
+            photons->AddParticle(rawParticle->GetVector(i), rawParticle->GetApparatus(i), rawParticle->Get_dE(i), rawParticle->GetWC0_E(i), rawParticle->GetWC1_E(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (Identified[i] == pdg_rootino)
-            rootinos->AddParticle(rawEvent->GetVector(i), rawEvent->GetApparatus(i), rawEvent->Get_dE(i), rawEvent->GetWC0_E(i), rawEvent->GetWC1_E(i), rawEvent->GetTime(i), rawEvent->GetClusterSize(i));
+            rootinos->AddParticle(rawParticle->GetVector(i), rawParticle->GetApparatus(i), rawParticle->Get_dE(i), rawParticle->GetWC0_E(i), rawParticle->GetWC1_E(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
     }
 
     return kTRUE;
