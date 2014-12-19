@@ -65,12 +65,12 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, Int_t* subRootinos_in
     new((*subRootinos)[nParticles]) TClonesArray("TLorentzVector", _NSubRootinos);
     new((*subPhotons)[nParticles]) TClonesArray("TLorentzVector", _NSubPhotons);
     new((*subChargedPi)[nParticles]) TClonesArray("TLorentzVector", _NSubChargedPi);
-    Apparatus[nParticles]    = GTreeRawParticle::APPARATUS_NONE;
+    apparatus[nParticles]    = GTreeRawParticle::APPARATUS_NONE;
     time[nParticles]         = 0;
     clusterSize[nParticles]  = 0;
-    d_E[nParticles]          = 0;
-    WC0_E[nParticles]        = 0;
-    WC1_E[nParticles]        = 0;
+    vetoEnergy[nParticles]          = 0;
+    MWPC0Energy[nParticles]        = 0;
+    MWPC1Energy[nParticles]        = 0;
 
     nSubParticles[nParticles]  = _NSubRootinos + _NSubPhotons + _NSubChargedPi;
     nSubRootinos[nParticles]   = _NSubRootinos;
@@ -81,34 +81,34 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, Int_t* subRootinos_in
     {
         sum += *subRootinos_list[i];
         new((*((TClonesArray*)subRootinos->At(nParticles)))[i]) TLorentzVector(*subRootinos_list[i]);
-        Apparatus[nParticles]    = Apparatus[nParticles] | manager->rootinos->GetApparatus(subRootinos_index[i]);
+        apparatus[nParticles]    = apparatus[nParticles] | manager->rootinos->GetApparatus(subRootinos_index[i]);
         time[nParticles]         += manager->rootinos->GetTime(subRootinos_index[i]);
         clusterSize[nParticles]  += manager->rootinos->GetClusterSize(subRootinos_index[i]);
-        d_E[nParticles]          += manager->rootinos->Get_dE(subRootinos_index[i]);
-        WC0_E[nParticles]        += manager->rootinos->GetWC0_E(subRootinos_index[i]);
-        WC1_E[nParticles]        += manager->rootinos->GetWC1_E(subRootinos_index[i]);
+        vetoEnergy[nParticles]          += manager->rootinos->GetVetoEnergy(subRootinos_index[i]);
+        MWPC0Energy[nParticles]        += manager->rootinos->GetMWPC0Energy(subRootinos_index[i]);
+        MWPC1Energy[nParticles]        += manager->rootinos->GetMWPC1Energy(subRootinos_index[i]);
     }
     for(int i=0; i<_NSubPhotons; i++)
     {
         sum += *subPhotons_list[i];
         new((*((TClonesArray*)subPhotons->At(nParticles)))[i]) TLorentzVector(*subPhotons_list[i]);
-        Apparatus[nParticles]    = Apparatus[nParticles] | manager->photons->GetApparatus(subPhotons_index[i]);
+        apparatus[nParticles]    = apparatus[nParticles] | manager->photons->GetApparatus(subPhotons_index[i]);
         time[nParticles]         += manager->photons->GetTime(subPhotons_index[i]);
         clusterSize[nParticles]  += manager->photons->GetClusterSize(subPhotons_index[i]);
-        d_E[nParticles]          += manager->photons->Get_dE(subPhotons_index[i]);
-        WC0_E[nParticles]        += manager->photons->GetWC0_E(subPhotons_index[i]);
-        WC1_E[nParticles]        += manager->photons->GetWC1_E(subPhotons_index[i]);
+        vetoEnergy[nParticles]          += manager->photons->GetVetoEnergy(subPhotons_index[i]);
+        MWPC0Energy[nParticles]        += manager->photons->GetMWPC0Energy(subPhotons_index[i]);
+        MWPC1Energy[nParticles]        += manager->photons->GetMWPC1Energy(subPhotons_index[i]);
     }
     for(int i=0; i<_NSubChargedPi; i++)
     {
         sum += *subChargedPi_list[i];
         new((*((TClonesArray*)subChargedPi->At(nParticles)))[i]) TLorentzVector(*subChargedPi_list[i]);
-        Apparatus[nParticles]    = Apparatus[nParticles] | manager->chargedPi->GetApparatus(subChargedPi_index[i]);
+        apparatus[nParticles]    = apparatus[nParticles] | manager->chargedPi->GetApparatus(subChargedPi_index[i]);
         time[nParticles]         += manager->chargedPi->GetTime(subChargedPi_index[i]);
         clusterSize[nParticles]  += manager->chargedPi->GetClusterSize(subChargedPi_index[i]);
-        d_E[nParticles]          += manager->chargedPi->Get_dE(subChargedPi_index[i]);
-        WC0_E[nParticles]        += manager->chargedPi->GetWC0_E(subChargedPi_index[i]);
-        WC1_E[nParticles]        += manager->chargedPi->GetWC1_E(subChargedPi_index[i]);
+        vetoEnergy[nParticles]          += manager->chargedPi->GetVetoEnergy(subChargedPi_index[i]);
+        MWPC0Energy[nParticles]        += manager->chargedPi->GetMWPC0Energy(subChargedPi_index[i]);
+        MWPC1Energy[nParticles]        += manager->chargedPi->GetMWPC1Energy(subChargedPi_index[i]);
     }
     time[nParticles]         /= nSubParticles[nParticles];
     new((*particles)[nParticles]) TLorentzVector(sum);
@@ -131,68 +131,68 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
     if(pdg0 == manager->pdgDB->GetParticle("gamma")->PdgCode())
     {
         new((*((TClonesArray*)subPhotons->At(nParticles)))[nSubPhotons[nParticles]]) TLorentzVector(subParticle0);
-        Apparatus[nParticles]    = manager->photons->GetApparatus(subParticle_index0);
+        apparatus[nParticles]    = manager->photons->GetApparatus(subParticle_index0);
         time[nParticles]         = manager->photons->GetTime(subParticle_index0);
         clusterSize[nParticles]  = manager->photons->GetClusterSize(subParticle_index0);
-        d_E[nParticles]          = manager->photons->Get_dE(subParticle_index0);
-        WC0_E[nParticles]        = manager->photons->GetWC0_E(subParticle_index0);
-        WC1_E[nParticles]        = manager->photons->GetWC1_E(subParticle_index0);
+        vetoEnergy[nParticles]          = manager->photons->GetVetoEnergy(subParticle_index0);
+        MWPC0Energy[nParticles]        = manager->photons->GetMWPC0Energy(subParticle_index0);
+        MWPC1Energy[nParticles]        = manager->photons->GetMWPC1Energy(subParticle_index0);
         nSubPhotons[nParticles]++;
     }
     else if(pdg0 == manager->pdgDB->GetParticle("pi+")->PdgCode())
     {
         new((*((TClonesArray*)subChargedPi->At(nParticles)))[nSubChargedPi[nParticles]]) TLorentzVector(subParticle0);
-        Apparatus[nParticles]    = manager->chargedPi->GetApparatus(subParticle_index0);
+        apparatus[nParticles]    = manager->chargedPi->GetApparatus(subParticle_index0);
         time[nParticles]         = manager->chargedPi->GetTime(subParticle_index0);
         clusterSize[nParticles]  = manager->chargedPi->GetClusterSize(subParticle_index0);
-        d_E[nParticles]          = manager->chargedPi->Get_dE(subParticle_index0);
-        WC0_E[nParticles]        = manager->chargedPi->GetWC0_E(subParticle_index0);
-        WC1_E[nParticles]        = manager->chargedPi->GetWC1_E(subParticle_index0);
+        vetoEnergy[nParticles]          = manager->chargedPi->GetVetoEnergy(subParticle_index0);
+        MWPC0Energy[nParticles]        = manager->chargedPi->GetMWPC0Energy(subParticle_index0);
+        MWPC1Energy[nParticles]        = manager->chargedPi->GetMWPC1Energy(subParticle_index0);
         nSubChargedPi[nParticles]++;
     }
     else
     {
         new((*((TClonesArray*)subRootinos->At(nParticles)))[nSubRootinos[nParticles]]) TLorentzVector(subParticle0);
-        Apparatus[nParticles]    = manager->rootinos->GetApparatus(subParticle_index0);
+        apparatus[nParticles]    = manager->rootinos->GetApparatus(subParticle_index0);
         time[nParticles]         = manager->rootinos->GetTime(subParticle_index0);
         clusterSize[nParticles]  = manager->rootinos->GetClusterSize(subParticle_index0);
-        d_E[nParticles]          = manager->rootinos->Get_dE(subParticle_index0);
-        WC0_E[nParticles]        = manager->rootinos->GetWC0_E(subParticle_index0);
-        WC1_E[nParticles]        = manager->rootinos->GetWC1_E(subParticle_index0);
+        vetoEnergy[nParticles]          = manager->rootinos->GetVetoEnergy(subParticle_index0);
+        MWPC0Energy[nParticles]        = manager->rootinos->GetMWPC0Energy(subParticle_index0);
+        MWPC1Energy[nParticles]        = manager->rootinos->GetMWPC1Energy(subParticle_index0);
         nSubRootinos[nParticles]++;
     }
     
     if(pdg1 == manager->pdgDB->GetParticle("gamma")->PdgCode())
     {
         new((*((TClonesArray*)subPhotons->At(nParticles)))[nSubPhotons[nParticles]]) TLorentzVector(subParticle1);
-        Apparatus[nParticles]    = Apparatus[nParticles] | manager->photons->GetApparatus(subParticle_index1);
+        apparatus[nParticles]    = apparatus[nParticles] | manager->photons->GetApparatus(subParticle_index1);
         time[nParticles]         += manager->photons->GetTime(subParticle_index1);
         clusterSize[nParticles]  += manager->photons->GetClusterSize(subParticle_index1);
-        d_E[nParticles]          += manager->photons->Get_dE(subParticle_index1);
-        WC0_E[nParticles]        += manager->photons->GetWC0_E(subParticle_index1);
-        WC1_E[nParticles]        += manager->photons->GetWC1_E(subParticle_index1);
+        vetoEnergy[nParticles]          += manager->photons->GetVetoEnergy(subParticle_index1);
+        MWPC0Energy[nParticles]        += manager->photons->GetMWPC0Energy(subParticle_index1);
+        MWPC1Energy[nParticles]        += manager->photons->GetMWPC1Energy(subParticle_index1);
         nSubPhotons[nParticles]++;
     }
     else if(pdg1 == manager->pdgDB->GetParticle("pi+")->PdgCode())
     {
         new((*((TClonesArray*)subChargedPi->At(nParticles)))[nSubChargedPi[nParticles]]) TLorentzVector(subParticle1);
-        Apparatus[nParticles]    = Apparatus[nParticles] | manager->chargedPi->GetApparatus(subParticle_index1);
+        apparatus[nParticles]    = apparatus[nParticles] | manager->chargedPi->GetApparatus(subParticle_index1);
         time[nParticles]         += manager->chargedPi->GetTime(subParticle_index1);
         clusterSize[nParticles]  += manager->chargedPi->GetClusterSize(subParticle_index1);
-        d_E[nParticles]          += manager->chargedPi->Get_dE(subParticle_index1);
-        WC0_E[nParticles]        += manager->chargedPi->GetWC0_E(subParticle_index1);
-        WC1_E[nParticles]        += manager->chargedPi->GetWC1_E(subParticle_index1);
+        vetoEnergy[nParticles]          += manager->chargedPi->GetVetoEnergy(subParticle_index1);
+        MWPC0Energy[nParticles]        += manager->chargedPi->GetMWPC0Energy(subParticle_index1);
+        MWPC1Energy[nParticles]        += manager->chargedPi->GetMWPC1Energy(subParticle_index1);
         nSubChargedPi[nParticles]++;
     }
     else
     {
         new((*((TClonesArray*)subRootinos->At(nParticles)))[nSubRootinos[nParticles]]) TLorentzVector(subParticle1);
-        Apparatus[nParticles]    = Apparatus[nParticles] | manager->rootinos->GetApparatus(subParticle_index1);
+        apparatus[nParticles]    = apparatus[nParticles] | manager->rootinos->GetApparatus(subParticle_index1);
         time[nParticles]         += manager->rootinos->GetTime(subParticle_index1);
         clusterSize[nParticles]  += manager->rootinos->GetClusterSize(subParticle_index1);
-        d_E[nParticles]          += manager->rootinos->Get_dE(subParticle_index1);
-        WC0_E[nParticles]        += manager->rootinos->GetWC0_E(subParticle_index1);
-        WC1_E[nParticles]        += manager->rootinos->GetWC1_E(subParticle_index1);
+        vetoEnergy[nParticles]          += manager->rootinos->GetVetoEnergy(subParticle_index1);
+        MWPC0Energy[nParticles]        += manager->rootinos->GetMWPC0Energy(subParticle_index1);
+        MWPC1Energy[nParticles]        += manager->rootinos->GetMWPC1Energy(subParticle_index1);
         nSubRootinos[nParticles]++;
     }
     time[nParticles]         /= 2;

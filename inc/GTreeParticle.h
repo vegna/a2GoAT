@@ -16,13 +16,13 @@ class  GTreeParticle    : public GTree
 private:
     UInt_t              nParticles;
     TClonesArray*       particles;	// reconstructed
-    UChar_t             Apparatus[GTreeParticle_MaxEntries];
+    UChar_t             apparatus[GTreeParticle_MaxEntries];
     Double_t            time[GTreeParticle_MaxEntries];
     UChar_t             clusterSize[GTreeParticle_MaxEntries];
     //Charged detector energies
-    Double_t            d_E[GTreeParticle_MaxEntries];
-    Double_t            WC0_E[GTreeParticle_MaxEntries];
-    Double_t            WC1_E[GTreeParticle_MaxEntries];
+    Double_t            vetoEnergy[GTreeParticle_MaxEntries];
+    Double_t            MWPC0Energy[GTreeParticle_MaxEntries];
+    Double_t            MWPC1Energy[GTreeParticle_MaxEntries];
 
 
 protected:
@@ -34,18 +34,18 @@ public:
     GTreeParticle(GTreeManager *Manager, const TString& _Name);
     virtual ~GTreeParticle();
 
-            void            AddParticle(const TLorentzVector& vec, const UChar_t _Apparatus = 0, const Double_t _d_E = 0, const Double_t _WC0_E = 0, const Double_t _WC1_E = 0, const Double_t _Time = 0, const UChar_t _ClusterSize = 0);
+            void            AddParticle(const TLorentzVector& vec, const UChar_t _Apparatus = 0, const Double_t _vetoEnergy = 0, const Double_t _MWPC0Energy = 0, const Double_t _MWPC1Energy = 0, const Double_t _Time = 0, const UChar_t _ClusterSize = 0);
     virtual void            Clear() {nParticles = 0; particles->Clear();}
-            UChar_t         GetApparatus(const Int_t index)     const	{return Apparatus[index];}
+            UChar_t         GetApparatus(const Int_t index)     const	{return apparatus[index];}
             UChar_t         GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
-            Double_t        Get_dE(const Int_t index)           const	{return d_E[index];}
+            Double_t        GetVetoEnergy(const Int_t index)    const	{return vetoEnergy[index];}
             UInt_t          GetNParticles()                     const	{return nParticles;}
     const	Double_t*       GetTime()                           const	{return time;}
             Double_t        GetTime(const Int_t index)          const	{return time[index];}
-    const	Double_t*       GetWC0_E()                          const	{return WC0_E;}
-            Double_t        GetWC0_E(const Int_t index)         const	{return WC0_E[index];}
-    const	Double_t*       GetWC1_E()                          const	{return WC1_E;}
-            Double_t        GetWC1_E(const Int_t index)         const	{return WC1_E[index];}
+    const	Double_t*       GetMWPC0Energy()                    const	{return MWPC0Energy;}
+            Double_t        GetMWPC0Energy(const Int_t index)   const	{return MWPC0Energy[index];}
+    const	Double_t*       GetMWPC1Energy()                    const	{return MWPC1Energy;}
+            Double_t        GetMWPC1Energy(const Int_t index)   const	{return MWPC1Energy[index];}
     inline          TLorentzVector& Particle(const Int_t particle);
     inline  const   TLorentzVector& Particle(const Int_t particle) const;
     virtual void            Print() const;

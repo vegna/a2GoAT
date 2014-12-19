@@ -13,12 +13,12 @@ GTreeParticle::GTreeParticle(GTreeManager *Manager, const TString& _Name)    :
 {
     for(int i=0; i<GTreeParticle_MaxEntries; i++)
     {
-        Apparatus[i]    = 0;
+        apparatus[i]    = 0;
         time[i]         = 0;
         clusterSize[i]  = 0;
-        d_E[i]          = 0;
-        WC0_E[i]        = 0;
-        WC1_E[i]        = 0;
+        vetoEnergy[i]   = 0;
+        MWPC0Energy[i]  = 0;
+        MWPC1Energy[i]  = 0;
     }
 }
 
@@ -31,24 +31,24 @@ void    GTreeParticle::SetBranchAdresses()
 {
     tree_in->SetBranchAddress("nParticles",&nParticles);
     tree_in->SetBranchAddress("particles", &particles);
-    tree_in->SetBranchAddress("Apparatus",Apparatus);
+    tree_in->SetBranchAddress("apparatus", apparatus);
     tree_in->SetBranchAddress("time", time);
     tree_in->SetBranchAddress("clusterSize", clusterSize);
-    tree_in->SetBranchAddress("d_E", d_E);
-    tree_in->SetBranchAddress("WC0_E", WC0_E);
-    tree_in->SetBranchAddress("WC1_E", WC1_E);
+    tree_in->SetBranchAddress("vetoEnergy", vetoEnergy);
+    tree_in->SetBranchAddress("MWPC0Energy", MWPC0Energy);
+    tree_in->SetBranchAddress("MWPC1Energy", MWPC1Energy);
 }
 
 void    GTreeParticle::SetBranches()
 {
     tree_out->Branch("nParticles",&nParticles, "nParticles/i");
     tree_out->Branch("particles", &particles, 32000, 0);
-    tree_out->Branch("Apparatus", Apparatus, "Apparatus[nParticles]/b");
+    tree_out->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
     tree_out->Branch("time", time, "time[nParticles]/D");
     tree_out->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
-    tree_out->Branch("d_E", d_E, "d_E[nParticles]/D");
-    tree_out->Branch("WC0_E", WC0_E, "WC0_E[nParticles]/D");
-    tree_out->Branch("WC1_E", WC1_E, "WC1_E[nParticles]/D");
+    tree_out->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+    tree_out->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+    tree_out->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
 }
 
 
@@ -73,14 +73,14 @@ Bool_t	GTreeParticle::Write()
     return GTree::Write();
 }
 
-void    GTreeParticle::AddParticle(const TLorentzVector& vec, const UChar_t _Apparatus, const Double_t _d_E, const Double_t _WC0_E, const Double_t _WC1_E, const Double_t _Time, const UChar_t _ClusterSize)
+void    GTreeParticle::AddParticle(const TLorentzVector& vec, const UChar_t _Apparatus, const Double_t _vetoEnergy, const Double_t _MWPC0Energy, const Double_t _MWPC1Energy, const Double_t _Time, const UChar_t _ClusterSize)
 {
-    Apparatus[nParticles]   = _Apparatus;
+    apparatus[nParticles]   = _Apparatus;
     time[nParticles]        = _Time;
     clusterSize[nParticles] = _ClusterSize;
-    d_E[nParticles]         = _d_E;
-    WC0_E[nParticles]       = _WC0_E;
-    WC1_E[nParticles]       = _WC1_E;
+    vetoEnergy[nParticles]  = _vetoEnergy;
+    MWPC0Energy[nParticles] = _MWPC0Energy;
+    MWPC1Energy[nParticles] = _MWPC1Energy;
     new((*particles)[nParticles]) TLorentzVector(vec);
     nParticles++;
     manager->countReconstructed++;
@@ -103,12 +103,12 @@ void    GTreeParticle::RemoveParticles(const Int_t nIndices, const Int_t* indice
         nParticles--;
         if(sort[i] != nParticles)
         {
-            Apparatus[sort[i]]  = Apparatus[nParticles];
-            time[sort[i]]       = time[nParticles];
-            clusterSize[sort[i]]= clusterSize[nParticles];
-            d_E[sort[i]]        = d_E[nParticles];
-            WC0_E[sort[i]]      = WC0_E[nParticles];
-            WC1_E[sort[i]]      = WC1_E[nParticles];
+            apparatus[sort[i]]   = apparatus[nParticles];
+            time[sort[i]]        = time[nParticles];
+            clusterSize[sort[i]] = clusterSize[nParticles];
+            vetoEnergy[sort[i]]  = vetoEnergy[nParticles];
+            MWPC0Energy[sort[i]] = MWPC0Energy[nParticles];
+            MWPC1Energy[sort[i]] = MWPC1Energy[nParticles];
             //particles->RemoveAt(sort[i]);
             new((*particles)[sort[i]]) TLorentzVector(*((TLorentzVector*)particles->At(nParticles)));
         }
@@ -122,8 +122,8 @@ void    GTreeParticle::PrintParticle(const Int_t i) const
 {
     cout << "\tParticle " << i << ": " << endl;
     cout << "\tPx: " << Particle(i).Px() << "   Py: " << Particle(i).Py() << "   Pz: " << Particle(i).Pz() << "   E: " << Particle(i).E() << endl;
-    cout << "\tApparatus: " << (Int_t)Apparatus[i] << "   clusterSize: " << (Int_t)clusterSize[i]  << endl;
-    cout << "\td_E: " << d_E[i] << "   WC0_E: " << WC0_E[i] << "   WC1_E: " << WC1_E[i]  << endl;
+    cout << "\tApparatus: " << (Int_t)apparatus[i] << "   clusterSize: " << (Int_t)clusterSize[i]  << endl;
+    cout << "\tvetoEnergy: " << vetoEnergy[i] << "   MWPC0Energy: " << MWPC0Energy[i] << "   MWPC1Energy: " << MWPC1Energy[i]  << endl;
 }
 
 void    GTreeParticle::Print() const
