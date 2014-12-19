@@ -7,7 +7,7 @@
 #include <TDatabasePDG.h>
 
 #include "GConfigFile.h"
-#include "GTreeRawEvent.h"
+#include "GTreeRawParticle.h"
 #include "GTreeTagger.h"
 #include "GTreeLinPol.h"
 #include "GTreeScaler.h"
@@ -48,7 +48,7 @@ private:
     virtual TDirectory* GetOutputDirectory()    {return file_out;}
 
 protected:
-    GTreeRawEvent*      rawEvent;
+    GTreeRawParticle*   rawParticle;
     GTreeTagger*        tagger;
     GTreeLinPol*        linpol;
     GTreeTrigger*       trigger;

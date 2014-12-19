@@ -33,7 +33,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 set(GOAT_BASE
    inc/GTree.h
-   inc/GTreeRawEvent.h
+   inc/GTreeRawParticle.h
    inc/GTreeDetectorHits.h
    inc/GTreeTagger.h
    inc/GTreeLinPol.h
@@ -45,7 +45,7 @@ set(GOAT_BASE
    inc/GHistManager.h
    inc/GTreeManager.h
    inc/GConfigFile.h   src/GTree.cc
-   src/GTreeRawEvent.cc
+   src/GTreeRawParticle.cc
    src/GTreeDetectorHits.cc
    src/GTreeTagger.cc
    src/GTreeLinPol.cc

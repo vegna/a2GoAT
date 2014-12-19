@@ -214,13 +214,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_nPart_total_condition) 	// Total number of particles
 		{
             case Condion_EqualOrMore:
-                if (rawEvent->GetNParticles() < SR_nPart_total) 	return kFALSE;
+                if (rawParticle->GetNParticles() < SR_nPart_total) 	return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (rawEvent->GetNParticles() > SR_nPart_total) 	return kFALSE;
+                if (rawParticle->GetNParticles() > SR_nPart_total) 	return kFALSE;
 				break;
             case Condion_Equal:
-                if (rawEvent->GetNParticles() != SR_nPart_total) 	return kFALSE;
+                if (rawParticle->GetNParticles() != SR_nPart_total) 	return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
@@ -229,13 +229,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_nPart_CB_condition) 	// Number of particles in CB
 		{
             case Condion_EqualOrMore:
-                if (rawEvent->GetNCB() < SR_nPart_CB) 			return kFALSE;
+                if (rawParticle->GetNCB() < SR_nPart_CB) 			return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (rawEvent->GetNCB() > SR_nPart_CB) 			return kFALSE;
+                if (rawParticle->GetNCB() > SR_nPart_CB) 			return kFALSE;
 				break;
             case Condion_Equal:
-                if (rawEvent->GetNCB() != SR_nPart_CB) 			return kFALSE;
+                if (rawParticle->GetNCB() != SR_nPart_CB) 			return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
@@ -244,13 +244,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_nPart_TAPS_condition) 	// Number of particles in TAPS
 		{
             case Condion_EqualOrMore:
-                if (rawEvent->GetNTAPS() < SR_nPart_TAPS) 		return kFALSE;
+                if (rawParticle->GetNTAPS() < SR_nPart_TAPS) 		return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (rawEvent->GetNTAPS() > SR_nPart_TAPS) 		return kFALSE;
+                if (rawParticle->GetNTAPS() > SR_nPart_TAPS) 		return kFALSE;
 				break;
             case Condion_Equal:
-                if (rawEvent->GetNTAPS() != SR_nPart_TAPS)		return kFALSE;
+                if (rawParticle->GetNTAPS() != SR_nPart_TAPS)		return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
