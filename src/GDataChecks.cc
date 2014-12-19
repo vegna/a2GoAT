@@ -76,12 +76,12 @@ inline Bool_t 	GDataChecks::CheckCBHits(const Int_t min, const Int_t max)
     {
         detectorHits->GetEntry(i);
 
-        for (int j=0; j<=detectorHits->GetNNaI_Hits(); j++)
+        for (int j=0; j<=detectorHits->GetNNaIHits(); j++)
         {
-            if  (detectorHits->GetNaI_Hits(j) <  180) SumQ1++;
-            if ((detectorHits->GetNaI_Hits(j) >= 180) && (detectorHits->GetNaI_Hits(j) < 360)) SumQ2++;
-            if ((detectorHits->GetNaI_Hits(j) >= 360) && (detectorHits->GetNaI_Hits(j) < 540)) SumQ3++;
-            if ((detectorHits->GetNaI_Hits(j) >= 540) && (detectorHits->GetNaI_Hits(j) < 720)) SumQ4++;
+            if  (detectorHits->GetNaIHits(j) <  180) SumQ1++;
+            if ((detectorHits->GetNaIHits(j) >= 180) && (detectorHits->GetNaIHits(j) < 360)) SumQ2++;
+            if ((detectorHits->GetNaIHits(j) >= 360) && (detectorHits->GetNaIHits(j) < 540)) SumQ3++;
+            if ((detectorHits->GetNaIHits(j) >= 540) && (detectorHits->GetNaIHits(j) < 720)) SumQ4++;
         }
     }
 

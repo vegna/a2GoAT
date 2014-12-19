@@ -8,18 +8,18 @@
 class  GTreeDetectorHits    : public GTree
 {
 private:
-    Int_t		nNaI_Hits;
-    Int_t		NaI_Hits[720];
-    Int_t		NaI_Cluster[720];
-    Int_t		nPID_Hits;
-    Int_t		PID_Hits[24];
-    Int_t		nWC_Hits;
-    Int_t		WC_Hits[860];
-    Int_t		nBaF2_PbWO4_Hits;
-    Int_t		BaF2_PbWO4_Hits[438];
-    Int_t		BaF2_PbWO4_Cluster[438];
-    Int_t		nVeto_Hits;
-    Int_t		Veto_Hits[438];
+    Int_t		nNaIHits;
+    Int_t		NaIHits[720];
+    Int_t		NaICluster[720];
+    Int_t		nPIDHits;
+    Int_t		PIDHits[24];
+    Int_t		nMWPCHits;
+    Int_t		MWPCHits[860];
+    Int_t		nBaF2PbWO4Hits;
+    Int_t		BaF2PbWO4Hits[438];
+    Int_t		BaF2PbWO4Cluster[438];
+    Int_t		nVetoHits;
+    Int_t		VetoHits[438];
 
 protected:
     virtual void    SetBranchAdresses();
@@ -29,31 +29,31 @@ public:
     GTreeDetectorHits(GTreeManager *Manager);
     virtual ~GTreeDetectorHits();
 
-    virtual void            Clear()                         {nNaI_Hits=0; nPID_Hits=0; nWC_Hits=0; nBaF2_PbWO4_Hits=0; nVeto_Hits=0;}
+    virtual void            Clear()                         {nNaIHits=0; nPIDHits=0; nMWPCHits=0; nBaF2PbWO4Hits=0; nVetoHits=0;}
 
-            Int_t		GetNNaI_Hits()              	const	{return nNaI_Hits;}
-    const	Int_t*		GetNaI_Hits()           		const	{return NaI_Hits;}
-            Int_t		GetNaI_Hits(const Int_t index)	const	{return NaI_Hits[index];}
-    const	Int_t*		GetNaI_Cluster()           		const	{return NaI_Cluster;}
-            Int_t		GetNaI_Cluster(const Int_t index)	const	{return NaI_Cluster[index];}
+            Int_t		GetNNaIHits()              	const	{return nNaIHits;}
+    const	Int_t*		GetNaIHits()           		const	{return NaIHits;}
+            Int_t		GetNaIHits(const Int_t index)	const	{return NaIHits[index];}
+    const	Int_t*		GetNaICluster()           		const	{return NaICluster;}
+            Int_t		GetNaICluster(const Int_t index)	const	{return NaICluster[index];}
 
-            Int_t		GetNPID_Hits()      			const	{return nPID_Hits;}
-    const	Int_t*		GetPID_Hits()               	const	{return PID_Hits;}
-            Int_t		GetPID_Hits(const Int_t index)	const	{return PID_Hits[index];}
+            Int_t		GetNPIDHits()      			const	{return nPIDHits;}
+    const	Int_t*		GetPIDHits()               	const	{return PIDHits;}
+            Int_t		GetPIDHits(const Int_t index)	const	{return PIDHits[index];}
 
-            Int_t		GetNWC_Hits()       			const	{return nWC_Hits;}
-    const	Int_t*		GetWC_Hits()                	const	{return WC_Hits;}
-            Int_t		GetWC_Hits(const Int_t index)	const	{return WC_Hits[index];}
+            Int_t		GetNMWPCHits()       			const	{return nMWPCHits;}
+    const	Int_t*		GetMWPCHits()                	const	{return MWPCHits;}
+            Int_t		GetMWPCHits(const Int_t index)	const	{return MWPCHits[index];}
 
-            Int_t		GetNBaF2_PbWO4_Hits()                   const	{return nBaF2_PbWO4_Hits;}
-    const	Int_t*		GetBaF2_PbWO4_Hits()                    const	{return BaF2_PbWO4_Hits;}
-            Int_t		GetBaF2_PbWO4_Hits(const Int_t index)	const	{return BaF2_PbWO4_Hits[index];}
-    const	Int_t*		GetBaF2_PbWO4_Cluster()                    const	{return BaF2_PbWO4_Cluster;}
-            Int_t		GetBaF2_PbWO4_Cluster(const Int_t index)	const	{return BaF2_PbWO4_Cluster[index];}
+            Int_t		GetNBaF2PbWO4Hits()                   const	{return nBaF2PbWO4Hits;}
+    const	Int_t*		GetBaF2PbWO4Hits()                    const	{return BaF2PbWO4Hits;}
+            Int_t		GetBaF2PbWO4Hits(const Int_t index)	const	{return BaF2PbWO4Hits[index];}
+    const	Int_t*		GetBaF2PbWO4Cluster()                    const	{return BaF2PbWO4Cluster;}
+            Int_t		GetBaF2PbWO4Cluster(const Int_t index)	const	{return BaF2PbWO4Cluster[index];}
 
-            Int_t		GetNVeto_Hits()                 const	{return nVeto_Hits;}
-    const	Int_t*		GetVeto_Hits()                  const	{return Veto_Hits;}
-            Int_t		GetVeto_Hits(const Int_t index)	const	{return Veto_Hits[index];}
+            Int_t		GetNVetoHits()                 const	{return nVetoHits;}
+    const	Int_t*		GetVetoHits()                  const	{return VetoHits;}
+            Int_t		GetVetoHits(const Int_t index)	const	{return VetoHits[index];}
 };
 
 
