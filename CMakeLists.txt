@@ -27,7 +27,6 @@ link_directories(${ROOT_LIBRARY_DIR})
 
 include_directories(inc)
 set(ROOT_LIBRARIES "${ROOT_LIBRARIES} -lEG")
-message(${ROOT_LIBRARIES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
@@ -44,7 +43,8 @@ set(GOAT_BASE
    inc/GTreeEventParameters.h
    inc/GHistManager.h
    inc/GTreeManager.h
-   inc/GConfigFile.h   src/GTree.cc
+   inc/GConfigFile.h   
+   src/GTree.cc
    src/GTreeRawParticle.cc
    src/GTreeDetectorHits.cc
    src/GTreeTagger.cc
@@ -57,12 +57,17 @@ set(GOAT_BASE
    src/GHistManager.cc
    src/GTreeManager.cc
    src/GConfigFile.cc
+   src/GDataChecks.cc
+   src/GParticleReconstruction.cc
+   src/GMesonReconstruction.cc
+   src/GSort.cc
+   src/GoAT.cc
+   inc/GTreeA2Geant.h
+   src/GTreeA2Geant.cc
 )
 
 set(GOAT_GHIST
    inc/GH1.h
-   inc/GHistBGSub.h
-   src/GHistBGSub.cc
    inc/GHistScaCor.h
    src/GHistScaCor.cc
    inc/GHistScaCor2.h
@@ -80,6 +85,31 @@ set(GOAT_GHIST
    inc/GHistTaggerBinning2.h
    src/GHistTaggerBinning2.cc
 )
+
+if( PLUTO )
+
+    find_package(Pluto)
+
+    if( PLUTO_FOUND )
+
+           set(GOAT_BASE
+              ${GOAT_BASE}
+              inc/GTreePluto.h
+              src/GTreePluto.cc
+           )
+
+           add_definitions( -DhasPluto )
+
+           include_directories(${PLUTO_INCLUDE_PATH})
+           link_directories(${PLUTO_LIBRARY_PATH})
+
+           set(LIBS ${LIB} ${PLUTO_LIBRARY})
+    endif()
+
+else()
+    message(STATUS "Pluto disabled")
+endif()
+
 
 add_executable(goat
    ${GOAT_BASE}

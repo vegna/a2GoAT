@@ -8,7 +8,9 @@ GTreeTrigger::GTreeTrigger(GTreeManager* Manager)    :
     Mult(0),
     nTriggerPattern(0),
     Helicity(0),
-    nError(0)
+    nError(0),
+    MC_evt_id(-1),
+    MC_rnd_id(-1)
 {
     for(int i=0; i<GTreeTrigger_MAX; i++)
     {
@@ -35,7 +37,8 @@ void    GTreeTrigger::SetBranchAdresses()
     tree_in->SetBranchAddress("ErrModID", ErrModID);
     tree_in->SetBranchAddress("ErrModIndex", ErrModIndex);
     tree_in->SetBranchAddress("ErrCode", ErrCode);
-
+    tree_in->SetBranchAddress("mc_evt_id", &MC_evt_id);
+    tree_in->SetBranchAddress("mc_rnd_id", &MC_rnd_id);
 }
 
 void    GTreeTrigger::SetBranches()
@@ -49,7 +52,8 @@ void    GTreeTrigger::SetBranches()
     tree_out->Branch("ErrModID", ErrModID, "ErrModID[nError]/I");
     tree_out->Branch("ErrModIndex", ErrModIndex, "ErrModIndex[nError]/I");
     tree_out->Branch("ErrCode", ErrCode, "ErrCode[nError]/I");
-
-  }
+    tree_out->Branch("mc_evt_id", &MC_evt_id, "mc_evt_id/L");
+    tree_out->Branch("mc_rnd_id", &MC_rnd_id, "mc_rnd_id/L");
+}
 
 

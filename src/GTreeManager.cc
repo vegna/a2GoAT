@@ -33,7 +33,14 @@ GTreeManager::GTreeManager()    :
     pi0(0),
     eta(0),
     etap(0),
-    linpol(0)
+#ifdef hasPluto
+    linpol(0),
+    pluto(NULL),
+#else
+    linpol(0),
+#endif
+    geant(NULL)
+
 {
     pdgDB = TDatabasePDG::Instance();
 
@@ -53,6 +60,10 @@ GTreeManager::GTreeManager()    :
     trigger = new GTreeTrigger(this);
     scalers = new GTreeScaler(this);
     linpol = new GTreeLinPol(this);
+#ifdef hasPluto
+    pluto = new GTreePluto(this);
+#endif
+    geant = new GTreeA2Geant(this);
 }
 
 GTreeManager::~GTreeManager()
