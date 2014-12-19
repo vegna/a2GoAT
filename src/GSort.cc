@@ -178,7 +178,7 @@ Bool_t	GSort::Init()
                 }
                 else
                 {
-                    cout << "tree for particle type "  << particleName  << " is not existing." << endl;
+                    cout << "tree for particle type "  << particleName  << " does not exist." << endl;
                     return kFALSE;
                 }
 			}

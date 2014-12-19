@@ -104,7 +104,7 @@ Bool_t  GTreeManager::TraverseScalerEntries(const UInt_t min, const UInt_t max)
     {
         if(!scalers->OpenForInput())
         {
-            std::cout << "Can not open treeScaler in input file." << std::endl;
+            std::cout << "Can not open Scaler tree in input file." << std::endl;
             return kFALSE;
         }
     }
@@ -205,14 +205,14 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
 {
     if(!scalers->IsOpenForInput())
     {
-        cout << "No treeScaler available. Expect MC data. Loop over all events" << endl;
+        cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
         TraverseEntries(0, GetNEntries());
         return true;
     }
     if(scalers->GetNEntries()==0)
     {
-        cout << "No treeScaler available. Expect MC data. Loop over all events" << endl;
+        cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
         TraverseEntries(0, GetNEntries());
         return true;
@@ -288,14 +288,14 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
 {
     if(!scalers->IsOpenForInput())
     {
-        cout << "No treeScaler available. Expect MC data. Loop over all events" << endl;
+        cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
         TraverseEntries(0, GetNEntries());
         return true;
     }
     if(scalers->GetNEntries()==0)
     {
-        cout << "No treeScaler available. Expect MC data. Loop over all events" << endl;
+        cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
         TraverseEntries(0, GetNEntries());
         return true;

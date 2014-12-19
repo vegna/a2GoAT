@@ -67,7 +67,7 @@ inline Bool_t 	GDataChecks::CheckCBHits(const Int_t min, const Int_t max)
     {
         if(!detectorHits->OpenForInput())
         {
-            cout << "Can not check CB Hits. Now treeDetectorHits available." << endl;
+            cout << "Can not check CB Hits. DetectorHits tree not available." << endl;
             return false;
         }
     }

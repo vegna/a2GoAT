@@ -65,7 +65,7 @@ Bool_t	GTreeParticle::Write()
     //std::cout << hist->GetEntries()<< "\t" << hist->GetBinContent(hist->GetBin(1)) << std::endl;
     if(hist->GetEntries() == hist->GetBinContent(hist->GetBin(1)))
     {
-        std::cout << "tree" << GetName() << " has not been written to disk. All Events have 0 " << GetName() << "." << std::endl;
+        std::cout << "tree " << GetName() << " has not been written to disk. All Events have 0 " << GetName() << "." << std::endl;
         saveToFile  = false;
         return kTRUE;
     }

@@ -43,7 +43,7 @@ UInt_t  GTreeScaler::GetScalerEntry(const Int_t event_number)
     {
         if(!OpenForInput())
         {
-            std::cout << "Can not open treeScaler in input file." << std::endl;
+            std::cout << "Can not open Scaler tree in input file." << std::endl;
             return 0;
         }
     }

@@ -164,7 +164,7 @@ Bool_t	GTree::Write()
 
     manager->file_out->cd();
     tree_out->Write();
-    std::cout << "tree" << name << " has been written to disk." << std::endl;
+    std::cout << "tree " << name << " has been written to disk." << std::endl;
     return kTRUE;
 }
 
