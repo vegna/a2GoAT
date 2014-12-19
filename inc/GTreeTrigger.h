@@ -10,15 +10,15 @@
 class  GTreeTrigger : public GTree
 {
 private:
-    Double_t 	ESum;
-    Int_t 		Mult;
+    Double_t 	energySum;
+    Int_t 		multiplicity;
     Int_t 		nTriggerPattern;
-    Int_t 		TriggerPattern[GTreeTrigger_MAX];
-    Bool_t              Helicity;
-    Int_t 		nError;
-    Int_t 		ErrModID[GTreeTrigger_MAX];
-    Int_t 		ErrModIndex[GTreeTrigger_MAX];
-    Int_t 		ErrCode[GTreeTrigger_MAX];
+    Int_t 		triggerPattern[GTreeTrigger_MAX];
+    Bool_t      helicity;
+    Int_t 		nErrors;
+    Int_t 		errorModuleID[GTreeTrigger_MAX];
+    Int_t 		errorModuleIndex[GTreeTrigger_MAX];
+    Int_t 		errorCode[GTreeTrigger_MAX];
     Long64_t    MC_evt_id;
     Long64_t    MC_rnd_id;
 
@@ -31,16 +31,16 @@ public:
     virtual ~GTreeTrigger();
 
 
-    virtual void        Clear()                         {nTriggerPattern = 0; nError = 0;}
-            Int_t 		GetMult()        		const	{return Mult;}
-            Double_t	GetESum()           	const	{return ESum;}
-            Bool_t 	GetHelicity()    	const	{return Helicity;}
-            Int_t		GetNTriggerPattern()    const	{return	nTriggerPattern;}
-    const   Int_t*		GetTriggerPattern()     const	{return	TriggerPattern;}
-            Int_t		GetNError()             const {return nError;}
-    const   Int_t*		GetErrModID()           const {return ErrModID;}
-    const   Int_t*		GetErrModIndex()        const {return ErrModIndex;}
-    const   Int_t*		GetErrCode()            const {return ErrCode;}
+    virtual void        Clear()                       {nTriggerPattern = 0; nErrors = 0;}
+            Int_t 		GetMultiplicity()       const {return multiplicity;}
+            Double_t	GetEnergySum()          const {return energySum;}
+            Bool_t 	    GetHelicity()    	    const {return helicity;}
+            Int_t		GetNTriggerPattern()    const {return nTriggerPattern;}
+    const   Int_t*		GetTriggerPattern()     const {return triggerPattern;}
+            Int_t		GetNErrors()            const {return nErrors;}
+    const   Int_t*		GetErrorModuleID()      const {return errorModuleID;}
+    const   Int_t*		GetErrorModuleIndex()   const {return errorModuleIndex;}
+    const   Int_t*		GetErrorCode()          const {return errorCode;}
 
 };
 

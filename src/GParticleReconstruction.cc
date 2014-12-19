@@ -30,9 +30,9 @@ GParticleReconstruction::~GParticleReconstruction()
 
 Bool_t GParticleReconstruction::Trigger()
 {
-    if(trigger->GetESum() < E_Sum)
+    if(trigger->GetEnergySum() < E_Sum)
         return kFALSE;
-    if(trigger->GetMult() < multiplicity)
+    if(trigger->GetMultiplicity() < multiplicity)
         return kFALSE;
     return kTRUE;
 }

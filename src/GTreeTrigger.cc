@@ -3,21 +3,21 @@
 
 
 GTreeTrigger::GTreeTrigger(GTreeManager* Manager)    :
-    GTree(Manager, TString("treeTrigger")),
-    ESum(0),
-    Mult(0),
+    GTree(Manager, TString("trigger")),
+    energySum(0),
+    multiplicity(0),
     nTriggerPattern(0),
-    Helicity(0),
-    nError(0),
+    helicity(0),
+    nErrors(0),
     MC_evt_id(-1),
     MC_rnd_id(-1)
 {
     for(int i=0; i<GTreeTrigger_MAX; i++)
     {
-        TriggerPattern[i] = 0;
-        ErrModID[i] = 0;
-        ErrModIndex[i] = 0;
-        ErrCode[i] = 0;
+        triggerPattern[i] = 0;
+        errorModuleID[i] = 0;
+        errorModuleIndex[i] = 0;
+        errorCode[i] = 0;
     }
 }
 
@@ -28,32 +28,32 @@ GTreeTrigger::~GTreeTrigger()
 
 void    GTreeTrigger::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("ESum", 	&ESum);
-    tree_in->SetBranchAddress("Mult", 	&Mult);
-    tree_in->SetBranchAddress("nTriggerPattern", &nTriggerPattern);
-    tree_in->SetBranchAddress("TriggerPattern", TriggerPattern);
-    tree_in->SetBranchAddress("Helicity", 	&Helicity);
-    tree_in->SetBranchAddress("nError", 	&nError);
-    tree_in->SetBranchAddress("ErrModID", ErrModID);
-    tree_in->SetBranchAddress("ErrModIndex", ErrModIndex);
-    tree_in->SetBranchAddress("ErrCode", ErrCode);
-    tree_in->SetBranchAddress("mc_evt_id", &MC_evt_id);
-    tree_in->SetBranchAddress("mc_rnd_id", &MC_rnd_id);
+    tree_in->SetBranchAddress("energySum", 	      &energySum);
+    tree_in->SetBranchAddress("multiplicity", 	  &multiplicity);
+    tree_in->SetBranchAddress("nTriggerPattern",  &nTriggerPattern);
+    tree_in->SetBranchAddress("triggerPattern",   triggerPattern);
+    tree_in->SetBranchAddress("helicity", 	      &helicity);
+    tree_in->SetBranchAddress("nErrors", 	      &nErrors);
+    tree_in->SetBranchAddress("errorModuleID",    errorModuleID);
+    tree_in->SetBranchAddress("errorModuleIndex", errorModuleIndex);
+    tree_in->SetBranchAddress("errorCode",        errorCode);
+    tree_in->SetBranchAddress("mc_evt_id",        &MC_evt_id);
+    tree_in->SetBranchAddress("mc_rnd_id",        &MC_rnd_id);
 }
 
 void    GTreeTrigger::SetBranches()
 {
-    tree_out->Branch("ESum", &ESum,"ESum/D");
-    tree_out->Branch("Mult", &Mult, "Mult/I");
-    tree_out->Branch("Helicity", &Helicity, "Helicity/O");
-    tree_out->Branch("nTriggerPattern", &nTriggerPattern, "nTriggerPattern/I");
-    tree_out->Branch("TriggerPattern", TriggerPattern, "TriggerPattern[nTriggerPattern]/I");
-    tree_out->Branch("nError", &nError, "nError/I");
-    tree_out->Branch("ErrModID", ErrModID, "ErrModID[nError]/I");
-    tree_out->Branch("ErrModIndex", ErrModIndex, "ErrModIndex[nError]/I");
-    tree_out->Branch("ErrCode", ErrCode, "ErrCode[nError]/I");
-    tree_out->Branch("mc_evt_id", &MC_evt_id, "mc_evt_id/L");
-    tree_out->Branch("mc_rnd_id", &MC_rnd_id, "mc_rnd_id/L");
+    tree_out->Branch("energySum",        &energySum,       "energySum/D");
+    tree_out->Branch("multiplicity",     &multiplicity,    "multiplicity/I");
+    tree_out->Branch("helicity",         &helicity,        "helicity/O");
+    tree_out->Branch("nTriggerPattern",  &nTriggerPattern, "nTriggerPattern/I");
+    tree_out->Branch("triggerPattern",   triggerPattern,   "triggerPattern[nTriggerPattern]/I");
+    tree_out->Branch("nErrors",          &nErrors,         "nErrors/I");
+    tree_out->Branch("errorModuleID",    errorModuleID,    "errorModuleID[nErrors]/I");
+    tree_out->Branch("errorModuleIndex", errorModuleIndex, "errorModuleIndex[nErrors]/I");
+    tree_out->Branch("errorCode",        errorCode,        "errorCode[nErrors]/I");
+    tree_out->Branch("mc_evt_id",        &MC_evt_id,       "mc_evt_id/L");
+    tree_out->Branch("mc_rnd_id",        &MC_rnd_id,       "mc_rnd_id/L");
 }
 
 

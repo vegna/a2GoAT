@@ -262,13 +262,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_CBESum_condition) 	// Crystal Ball Energy Sum
 		{
             case Condion_EqualOrMore:
-                if (trigger->GetESum() < SR_CBESum) 				return kFALSE;
+                if (trigger->GetEnergySum() < SR_CBESum) 				return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (trigger->GetESum() > SR_CBESum) 				return kFALSE;
+                if (trigger->GetEnergySum() > SR_CBESum) 				return kFALSE;
 				break;
             case Condion_Equal:
-                if (trigger->GetESum() != SR_CBESum)				return kFALSE;
+                if (trigger->GetEnergySum() != SR_CBESum)				return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
