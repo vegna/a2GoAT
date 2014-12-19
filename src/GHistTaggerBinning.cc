@@ -60,7 +60,7 @@ Int_t   GHistTaggerBinning::Fill(const Double_t value, const GTreeTagger& tagger
     for(int i=0; i<tagger.GetNTagged(); i++)
     {
         if(CreateHistogramsForTaggerBinning)
-            Fill(value, tagger.GetTagged_ch(i), tagger.GetTagged_t(i));
+            Fill(value, tagger.GetTaggedChannel(i), tagger.GetTaggedTime(i));
         else
             Fill(value);
     }

@@ -74,7 +74,7 @@ Int_t   GHistBGSub2::Fill(const Double_t x, const Double_t y, const Double_t tag
 Int_t   GHistBGSub2::Fill(const Double_t x, const Double_t y, const GTreeTagger& tagger)
 {
     for(int i=0; i<tagger.GetNTagged(); i++)
-        Fill(x, y, tagger.GetTagged_t(i));
+        Fill(x, y, tagger.GetTaggedTime(i));
 }
 
 

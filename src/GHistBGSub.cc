@@ -179,7 +179,7 @@ Int_t   GHistBGSub::Fill(const Double_t value, const Double_t taggerTime)
 Int_t   GHistBGSub::Fill(const Double_t value, const GTreeTagger& tagger)
 {
     for(int i=0; i<tagger.GetNTagged(); i++)
-        Fill(value, tagger.GetTagged_t(i));
+        Fill(value, tagger.GetTaggedTime(i));
 }
 
 void    GHistBGSub::Reset(Option_t* option)

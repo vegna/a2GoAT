@@ -90,6 +90,6 @@ Int_t   GHistBGSub3::Fill(const Double_t x, const Double_t y, const Double_t z, 
 Int_t   GHistBGSub3::Fill(const Double_t x, const Double_t y, const Double_t z, const GTreeTagger& tagger)
 {
     for(int i=0; i<tagger.GetNTagged(); i++)
-        Fill(x, y, z, tagger.GetTagged_t(i));
+        Fill(x, y, z, tagger.GetTaggedTime(i));
 }
 
