@@ -14,7 +14,7 @@ class  GTreeScaler : public GTree
 private:
     Int_t		EventNumber;
     Int_t		EventID;
-    UInt_t		Scaler[GTreeScaler_MAX];
+    UInt_t		scalers[GTreeScaler_MAX];
 
     Int_t		NScaler;
 
@@ -31,8 +31,8 @@ public:
             Int_t 		GetEventID()        		const	{return EventID;}
             Int_t 		GetEventNumber()        	const	{return EventNumber;}
             Int_t 		GetNScaler()    			const	{return NScaler;}
-    const	UInt_t*		GetScaler()                 const	{return	Scaler;}
-            UInt_t		GetScaler(const Int_t index)const	{return	Scaler[index];}
+    const	UInt_t*		GetScaler()                 const	{return	scalers;}
+            UInt_t		GetScaler(const Int_t index)const	{return	scalers[index];}
             UInt_t		GetScalerEntry(const Int_t event_number);
             void 		SetNScaler(const Int_t num);
     virtual void        Print() const;

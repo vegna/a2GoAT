@@ -4,13 +4,13 @@
 
 
 GTreeScaler::GTreeScaler(GTreeManager *Manager)    :
-    GTree(Manager, TString("treeScaler"), kTRUE),
+    GTree(Manager, TString("scaler"), kTRUE),
     EventNumber(0),
     EventID(0),
     NScaler(0)
 {
     for(int i=0; i<GTreeScaler_MAX; i++)
-        Scaler[i] = 0;
+        scalers[i] = 0;
 }
 
 GTreeScaler::~GTreeScaler()
@@ -22,9 +22,9 @@ void    GTreeScaler::SetBranchAdresses()
 {
     tree_in->SetBranchAddress("eventNumber", &EventNumber);
     tree_in->SetBranchAddress("eventID", &EventID);
-    NScaler = tree_in->GetLeaf("Scaler")->GetLen();
+    NScaler = tree_in->GetLeaf("scalers")->GetLen();
     if(NScaler<=GTreeScaler_MAX)
-        tree_in->SetBranchAddress("Scaler", Scaler);
+        tree_in->SetBranchAddress("scalers", scalers);
 }
 
 void    GTreeScaler::SetBranches()
@@ -32,8 +32,8 @@ void    GTreeScaler::SetBranches()
     tree_out->Branch("eventNumber", &EventNumber, "eventNumber/I");
     tree_out->Branch("eventID", &EventID, "eventID/I");
     Char_t str[256];
-    sprintf(str, "Scaler[%d]/i", NScaler);
-    tree_out->Branch("Scaler", Scaler, str);
+    sprintf(str, "scalers[%d]/i", NScaler);
+    tree_out->Branch("scalers", scalers, str);
 }
 
 
@@ -74,7 +74,7 @@ void    GTreeScaler::Print() const
     std::cout << "GTreeScaler: EventNumber->" << EventNumber << " EventID->" << EventID << std::endl;
     std::cout << "             NScaler->" << NScaler << std::endl;
     for(int i=0; i<NScaler; i++)
-        std::cout << "Scaler " << i << ": " << Scaler[i] << std::endl;
+        std::cout << "Scaler " << i << ": " << scalers[i] << std::endl;
 }
 
 void    GTreeScaler::CloneValidEntries()
