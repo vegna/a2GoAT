@@ -43,7 +43,7 @@ void GTreeA2Geant::SetBranchAdresses()
 
 void GTreeA2Geant::SetBranches()
 {
-    tree_out->Branch("nhitcout << fbeam[3] << endl;s",&fnhits,"fnhits/I");
+    tree_out->Branch("nhits",&fnhits,"fnhits/I");
     tree_out->Branch("npart",&fnpart,"fnpart/I");
     tree_out->Branch("ntaps",&fntaps,"fntaps/I");
     tree_out->Branch("nvtaps",&fnvtaps,"fnvtaps/I");
