@@ -11,8 +11,8 @@ using namespace std;
 GTreeManager::GTreeManager()    :
     GHistManager(),
     GConfigFile(),
-    file_in(0),
-    file_out(0),
+    inputFile(0),
+    outputFile(0),
     treeList(),
     treeCorreleatedToScalerReadList(),
     readList(),
@@ -77,7 +77,7 @@ GTreeManager::~GTreeManager()
 
 Bool_t  GTreeManager::TraverseEntries(const UInt_t min, const UInt_t max)
 {
-    if(!file_in)
+    if(!inputFile)
         return kFALSE;
 
     for(UInt_t i=min; i<max; i++)
@@ -95,7 +95,7 @@ Bool_t  GTreeManager::TraverseEntries(const UInt_t min, const UInt_t max)
 
 Bool_t  GTreeManager::TraverseScalerEntries(const UInt_t min, const UInt_t max)
 {
-    if(!file_in)
+    if(!inputFile)
         return kFALSE;
 
     if(!scalers)
@@ -125,46 +125,46 @@ Bool_t  GTreeManager::TraverseFiles()
     Int_t nFiles = GetNFiles();
     for(Int_t i=0; i<nFiles; i++)
     {
-        std::string file_in = GetInputFile(i);
-        std::string file_out = GetOutputFile(i);
-        if(!StartFile(file_in.c_str(), file_out.c_str())) cout << "ERROR: Failed on file " << file_in << "!" << endl;
+        std::string inputFileName = GetInputFile(i);
+        std::string outputFileName = GetOutputFile(i);
+        if(!StartFile(inputFileName.c_str(), outputFileName.c_str())) cout << "ERROR: Failed on file " << inputFileName << "!" << endl;
     }
 
     return kTRUE;
 }
 
-Bool_t  GTreeManager::StartFile(const char* input_filename, const char* output_filename)
+Bool_t  GTreeManager::StartFile(const char* inputFileName, const char* outputFileName)
 {
-    if(file_in)    file_in->Close();
-    file_in = TFile::Open(input_filename);
-    if(!file_in)
+    if(inputFile)    inputFile->Close();
+    inputFile = TFile::Open(inputFileName);
+    if(!inputFile)
     {
-        cout << "#ERROR: Can not open input file " << input_filename << "!" << endl;
+        cout << "#ERROR: Can not open input file " << inputFileName << "!" << endl;
         return kFALSE;
     }
-    cout << "Opened input file " << file_in->GetName() << "!" << file_in->GetTitle() << endl;
+    cout << "Opened input file " << inputFile->GetName() << "!" << inputFile->GetTitle() << endl;
 
     for(int l=0; l<treeList.GetEntries(); l++)
     {
-        if(file_in->Get(((GTree*)treeList[l])->GetName()))
+        if(inputFile->Get(((GTree*)treeList[l])->GetName()))
             ((GTree*)treeList[l])->OpenForInput();
     }
     for(int l=0; l<treeCorreleatedToScalerReadList.GetEntries(); l++)
     {
-        if(file_in->Get(((GTree*)treeCorreleatedToScalerReadList[l])->GetName()))
+        if(inputFile->Get(((GTree*)treeCorreleatedToScalerReadList[l])->GetName()))
             ((GTree*)treeCorreleatedToScalerReadList[l])->OpenForInput();
     }
 
-    if(file_out)
-        file_out->Close();
-    file_out = TFile::Open(output_filename, "RECREATE");
-    if(!file_out)
+    if(outputFile)
+        outputFile->Close();
+    outputFile = TFile::Open(outputFileName, "RECREATE");
+    if(!outputFile)
     {
-        cout << "#ERROR: Can not create output file " << output_filename << "!" << endl;
+        cout << "#ERROR: Can not create output file " << outputFileName << "!" << endl;
         return kFALSE;
     }
-    cout << "Created output file " << file_out->GetName() << "!" << file_out->GetTitle() << endl;
-    TFileCacheWrite*    cache   = new TFileCacheWrite(file_out, 104857600);
+    cout << "Created output file " << outputFile->GetName() << "!" << outputFile->GetTitle() << endl;
+    TFileCacheWrite*    cache   = new TFileCacheWrite(outputFile, 104857600);
 
     isWritten   = kFALSE;
     ClearLinkedHistograms();
@@ -182,8 +182,8 @@ Bool_t  GTreeManager::StartFile(const char* input_filename, const char* output_f
         ((GTree*)treeCorreleatedToScalerReadList[l])->Close();
 
 
-    if(file_in)     file_in->Close();
-    if(file_out)    file_out->Close();
+    if(inputFile)     inputFile->Close();
+    if(outputFile)    outputFile->Close();
     //delete  cache;
 
     return kTRUE;
@@ -191,13 +191,13 @@ Bool_t  GTreeManager::StartFile(const char* input_filename, const char* output_f
 
 Bool_t  GTreeManager::Write()
 {
-    if(!file_out)   return kFALSE;
-    file_out->cd();
+    if(!outputFile)   return kFALSE;
+    outputFile->cd();
 
     for(int l=0; l<writeList.GetEntries(); l++)
         ((GTree*)writeList[l])->Write();
 
-    WriteLinkedHistograms(file_out);
+    WriteLinkedHistograms(outputFile);
 
     isWritten   = kTRUE;
 
@@ -206,8 +206,8 @@ Bool_t  GTreeManager::Write()
 
 Bool_t  GTreeManager::Write(const TNamed* object)
 {
-    if(!file_out)   return kFALSE;
-    file_out->cd();
+    if(!outputFile)   return kFALSE;
+    outputFile->cd();
     object->Write();
     std::cout << "object " << object->GetName() << " has been written to disk." << std::endl;
     return kTRUE;
@@ -263,7 +263,7 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
         shift   = scalers->GetEventNumber() - scalers->GetEventID();
     }
 
-    file_out->cd();
+    outputFile->cd();
     TH1I*   accepted    = new TH1I("CountScalerValid", "Events with correct scalers (all=0,accepted=1,rejected=2)", 3, 0, 3);
     accepted->SetBinContent(1, GetNEntries());
 
@@ -384,7 +384,7 @@ UInt_t  GTreeManager::GetNScalerEntries()       const
 
 void    GTreeManager::SetAsGoATFile()
 {
-    if(!file_out)
+    if(!outputFile)
         return;
     TNamed flag("GoAT_File", "GoAT_File");
     Write(&flag);
@@ -392,7 +392,7 @@ void    GTreeManager::SetAsGoATFile()
 
 void    GTreeManager::SetAsPhysicsFile()
 {
-    if(!file_out)
+    if(!outputFile)
         return;
     TNamed flag("Physics_File", "Physics_File");
     Write(&flag);
@@ -409,9 +409,9 @@ Bool_t  GTreeManager::IsAcquFile()    const
 
 Bool_t  GTreeManager::IsGoATFile()    const
 {
-    if(!file_in)
+    if(!inputFile)
         return kFALSE;
-    TNamed* flag    = (TNamed*)file_in->Get("GoAT_File");
+    TNamed* flag    = (TNamed*)inputFile->Get("GoAT_File");
     if(flag)
         return kTRUE;
     return kFALSE;
@@ -419,9 +419,9 @@ Bool_t  GTreeManager::IsGoATFile()    const
 
 Bool_t  GTreeManager::IsPhysicsFile()    const
 {
-    if(!file_in)
+    if(!inputFile)
         return kFALSE;
-    TNamed* flag    = (TNamed*)file_in->Get("Physics_File");
+    TNamed* flag    = (TNamed*)inputFile->Get("Physics_File");
     if(flag)
         return kTRUE;
     return kFALSE;

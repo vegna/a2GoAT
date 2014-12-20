@@ -54,7 +54,7 @@ void    GTreeParticle::SetBranches()
 
 Bool_t	GTreeParticle::Write()
 {
-    if(!manager->file_out)          return kFALSE;
+    if(!manager->outputFile)          return kFALSE;
     if(!tree_out)                   return kFALSE;
     if(!IsOpenForOutput())          return kFALSE;
 

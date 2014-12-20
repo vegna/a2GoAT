@@ -61,7 +61,7 @@ void    GTree::Fill()
 
 Bool_t  GTree::OpenForInput()
 {
-    manager->file_in->GetObject(name.Data(),tree_in);
+    manager->inputFile->GetObject(name.Data(),tree_in);
     if(tree_in)
     {
         SetBranchAdresses();
@@ -80,14 +80,14 @@ Bool_t  GTree::OpenForInput()
         return kTRUE;
     }
 
-    cout << "#ERROR# GTree::OpenForInput(TFile& inputFile): could not find a tree called " << name.Data() << " in input file " << manager->file_in->GetName() << "!" << endl;
+    cout << "#ERROR# GTree::OpenForInput(TFile& inputFile): could not find a tree called " << name.Data() << " in input file " << manager->inputFile->GetName() << "!" << endl;
     status = status & (~FLAG_OPENFORINPUT);
     return kFALSE;
 }
 
 Bool_t  GTree::OpenForOutput()
 {
-    manager->file_out->cd();
+    manager->outputFile->cd();
     tree_out    = new TTree(name.Data(), name.Data());
     if(tree_out)
     {
@@ -98,7 +98,7 @@ Bool_t  GTree::OpenForOutput()
         return kTRUE;
     }
 
-    cout << "#ERROR# GTree::OpenForInput(TFile& inputFile): can not create output tree " << name.Data() << " in output file " << manager->file_in->GetName() << "!" << endl;
+    cout << "#ERROR# GTree::OpenForInput(TFile& inputFile): can not create output tree " << name.Data() << " in output file " << manager->inputFile->GetName() << "!" << endl;
     status = status & (~FLAG_OPENFOROUTPUT);
     return kFALSE;
 }
@@ -121,7 +121,7 @@ void    GTree::Close()
 
     if(!saveToFile)
     {
-        manager->file_out->Delete(TString(name).Append(";*").Data());
+        manager->outputFile->Delete(TString(name).Append(";*").Data());
         saveToFile  = true;
     }
 }
@@ -158,11 +158,11 @@ void    GTree::Print() const
 
 Bool_t	GTree::Write()
 {
-    if(!manager->file_out)          return kFALSE;
+    if(!manager->outputFile)          return kFALSE;
     if(!tree_out)                   return kFALSE;
     if(!IsOpenForOutput())          return kFALSE;
 
-    manager->file_out->cd();
+    manager->outputFile->cd();
     tree_out->Write();
     std::cout << "tree " << name << " has been written to disk." << std::endl;
     return kTRUE;

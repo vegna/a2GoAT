@@ -8,12 +8,12 @@
 
 
 GConfigFile::GConfigFile()  :
-    global_config_file()
+    globalConfigFile()
 {
 }
 
-GConfigFile::GConfigFile(const Char_t* config_file)  :
-    global_config_file(config_file)
+GConfigFile::GConfigFile(const Char_t* configFile)  :
+    globalConfigFile(configFile)
 {
 }
 
@@ -22,23 +22,23 @@ GConfigFile::~GConfigFile()
 
 }
 
-Bool_t	GConfigFile::Init(const char* configfile)
+Bool_t	GConfigFile::Init(const char* configFile)
 {
     std::cout << "No Init function specified for this class." << std::endl;
     return kTRUE;
 }
 
-Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& def_pre_in, const std::string& def_pre_out)
+Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& defaultInputPrefix, const std::string& defaultOutputPrefix)
 {
     // Initialise strings
-    std::string configfile = "";
-    std::string serverfile = "";
-    std::string dir_in = "";
-    std::string dir_out = "";
-    std::string file_in = "";
-    std::string file_out = "";
-    std::string pre_in = def_pre_in;
-    std::string pre_out = def_pre_out;
+    std::string configFile = "";
+    std::string serverFile = "";
+    std::string inputDirectory = "";
+    std::string outputDirectory = "";
+    std::string inputFile = "";
+    std::string outputFile = "";
+    std::string inputPrefix = defaultInputPrefix;
+    std::string outputPrefix = defaultOutputPrefix;
 
     Int_t length;
     std::string flag;
@@ -54,7 +54,7 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& 
         flag = argv[1];
         flag.erase(0,1);
         if(strcmp(flag.c_str(), "help") == 0) return kFALSE;
-        else configfile= argv[1];
+        else configFile= argv[1];
     }
     else
     {
@@ -65,13 +65,13 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& 
             {
                 i++;
                 flag.erase(0,1);
-                if(strcmp(flag.c_str(), "s") == 0) serverfile = argv[i];
-                else if(strcmp(flag.c_str(), "d") == 0) dir_in = argv[i];
-                else if(strcmp(flag.c_str(), "D") == 0) dir_out = argv[i];
-                else if(strcmp(flag.c_str(), "f") == 0) file_in = argv[i];
-                else if(strcmp(flag.c_str(), "F") == 0) file_out = argv[i];
-                else if(strcmp(flag.c_str(), "p") == 0) pre_in = argv[i];
-                else if(strcmp(flag.c_str(), "P") == 0) pre_out = argv[i];
+                if(strcmp(flag.c_str(), "s") == 0) serverFile = argv[i];
+                else if(strcmp(flag.c_str(), "d") == 0) inputDirectory = argv[i];
+                else if(strcmp(flag.c_str(), "D") == 0) outputDirectory = argv[i];
+                else if(strcmp(flag.c_str(), "f") == 0) inputFile = argv[i];
+                else if(strcmp(flag.c_str(), "F") == 0) outputFile = argv[i];
+                else if(strcmp(flag.c_str(), "p") == 0) inputPrefix = argv[i];
+                else if(strcmp(flag.c_str(), "P") == 0) outputPrefix = argv[i];
                 else if(strcmp(flag.c_str(), "n") == 0)
                 {
                         overwrite = kFALSE;
@@ -83,183 +83,181 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& 
                     return kFALSE;
                 }
             }
-            else configfile = argv[i];
+            else configFile = argv[i];
         }
     }
 
     // Check that config file exists:
-    ifstream cfile(configfile.c_str());
+    ifstream cfile(configFile.c_str());
     if(!cfile)
     {
-        std::cout << "Config file '" << configfile << "' could not be found." << std::endl;
+        std::cout << "Config file '" << configFile << "' could not be found." << std::endl;
         return kFALSE;
     }
-    SetConfigFile(configfile.c_str());
+    SetConfigFile(configFile.c_str());
 
     // If server file is specified, check that it exists
-    if(serverfile.length() > 0)
+    if(serverFile.length() > 0)
     {
         // Check that file exists:
-        ifstream sfile(serverfile.c_str());
+        ifstream sfile(serverFile.c_str());
         if(!sfile)
         {
-            std::cout << "Server file '" << serverfile << "' could not be found" << std::endl;
+            std::cout << "Server file '" << serverFile << "' could not be found" << std::endl;
             return kFALSE;
         }
     }
     // If no server file is specified, allow for checking in the config file
-    else serverfile = configfile;
+    else serverFile = configFile;
 
     // If unset, scan server or config file for file settings
-    if(dir_in.length() == 0)
+    if(inputDirectory.length() == 0)
     {
-        flag = ReadConfig("Input-Directory",0,(Char_t*)serverfile.c_str());
+        flag = ReadConfig("Input-Directory",0,(Char_t*)serverFile.c_str());
         flag.erase(0,flag.find_first_not_of(" "));
-        if(strcmp(flag.c_str(),"nokey") != 0) dir_in = flag;
+        if(strcmp(flag.c_str(),"nokey") != 0) inputDirectory = flag;
     }
 
-    if(dir_out.length() == 0)
+    if(outputDirectory.length() == 0)
     {
-        flag = ReadConfig("Output-Directory",0,(Char_t*)serverfile.c_str());
+        flag = ReadConfig("Output-Directory",0,(Char_t*)serverFile.c_str());
         flag.erase(0,flag.find_first_not_of(" "));
-        if(strcmp(flag.c_str(),"nokey") != 0) dir_out = flag;
+        if(strcmp(flag.c_str(),"nokey") != 0) outputDirectory = flag;
     }
 
-    if(file_in.length() == 0)
+    if(inputFile.length() == 0)
     {
-        flag = ReadConfig("Input-File",0,(Char_t*)serverfile.c_str());
+        flag = ReadConfig("Input-File",0,(Char_t*)serverFile.c_str());
         flag.erase(0,flag.find_first_not_of(" "));
-        if(strcmp(flag.c_str(),"nokey") != 0) file_in = flag;
+        if(strcmp(flag.c_str(),"nokey") != 0) inputFile = flag;
     }
 
-    if(file_out.length() == 0)
+    if(outputFile.length() == 0)
     {
-        flag = ReadConfig("Output-File",0,(Char_t*)serverfile.c_str());
+        flag = ReadConfig("Output-File",0,(Char_t*)serverFile.c_str());
         flag.erase(0,flag.find_first_not_of(" "));
-        if(strcmp(flag.c_str(),"nokey") != 0) file_out = flag;
+        if(strcmp(flag.c_str(),"nokey") != 0) outputFile = flag;
     }
 
-    if(pre_in.length() == 0)
+    if(inputPrefix.length() == 0)
     {
-        flag = ReadConfig("Input-Prefix",0,(Char_t*)serverfile.c_str());
+        flag = ReadConfig("Input-Prefix",0,(Char_t*)serverFile.c_str());
         flag.erase(0,flag.find_first_not_of(" "));
-        if(strcmp(flag.c_str(),"nokey") != 0) pre_in = flag;
+        if(strcmp(flag.c_str(),"nokey") != 0) inputPrefix = flag;
     }
 
-    if(pre_out.length() == 0)
+    if(outputPrefix.length() == 0)
     {
-        flag = ReadConfig("Output-Prefix",0,(Char_t*)serverfile.c_str());
+        flag = ReadConfig("Output-Prefix",0,(Char_t*)serverFile.c_str());
         flag.erase(0,flag.find_first_not_of(" "));
-        if(strcmp(flag.c_str(),"nokey") != 0) pre_out = flag;
+        if(strcmp(flag.c_str(),"nokey") != 0) outputPrefix = flag;
     }
     // Finished scanning for file settings
 
     // Fix directories to include final slash if not there
-    if(dir_in.find_last_of("/") != (dir_in.length()-1)) dir_in += "/";
-    if(dir_out.find_last_of("/") != (dir_out.length()-1)) dir_out += "/";
+    if(inputDirectory.find_last_of("/") != (inputDirectory.length()-1)) inputDirectory += "/";
+    if(outputDirectory.find_last_of("/") != (outputDirectory.length()-1)) outputDirectory += "/";
 
     // Output user settings (Set to defaults if still unspecified)
     std::cout << std::endl << "User inputs" << std::endl;
-    std::cout << "Config file:      '" << configfile << "' chosen" << std::endl;
-    if(dir_in.length() != 0)  	std::cout << "Input directory:  '" << dir_in << "' chosen" << std::endl;
-    if(dir_out.length() != 0)  	std::cout << "Output directory: '" << dir_out << "' chosen" << std::endl;
-    if(file_in.length() != 0)  	std::cout << "Input file:       '" << file_in << "' chosen" << std::endl;
-    if(file_out.length() != 0) 	std::cout << "Output file:      '" << file_out << "' chosen" << std::endl;
-    if(pre_in.length() != 0)  	std::cout << "Input prefix:     '" << pre_in << "' chosen" << std::endl;
-    if(pre_out.length() != 0)  	std::cout << "Output prefix:    '" << pre_out << "' chosen" << std::endl;
+    std::cout << "Config file:      '" << configFile << "' chosen" << std::endl;
+    if(inputDirectory.length() != 0)  std::cout << "Input directory:  '" << inputDirectory  << "' chosen" << std::endl;
+    if(outputDirectory.length() != 0) std::cout << "Output directory: '" << outputDirectory << "' chosen" << std::endl;
+    if(inputFile.length() != 0)  	  std::cout << "Input file:       '" << inputFile       << "' chosen" << std::endl;
+    if(outputFile.length() != 0) 	  std::cout << "Output file:      '" << outputFile      << "' chosen" << std::endl;
+    if(inputPrefix.length() != 0)  	  std::cout << "Input prefix:     '" << inputPrefix     << "' chosen" << std::endl;
+    if(outputPrefix.length() != 0)    std::cout << "Output prefix:    '" << outputPrefix    << "' chosen" << std::endl;
     std::cout << std::endl;
 
     std::string file;
     std::string prefix;
     std::string suffix;
 
-    Int_t files_found = 0;
+    Int_t filesFound = 0;
     // If input file is specified, use it
-    if(file_in.length() > 0)
+    if(inputFile.length() > 0)
     {
         std::cout << "Searching for input file(s)" << std::endl;
-        file = file_in;
+        file = inputFile;
         length = file.length();
         // File should at least have '.root' at the end
         if(length >= 5)
         {
             // Add input directory to it
-            file_in = dir_in+file_in;
-            std::cout << "Input file  '" << file_in << "' chosen" << std::endl;
+            inputFile = inputDirectory+inputFile;
+            std::cout << "Input file  '" << inputFile << "' chosen" << std::endl;
 
             // If output file is specified, use it
-            if(file_out.length() > 0) file_out = dir_out+file_out;
+            if(outputFile.length() > 0) outputFile = outputDirectory+outputFile;
             // If output file is not specified, build it
             else
             {
                 // If output directory is not specified, build it
-                if(dir_out.length() == 0)
+                if(outputDirectory.length() == 0)
                 {
                     prefix = file.substr(0,file.find_last_of("/")+1);
-                    dir_out = dir_in+prefix;
+                    outputDirectory = inputDirectory+prefix;
                 }
                 // If input prefix doesn't match, simply prepend output prefix to the file name
-                if(file.find(pre_in)>file.length()) suffix = ("_"+file.substr(file.find_last_of("/")+1,length-(file.find_last_of("/")+1)));
+                if(file.find(inputPrefix)>file.length()) suffix = ("_"+file.substr(file.find_last_of("/")+1,length-(file.find_last_of("/")+1)));
                 // If input prefix does match, switch prefixes
-                else suffix = file.substr(file.find_last_of("/")+1+pre_in.length(),length-(file.find_last_of("/")+1+pre_in.length()));
+                else suffix = file.substr(file.find_last_of("/")+1+inputPrefix.length(),length-(file.find_last_of("/")+1+inputPrefix.length()));
                 // Build output file name
-                file_out = dir_out+pre_out+suffix;
+                outputFile = outputDirectory+outputPrefix+suffix;
             }
 
-            std::cout << "Output file '" << file_out << "' chosen" << std::endl << std::endl;
-            input_files.push_back(file_in);
-            output_files.push_back(file_out);
-            files_found++;
+            std::cout << "Output file '" << outputFile << "' chosen" << std::endl << std::endl;
+            inputFileList.push_back(inputFile);
+            outputFileList.push_back(outputFile);
+            filesFound++;
         }
     }
     // Otherwise scan input directory for matching files
     else
     {
         std::cout << "Searching input directory for files matching input prefix" << std::endl;
-        std::cout << "Input prefix  '" << pre_in << "' chosen" << std::endl;
-        std::cout << "Output prefix '" << pre_out << "' chosen" << std::endl;
 
         // If output directory is not specified, use the input directory
-        if(dir_in.length()  == 0) dir_in = "./";
-        if(dir_out.length() == 0) dir_out = dir_in;
+        if(inputDirectory.length()  == 0) inputDirectory = "./";
+        if(outputDirectory.length() == 0) outputDirectory = inputDirectory;
 
         // Create list of files in input directory
-        TSystemFile *sys_file;
-        TSystemDirectory *sys_dir = new TSystemDirectory("files",dir_in.c_str());
-        TList *file_list = sys_dir->GetListOfFiles();
-        file_list->Sort();
-        TIter file_iter(file_list);
+        TSystemFile *systemFile;
+        TSystemDirectory *systemDirectory = new TSystemDirectory("files",inputDirectory.c_str());
+        TList *fileList = systemDirectory->GetListOfFiles();
+        fileList->Sort();
+        TIter fileIterator(fileList);
 
         // Iterate over files
-        while((sys_file=(TSystemFile*)file_iter()))
+        while((systemFile=(TSystemFile*)fileIterator()))
         {
-            file = sys_file->GetName();
+            file = systemFile->GetName();
             length = file.length();
             // File should at least have '.root' at the end
             if(length >= 5)
             {
                 //Check that prefixes and suffixes match
-                prefix = file.substr(0,pre_in.length());
+                prefix = file.substr(0,inputPrefix.length());
                 suffix = file.substr(length-5,5);
-                if(((strcmp(prefix.c_str(),pre_in.c_str()) == 0)) && (strcmp(suffix.c_str(),".root") == 0))
+                if(((strcmp(prefix.c_str(),inputPrefix.c_str()) == 0)) && (strcmp(suffix.c_str(),".root") == 0))
                 {
                     // Build input file name
-                    file_in = dir_in+file;
+                    inputFile = inputDirectory+file;
                     // Build output file name
-                    suffix = file.substr(pre_in.length(),length-pre_in.length());
-                    file_out = dir_out+pre_out+suffix;
+                    suffix = file.substr(inputPrefix.length(),length-inputPrefix.length());
+                    outputFile = outputDirectory+outputPrefix+suffix;
 
                     // Check for previously created output file
-                    if((gSystem->IsFileInIncludePath(file_out.c_str())) && !overwrite) continue;
+                    if((gSystem->IsFileInIncludePath(outputFile.c_str())) && !overwrite) continue;
 
-                    input_files.push_back(file_in);
-                    output_files.push_back(file_out);
-                    files_found++;
+                    inputFileList.push_back(inputFile);
+                    outputFileList.push_back(outputFile);
+                    filesFound++;
                 }
             }
         }
     }
-    if (files_found == 0)
+    if (filesFound == 0)
     {
         std::cout << "ERROR: No AcquRoot files found!" << std::endl;
         return kFALSE;
@@ -268,7 +266,7 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& 
     return kTRUE;
 }
 
-std::string GConfigFile::ReadConfig(const std::string& key_in, const Int_t instance, const Char_t* configname)
+std::string GConfigFile::ReadConfig(const std::string& key_in, const Int_t instance, const Char_t* configName)
 {
     Int_t string_instance = 0;
     std::string key = key_in;
@@ -277,14 +275,14 @@ std::string GConfigFile::ReadConfig(const std::string& key_in, const Int_t insta
     std::string str;
     std::string values;
 
-    ifstream configfile;
+    ifstream configFile;
 
-    configfile.open(configname);
-    //std::cout << "config: " << configname << std::endl;
+    configFile.open(configName);
+    //std::cout << "config: " << configName << std::endl;
 
-    if (configfile.is_open())
+    if (configFile.is_open())
     {
-        while ( getline (configfile,str) )
+        while ( getline (configFile,str) )
         {
             std::string::size_type begin = str.find_first_not_of(" \f\t\v");
             if(begin == std::string::npos) continue;
@@ -307,13 +305,13 @@ std::string GConfigFile::ReadConfig(const std::string& key_in, const Int_t insta
             {
                 if (string_instance == instance)
                 {
-                    configfile.close();
+                    configFile.close();
                     return values;
                 }
                 else string_instance++;
             }
         }
-        configfile.close();
+        configFile.close();
     }
 
     return "nokey";

@@ -30,7 +30,7 @@
 class  GTreeManager : public GHistManager, public GConfigFile
 {
 private:
-    TFile*      file_in;
+    TFile*      inputFile;
     TObjArray   treeList;
     TObjArray   treeCorreleatedToScalerReadList;
     TObjArray   readList;
@@ -46,10 +46,10 @@ private:
             Bool_t      TraverseValidEvents_GoATTreeFile();
 
 protected:
-    TFile*          file_out;
+    TFile*          outputFile;
 
 private:
-    virtual TDirectory* GetOutputDirectory()    {return file_out;}
+    virtual TDirectory* GetOutputDirectory()    {return outputFile;}
 
 protected:
     GTreeRawParticle*   rawParticle;
@@ -103,7 +103,7 @@ public:
             Bool_t  IsGoATFile()    const;
             Bool_t  IsPhysicsFile()    const;
             Bool_t  TraverseFiles();
-            Bool_t  StartFile(const char* input_filename, const char* output_filename);
+            Bool_t  StartFile(const char* inputFileName, const char* outputFileName);
 
     friend  class GTree;
     friend  class GTreeParticle;
