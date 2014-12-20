@@ -120,6 +120,19 @@ Bool_t  GTreeManager::TraverseScalerEntries(const UInt_t min, const UInt_t max)
 }
 
 
+Bool_t  GTreeManager::TraverseFiles()
+{
+    Int_t nFiles = GetNFiles();
+    for(Int_t i=0; i<nFiles; i++)
+    {
+        std::string file_in = GetInputFile(i);
+        std::string file_out = GetOutputFile(i);
+        if(!StartFile(file_in.c_str(), file_out.c_str())) cout << "ERROR: Failed on file " << file_in << "!" << endl;
+    }
+
+    return kTRUE;
+}
+
 Bool_t  GTreeManager::StartFile(const char* input_filename, const char* output_filename)
 {
     if(file_in)    file_in->Close();

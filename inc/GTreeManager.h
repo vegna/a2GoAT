@@ -102,6 +102,7 @@ public:
             Bool_t  IsAcquFile()    const;
             Bool_t  IsGoATFile()    const;
             Bool_t  IsPhysicsFile()    const;
+            Bool_t  TraverseFiles();
             Bool_t  StartFile(const char* input_filename, const char* output_filename);
 
     friend  class GTree;
