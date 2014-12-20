@@ -1,4 +1,4 @@
-﻿#ifndef __CINT__
+#ifndef __CINT__
 
 #include "GoAT.h"
 #include <time.h>
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     // Perform full initialisation
     if(!analysis->GConfigFile::Init())
     {
-        cout << "ERROR: GoAT Init failed!" << endl;
+        cout << "ERROR: Init failed!" << endl;
         return 0;
     }
 

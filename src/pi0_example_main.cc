@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     // Perform full initialisation
     if(!analysis->GConfigFile::Init())
     {
-        cout << "ERROR: PPi0Example Init failed!" << endl;
+        cout << "ERROR: Init failed!" << endl;
         return 0;
     }
 
