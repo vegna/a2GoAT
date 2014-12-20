@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     GoAT* analysis = new GoAT;
 
     // Perform basic configuration
-    if(!analysis->BaseConfig(argc, argv))
+    if(!analysis->BaseConfig(argc, argv, "Acqu", "GoAT"))
     {
         system("man ./documents/goat.man");
         return 0;

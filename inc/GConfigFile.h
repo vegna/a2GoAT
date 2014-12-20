@@ -24,7 +24,7 @@ public:
             Bool_t	Init()                          {Init(global_config_file.c_str());}
             void    SetConfigFile(const Char_t* config_file)	{global_config_file = config_file;}
     const   Char_t* GetConfigFile() const                       {}
-            Bool_t  BaseConfig(const int argc, char* argv[]);
+            Bool_t  BaseConfig(const int argc, char* argv[], const std::string& def_pre_in, const std::string& def_pre_out);
     const   Int_t   GetNFiles() {return input_files.size();}
     std::string GetInputFile(const int i) {return input_files.at(i);}
     //std::vector GetInputFiles() {return input_files};

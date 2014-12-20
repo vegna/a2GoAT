@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     PPi0Example* analysis = new PPi0Example;
 
     // Perform basic configuration
-    if(!analysis->BaseConfig(argc, argv))
+    if(!analysis->BaseConfig(argc, argv, "GoAT", "Physics"))
     {
         system("man ./documents/goat.man");
         return 0;

@@ -25,7 +25,6 @@ private:
 
     TH1*	TaggerAccScal;
 
-    string  	config;
 protected:
     virtual Bool_t  Start();
     virtual void    ProcessEvent();

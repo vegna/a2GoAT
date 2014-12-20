@@ -28,7 +28,7 @@ Bool_t	GConfigFile::Init(const char* configfile)
     return kTRUE;
 }
 
-Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[])
+Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& def_pre_in, const std::string& def_pre_out)
 {
     // Initialise strings
     std::string configfile = "";
@@ -37,8 +37,8 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[])
     std::string dir_out = "";
     std::string file_in = "";
     std::string file_out = "";
-    std::string pre_in = "";
-    std::string pre_out = "";
+    std::string pre_in = def_pre_in;
+    std::string pre_out = def_pre_out;
 
     Int_t length;
     std::string flag;
@@ -166,9 +166,7 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[])
     if(file_in.length() != 0)  	std::cout << "Input file:       '" << file_in << "' chosen" << std::endl;
     if(file_out.length() != 0) 	std::cout << "Output file:      '" << file_out << "' chosen" << std::endl;
     if(pre_in.length() != 0)  	std::cout << "Input prefix:     '" << pre_in << "' chosen" << std::endl;
-    else { pre_in = "Acqu"; 	std::cout << "Input prefix:     '" << pre_in << "' chosen by default" << std::endl; }
     if(pre_out.length() != 0)  	std::cout << "Output prefix:    '" << pre_out << "' chosen" << std::endl;
-    else { pre_out = "GoAT"; 	std::cout << "Output prefix:    '" << pre_out << "' chosen by default" << std::endl; }
     std::cout << std::endl;
 
     std::string file;
