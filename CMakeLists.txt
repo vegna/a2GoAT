@@ -41,6 +41,7 @@ set(GOAT_BASE
    inc/GTreeMeson.h
    inc/GTreeTrigger.h
    inc/GTreeEventParameters.h
+   inc/GTreeA2Geant.h
    inc/GHistManager.h
    inc/GTreeManager.h
    inc/GConfigFile.h   
@@ -54,16 +55,10 @@ set(GOAT_BASE
    src/GTreeMeson.cc
    src/GTreeTrigger.cc
    src/GTreeEventParameters.cc
+   src/GTreeA2Geant.cc
    src/GHistManager.cc
    src/GTreeManager.cc
    src/GConfigFile.cc
-   src/GDataChecks.cc
-   src/GParticleReconstruction.cc
-   src/GMesonReconstruction.cc
-   src/GSort.cc
-   src/GoAT.cc
-   inc/GTreeA2Geant.h
-   src/GTreeA2Geant.cc
 )
 
 set(GOAT_GHIST
