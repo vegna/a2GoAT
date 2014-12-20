@@ -266,10 +266,10 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& 
     return kTRUE;
 }
 
-std::string GConfigFile::ReadConfig(const std::string& key_in, const Int_t instance, const Char_t* configName)
+std::string GConfigFile::ReadConfig(const std::string& inputKey, const Int_t instance, const Char_t* configName)
 {
     Int_t string_instance = 0;
-    std::string key = key_in;
+    std::string key = inputKey;
     std::transform(key.begin(), key.end(),key.begin(), ::toupper);
 
     std::string str;

@@ -29,9 +29,9 @@ public:
     std::string GetInputFile(const int i) {return inputFileList.at(i);}
     std::string GetOutputFile(const int i) {return outputFileList.at(i);}
 
-    std::string	ReadConfig(const std::string& key_in, const Int_t instance, const Char_t* configName);
-    std::string	ReadConfig(const std::string& key_in, const Int_t instance)                             {return ReadConfig(key_in, instance, globalConfigFile.c_str());}
-    std::string	ReadConfig(const std::string& key_in)                                                   {return ReadConfig(key_in, 0, globalConfigFile.c_str());}
+    std::string	ReadConfig(const std::string& inputKey, const Int_t instance, const Char_t* configName);
+    std::string	ReadConfig(const std::string& inputKey, const Int_t instance)                             {return ReadConfig(inputKey, instance, globalConfigFile.c_str());}
+    std::string	ReadConfig(const std::string& inputKey)                                                   {return ReadConfig(inputKey, 0, globalConfigFile.c_str());}
 };
 
 #endif
