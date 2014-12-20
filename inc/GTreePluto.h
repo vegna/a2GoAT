@@ -28,8 +28,8 @@ public:
 
     virtual void                Clear()                 { PlutoMCTrue->Clear(); plutoID=-1; plutoRandomID=1; }
     virtual TClonesArray* 		GetMCTrue()        		{ return PlutoMCTrue; }
-    virtual Long64_t            GetPlutoID()            { return plutoID; }
-    virtual Long64_t            GetPlutoRandomID()      { return plutoRandomID; }
+    virtual Long64_t            GetPlutoID()       const     { return plutoID; }
+    virtual Long64_t            GetPlutoRandomID() const     { return plutoRandomID; }
 
     typedef std::list<const PParticle*> ParticleList;
 
