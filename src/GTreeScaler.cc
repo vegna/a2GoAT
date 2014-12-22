@@ -5,9 +5,9 @@
 
 GTreeScaler::GTreeScaler(GTreeManager *Manager)    :
     GTree(Manager, TString("scaler"), kTRUE),
-    EventNumber(0),
-    EventID(0),
-    NScaler(0)
+    eventNumber(0),
+    eventID(0),
+    nScalers(0)
 {
     for(int i=0; i<GTreeScaler_MAX; i++)
         scalers[i] = 0;
@@ -20,24 +20,24 @@ GTreeScaler::~GTreeScaler()
 
 void    GTreeScaler::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("eventNumber", &EventNumber);
-    tree_in->SetBranchAddress("eventID", &EventID);
-    NScaler = tree_in->GetLeaf("scalers")->GetLen();
-    if(NScaler<=GTreeScaler_MAX)
+    tree_in->SetBranchAddress("eventNumber", &eventNumber);
+    tree_in->SetBranchAddress("eventID", &eventID);
+    nScalers = tree_in->GetLeaf("scalers")->GetLen();
+    if(nScalers<=GTreeScaler_MAX)
         tree_in->SetBranchAddress("scalers", scalers);
 }
 
 void    GTreeScaler::SetBranches()
 {
-    tree_out->Branch("eventNumber", &EventNumber, "eventNumber/I");
-    tree_out->Branch("eventID", &EventID, "eventID/I");
+    tree_out->Branch("eventNumber", &eventNumber, "eventNumber/I");
+    tree_out->Branch("eventID", &eventID, "eventID/I");
     Char_t str[256];
-    sprintf(str, "scalers[%d]/i", NScaler);
+    sprintf(str, "scalers[%d]/i", nScalers);
     tree_out->Branch("scalers", scalers, str);
 }
 
 
-UInt_t  GTreeScaler::GetScalerEntry(const Int_t event_number)
+UInt_t  GTreeScaler::GetScalerEntry(const Int_t number)
 {
     if(!IsOpenForInput())
     {
@@ -51,19 +51,19 @@ UInt_t  GTreeScaler::GetScalerEntry(const Int_t event_number)
     for(Int_t i=0; i<GetNEntries(); i++)
     {
         GetEntry(i);
-        if(event_number<EventNumber)
+        if(number<eventNumber)
             return i;
     }
 }
 
 
-void    GTreeScaler::SetNScaler(const Int_t num)
+void    GTreeScaler::SetNScalers(const Int_t number)
 {
-    NScaler = num;
-    if(NScaler>GTreeScaler_MAX)
+    nScalers = number;
+    if(nScalers>GTreeScaler_MAX)
     {
-        std::cout << "#ERROR# GTreeScaler::SetNScaler(const Int_t num): Can not handle " << num << " Scalers! Set to max (" << GTreeScaler_MAX << ")." << std::endl;
-        NScaler = GTreeScaler_MAX;
+        std::cout << "#ERROR# GTreeScaler::SetNScaler(const Int_t num): Can not handle " << number << " Scalers! Set to max (" << GTreeScaler_MAX << ")." << std::endl;
+        nScalers = GTreeScaler_MAX;
     }
 }
 
@@ -71,9 +71,9 @@ void    GTreeScaler::Print() const
 {
     GTree::Print();
 
-    std::cout << "GTreeScaler: EventNumber->" << EventNumber << " EventID->" << EventID << std::endl;
-    std::cout << "             NScaler->" << NScaler << std::endl;
-    for(int i=0; i<NScaler; i++)
+    std::cout << "GTreeScaler: eventNumber->" << eventNumber << " eventID->" << eventID << std::endl;
+    std::cout << "             nScalers->" << nScalers << std::endl;
+    for(int i=0; i<nScalers; i++)
         std::cout << "Scaler " << i << ": " << scalers[i] << std::endl;
 }
 

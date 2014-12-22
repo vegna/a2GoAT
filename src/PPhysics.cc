@@ -46,11 +46,11 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 		cout << "Setting lower limit to zero and continuing" << endl;
 		low_scaler_number = 0;
 	}
-	if (high_scaler_number > scalers->GetNScaler())
+    if (high_scaler_number > scalers->GetNScalers())
 	{
 		cout << "FillScalers given scaler number outside range: " << high_scaler_number << endl;
 		cout << "Setting upper limit to "<< high_scaler_number << " and continuing" << endl;	
-		high_scaler_number = scalers->GetNScaler();
+        high_scaler_number = scalers->GetNScalers();
 	}
 
 	for (int i = low_scaler_number; i <= high_scaler_number; i++) 
