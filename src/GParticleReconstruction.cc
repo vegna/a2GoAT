@@ -43,7 +43,7 @@ Bool_t GParticleReconstruction::Start()
     rootinos->CloseForInput();
     photons->CloseForInput();
     electrons->CloseForInput();
-    chargedPi->CloseForInput();
+    chargedPions->CloseForInput();
     protons->CloseForInput();
     neutrons->CloseForInput();
 
@@ -340,7 +340,7 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
     rootinos->Clear();
     photons->Clear();
     electrons->Clear();
-    chargedPi->Clear();
+    chargedPions->Clear();
     protons->Clear();
     neutrons->Clear();
 
@@ -495,7 +495,7 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
         if (identified[i] == pdgDB->GetParticle("proton")->PdgCode())
             protons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("pi+")->PdgCode())
-            chargedPi->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
+            chargedPions->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("e-")->PdgCode())
             electrons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("neutron")->PdgCode())
@@ -519,7 +519,7 @@ void	GParticleReconstruction::ProcessEvent()
     rootinos->Fill();
     photons->Fill();
     electrons->Fill();
-    chargedPi->Fill();
+    chargedPions->Fill();
     protons->Fill();
     neutrons->Fill();
     FillReadList();

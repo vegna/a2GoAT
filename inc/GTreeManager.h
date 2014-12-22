@@ -63,7 +63,7 @@ protected:
     GTreeParticle*      rootinos;
     GTreeParticle*      photons;
     GTreeParticle*      electrons;
-    GTreeParticle*      chargedPi;
+    GTreeParticle*      chargedPions;
     GTreeParticle*      protons;
     GTreeParticle*      neutrons;
     GTreeMeson*         pi0;

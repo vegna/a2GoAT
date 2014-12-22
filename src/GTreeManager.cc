@@ -27,7 +27,7 @@ GTreeManager::GTreeManager()    :
     rootinos(0),
     photons(0),
     electrons(0),
-    chargedPi(0),
+    chargedPions(0),
     protons(0),
     neutrons(0),
     pi0(0),
@@ -50,7 +50,7 @@ GTreeManager::GTreeManager()    :
     rootinos = new GTreeParticle(this, "rootinos");
     photons = new GTreeParticle(this, "photons");
     electrons = new GTreeParticle(this, "electrons");
-    chargedPi = new GTreeParticle(this, "pi_charged");
+    chargedPions = new GTreeParticle(this, "chargedPions");
     protons = new GTreeParticle(this, "protons");
     neutrons = new GTreeParticle(this, "neutrons");
     eventParameters = new GTreeEventParameters(this);

@@ -84,7 +84,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     eta->Clear();
     etap->Clear();
 
-    Int_t       maxSubs = rootinos->GetNParticles() + photons->GetNParticles() + chargedPi->GetNParticles();
+    Int_t       maxSubs = rootinos->GetNParticles() + photons->GetNParticles() + chargedPions->GetNParticles();
 
     Int_t		index1	  [maxSubs * maxSubs];
     Int_t		index2	  [maxSubs * maxSubs];
@@ -173,23 +173,23 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         
         countPhotons++;
     }
-    for (int i = 0; i < chargedPi->GetNParticles(); i++)
+    for (int i = 0; i < chargedPions->GetNParticles(); i++)
     {
-        if (chargedPi->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
-        if (chargedPi->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
+        if (chargedPions->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
+        if (chargedPions->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
 
 		// reject zero energy particles (no CB cluster involved)
 		// note, not currently possible for charged pions 
 		// included for completeness
-		if (chargedPi->Particle(i).T() == 0) continue;
+        if (chargedPions->Particle(i).T() == 0) continue;
 
         is_meson[ndaughter_full] = kFALSE;
 
-        daughter_list[ ndaughter_full] = &chargedPi->Particle(i);
+        daughter_list[ ndaughter_full] = &chargedPions->Particle(i);
         daughter_index[ndaughter_full] = i;
         pdg_list[ndaughter_full] 	   = pdgDB->GetParticle("pi+")->PdgCode();;
 
-        reaction_p4_full += chargedPi->Particle(i);  
+        reaction_p4_full += chargedPions->Particle(i);
         ndaughter_full++;
       
         countChargedPi++;
@@ -224,7 +224,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 		// Remove daughters from original particle list
         rootinos->RemoveParticles(countRootinos, daughter_index);
         photons->RemoveParticles(countPhotons, &daughter_index[countRootinos]);
-        chargedPi->RemoveParticles(countChargedPi, &daughter_index[countRootinos+countPhotons]);
+        chargedPions->RemoveParticles(countChargedPi, &daughter_index[countRootinos+countPhotons]);
         
         // Complete reaction satisfied, return kTRUE
         return kTRUE;
@@ -239,7 +239,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 		// Remove daughters from original particle list
         rootinos->RemoveParticles(countRootinos, daughter_index);
         photons->RemoveParticles(countPhotons, &daughter_index[countRootinos]);
-        chargedPi->RemoveParticles(countChargedPi, &daughter_index[countRootinos+countPhotons]);
+        chargedPions->RemoveParticles(countChargedPi, &daughter_index[countRootinos+countPhotons]);
         
         // Complete reaction satisfied, return kTRUE
         return kTRUE;
@@ -301,10 +301,10 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 
     Int_t		nIndex_rootino_delete    = 0;
     Int_t		nIndex_photon_delete    = 0;
- //   Int_t		nIndex_chargedPi_delete = 0;
+ //   Int_t		nIndex_chargedPion_delete = 0;
     Int_t		index_rootino_delete[GTreeParticle_MaxEntries];
     Int_t		index_photon_delete[GTreeParticle_MaxEntries];
-  //  Int_t		index_chargedPi_delete[GTreeParticle_MaxEntries];
+  //  Int_t		index_chargedPion_delete[GTreeParticle_MaxEntries];
 
     for (Int_t i = 0; i < k; i++)
     {
@@ -332,8 +332,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
             }
  /*           else
             {
-                index_chargedPi_delete[nIndex_chargedPi_delete] = daughter_index[index1[sort_index[i]]];
-                nIndex_chargedPi_delete++;
+                index_chargedPion_delete[nIndex_chargedPion_delete] = daughter_index[index1[sort_index[i]]];
+                nIndex_chargedPion_delete++;
             }*/
             if(index2[sort_index[i]] < countRootinos)
             {
@@ -347,8 +347,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
             }
 /*            else
             {
-                index_chargedPi_delete[nIndex_chargedPi_delete] = daughter_index[index2[sort_index[i]]];
-                nIndex_chargedPi_delete++;
+                index_chargedPion_delete[nIndex_chargedPion_delete] = daughter_index[index2[sort_index[i]]];
+                nIndex_chargedPion_delete++;
             }*/
         }
         else if(tempID[sort_index[i]] == pdgDB->GetParticle("eta")->PdgCode())
@@ -366,8 +366,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
             }
 /*          else
             {
-                index_chargedPi_delete[nIndex_chargedPi_delete] = daughter_index[index1[sort_index[i]]];
-                nIndex_chargedPi_delete++;
+                index_chargedPion_delete[nIndex_chargedPion_delete] = daughter_index[index1[sort_index[i]]];
+                nIndex_chargedPion_delete++;
             }*/
             if(index2[sort_index[i]] < countRootinos)
             {
@@ -381,8 +381,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
             }
 /*            else
             {
-                index_chargedPi_delete[nIndex_chargedPi_delete] = daughter_index[index2[sort_index[i]]];
-                nIndex_chargedPi_delete++;
+                index_chargedPion_delete[nIndex_chargedPion_delete] = daughter_index[index2[sort_index[i]]];
+                nIndex_chargedPion_delete++;
             }*/
         }
         else if(tempID[sort_index[i]] == pdgDB->GetParticle("eta'")->PdgCode())
@@ -400,8 +400,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
             }
  /*           else
             {
-                index_chargedPi_delete[nIndex_chargedPi_delete] = daughter_index[index1[sort_index[i]]];
-                nIndex_chargedPi_delete++;
+                index_chargedPion_delete[nIndex_chargedPion_delete] = daughter_index[index1[sort_index[i]]];
+                nIndex_chargedPion_delete++;
             }*/
             if(index2[sort_index[i]] < countRootinos)
             {
@@ -415,14 +415,14 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
             }
 /*            else
             {
-                index_chargedPi_delete[nIndex_chargedPi_delete] = daughter_index[index2[sort_index[i]]];
-                nIndex_chargedPi_delete++;
+                index_chargedPion_delete[nIndex_chargedPion_delete] = daughter_index[index2[sort_index[i]]];
+                nIndex_chargedPion_delete++;
             }*/
         }
     }
     rootinos->RemoveParticles(nIndex_rootino_delete, index_rootino_delete);
     photons->RemoveParticles(nIndex_photon_delete, index_photon_delete);
-//    chargedPi->RemoveParticles(nIndex_chargedPi_delete, index_chargedPi_delete);
+//    chargedPions->RemoveParticles(nIndex_chargedPion_delete, index_chargedPion_delete);
 
 
     return kTRUE;

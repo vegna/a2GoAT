@@ -128,7 +128,7 @@ void	GoAT::ProcessEvent()
         eventParameters->Fill();
 		rootinos->Fill();
         photons->Fill();
-        chargedPi->Fill();
+        chargedPions->Fill();
         FillReadList();
         nEventsWritten++;
     }
@@ -150,7 +150,7 @@ Bool_t	GoAT::Start()
 			rootinos->CloseForInput();
             photons->CloseForInput();
             electrons->CloseForInput();
-            chargedPi->CloseForInput();
+            chargedPions->CloseForInput();
             protons->CloseForInput();
             neutrons->CloseForInput();
             pi0->CloseForInput();
@@ -162,7 +162,7 @@ Bool_t	GoAT::Start()
 			rootinos->CloseForInput();
             photons->CloseForInput();
             electrons->CloseForInput();
-            chargedPi->CloseForInput();
+            chargedPions->CloseForInput();
             protons->CloseForInput();
             neutrons->CloseForInput();
         }

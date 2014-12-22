@@ -368,11 +368,11 @@ Bool_t	GSort::SortOnNeutrality(Bool_t charge, Int_t Num, Sort_Condition cond, Do
                 continue;
             NumberFound++;
         }
-        for (Int_t i = 0; i <chargedPi->GetNParticles(); i++)
+        for (Int_t i = 0; i <chargedPions->GetNParticles(); i++)
         {
             //Check theta limits
-            if ((chargedPi->Particle(i).Theta() <= ThetaMin) ||
-                (chargedPi->Particle(i).Theta() >= ThetaMax))
+            if ((chargedPions->Particle(i).Theta() <= ThetaMin) ||
+                (chargedPions->Particle(i).Theta() >= ThetaMax))
                 continue;
             NumberFound++;
         }
