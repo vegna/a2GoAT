@@ -57,7 +57,10 @@ Bool_t	GParticleReconstruction::Init()
     GDataChecks::Init();
 
 	cout << endl << "Particle Reconstruction turned ON" << endl;
-    
+
+    char cutFile[256];
+    char cutName[256];
+
     //CB
     // set default reconstruction (none)
     typeCB = ReconstructNone;
@@ -65,10 +68,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-CB-Proton");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeCB = ReconstructType(ReconstructCutProton | typeCB);
-            if(!(cutProtonCB = OpenCutFile(cutFilename,cutName)))
+            if(!(cutProtonCB = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -84,10 +87,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-CB-Pion");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeCB = ReconstructType(ReconstructCutPion | typeCB);
-            if(!(cutPionCB = OpenCutFile(cutFilename,cutName)))
+            if(!(cutPionCB = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -103,10 +106,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-CB-Electron");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeCB = ReconstructType(ReconstructCutElectron | typeCB);
-            if(!(cutElectronCB = OpenCutFile(cutFilename,cutName)))
+            if(!(cutElectronCB = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -122,10 +125,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-CB-TOF");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeCB = ReconstructType(ReconstructTimeOfFlight | typeCB);
-            if(!(cutTimeOfFlightCB = OpenCutFile(cutFilename,cutName)))
+            if(!(cutTimeOfFlightCB = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -141,10 +144,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-CB-ClustSize");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeCB = ReconstructType(ReconstructClusterSize | typeCB);
-            if(!(cutClusterSizeCB = OpenCutFile(cutFilename,cutName)))
+            if(!(cutClusterSizeCB = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -180,10 +183,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-TAPS-Proton");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeTAPS = ReconstructType(ReconstructCutProton | typeTAPS);
-            if(!(cutProtonTAPS = OpenCutFile(cutFilename,cutName)))
+            if(!(cutProtonTAPS = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -199,10 +202,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-TAPS-Pion");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeTAPS = ReconstructType(ReconstructCutPion | typeTAPS);
-            if(!(cutPionTAPS = OpenCutFile(cutFilename,cutName)))
+            if(!(cutPionTAPS = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -218,10 +221,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-TAPS-Electron");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeTAPS = ReconstructType(ReconstructCutElectron | typeTAPS);
-            if(!(cutElectronTAPS  = OpenCutFile(cutFilename,cutName)))
+            if(!(cutElectronTAPS  = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -237,10 +240,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-TAPS-TOF");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeTAPS = ReconstructType(ReconstructTimeOfFlight | typeTAPS);
-            if(!(cutTimeOfFlightTAPS = OpenCutFile(cutFilename,cutName)))
+            if(!(cutTimeOfFlightTAPS = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -256,10 +259,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-TAPS-ClustSize");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
         {
             typeTAPS = ReconstructType(ReconstructClusterSize | typeTAPS);
-            if(!(cutClusterSizeTAPS = OpenCutFile(cutFilename,cutName)))
+            if(!(cutClusterSizeTAPS = OpenCutFile(cutFile,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -531,27 +534,27 @@ void	GParticleReconstruction::ProcessEvent()
  */
 TCutG*	GParticleReconstruction::OpenCutFile(Char_t* file, Char_t* name)
 {
-    cutFile 	= new TFile(file, "READ");
+    TCutG *cut;
 
-    if( !cutFile || !cutFile->IsOpen() ) {
+    TFile cutFile(file, "READ");
+
+    if( !cutFile.IsOpen() ) {
         cerr << "Can't open cut file: " << file << endl;
         throw false;
     }
 
-
     // Try to find a TCutG with the name we want
     // GetObject checks the type to be TCutG,
     // see http://root.cern.ch/root/html534/TDirectory.html#TDirectory:GetObject
-    cutFile->GetObject(name, cut);
+    cutFile.GetObject(name, cut);
 
     if( !cut ) {
         cerr << "Could not find a TCutG with the name " << name << " in " << file << endl;
         throw false;
     }
 
-    TCutG* cutClone = cut;
-    cutFile->Close();
+    cutFile.Close();
 
     cout << "cut file " << file << 	" opened (Cut-name = " << name << ")"<< endl;
-    return cutClone;
+    return cut;
 }

@@ -29,11 +29,6 @@ private:
     ReconstructType   typeCB;
     ReconstructType   typeTAPS;
 
-    char 		cutFilename[256];
-    char 		cutName[256];
-
-    TFile* 		cutFile;
-    TCutG* 		cut;
     TCutG* 		cutProtonCB;
     TCutG* 		cutPionCB;
     TCutG*		cutElectronCB;
