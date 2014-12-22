@@ -30,7 +30,7 @@ GTreeManager::GTreeManager()    :
     chargedPions(0),
     protons(0),
     neutrons(0),
-    pi0(0),
+    neutralPions(0),
     eta(0),
     etap(0),
 #ifdef hasPluto
@@ -46,7 +46,7 @@ GTreeManager::GTreeManager()    :
 
     etap = new GTreeMeson(this, "etaprime");
     eta = new GTreeMeson(this, "eta");
-    pi0 = new GTreeMeson(this, "pi0");
+    neutralPions = new GTreeMeson(this, "neutralPions");
     rootinos = new GTreeParticle(this, "rootinos");
     photons = new GTreeParticle(this, "photons");
     electrons = new GTreeParticle(this, "electrons");

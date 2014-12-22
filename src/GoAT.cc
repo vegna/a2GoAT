@@ -103,7 +103,7 @@ void	GoAT::ProcessEvent()
                 electrons->Fill();
                 protons->Fill();
                 neutrons->Fill();
-                pi0->Fill();
+                neutralPions->Fill();
                 eta->Fill();
                 etap->Fill();
             }
@@ -120,7 +120,7 @@ void	GoAT::ProcessEvent()
         {
             GMesonReconstruction::ProcessEventWithoutFilling();
             if(!SortFillEvent())    return;
-            pi0->Fill();
+            neutralPions->Fill();
             eta->Fill();
             etap->Fill();
         }
@@ -153,7 +153,7 @@ Bool_t	GoAT::Start()
             chargedPions->CloseForInput();
             protons->CloseForInput();
             neutrons->CloseForInput();
-            pi0->CloseForInput();
+            neutralPions->CloseForInput();
             eta->CloseForInput();
             etap->CloseForInput();
         }
@@ -169,7 +169,7 @@ Bool_t	GoAT::Start()
     }
     else if(useMesonReconstruction)
     {
-        pi0->CloseForInput();
+        neutralPions->CloseForInput();
         eta->CloseForInput();
         etap->CloseForInput();
     }

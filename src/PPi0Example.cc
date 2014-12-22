@@ -52,30 +52,30 @@ Bool_t	PPi0Example::Start()
 void	PPi0Example::ProcessEvent()
 {
 	// fill time diff (tagger - pi0), all pi0
-	FillTime(*pi0,time);
-	FillTimeCut(*pi0,time_cut);
+    FillTime(*neutralPions,time);
+    FillTimeCut(*neutralPions,time_cut);
 	
 	// fill missing mass, all pi0
-	FillMissingMass(*pi0,MM);	
+    FillMissingMass(*neutralPions,MM);
 	
 	// fill invariant mass, all pi0
-	FillMass(*pi0,IM);
+    FillMass(*neutralPions,IM);
 		
     // Some neutral decays
-    for (Int_t i = 0; i < pi0->GetNParticles(); i++)
+    for (Int_t i = 0; i < neutralPions->GetNParticles(); i++)
     {
         // Fill MM for 2 photon decay
-        if ((pi0->GetNSubParticles(i) == 2) & (pi0->GetNSubPhotons(i) == 2))
+        if ((neutralPions->GetNSubParticles(i) == 2) & (neutralPions->GetNSubPhotons(i) == 2))
         {
 		// fill time diff (tagger - pi0), this pi0
-		FillTime(*pi0,i,time_2g);
-		FillTimeCut(*pi0,i,time_2g_cut);
+        FillTime(*neutralPions,i,time_2g);
+        FillTimeCut(*neutralPions,i,time_2g_cut);
 			
 		// fill missing mass, this pi0
-            	FillMissingMass(*pi0,i,MM_2g);
+                FillMissingMass(*neutralPions,i,MM_2g);
             
 		// fill invariant mass, this pi0
-            FillMass(*pi0,i,IM_2g);
+            FillMass(*neutralPions,i,IM_2g);
         }
 
     }

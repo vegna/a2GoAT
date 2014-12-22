@@ -18,7 +18,7 @@ GMesonReconstruction::~GMesonReconstruction()
 
 Bool_t GMesonReconstruction::Start()
 {
-    pi0->CloseForInput();
+    neutralPions->CloseForInput();
     eta->CloseForInput();
     etap->CloseForInput();
 
@@ -80,7 +80,7 @@ Bool_t	GMesonReconstruction::Init()
 
 Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 {
-    pi0->Clear();
+    neutralPions->Clear();
     eta->Clear();
     etap->Clear();
 
@@ -203,7 +203,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     if ((diff_pi0 <= 1.0) && (diff_pi0 < diff_eta) && (diff_pi0 < diff_etap) && (ndaughter >= 2))
     {
 		// Add pi0 (charged pion list not included)
-        pi0->AddParticle(countRootinos, daughter_index, daughter_list, 
+        neutralPions->AddParticle(countRootinos, daughter_index, daughter_list,
 						countPhotons, &daughter_index[countRootinos], &daughter_list[countRootinos], 
 						0, &daughter_index[0], &daughter_list[0]);
 						
@@ -319,7 +319,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         // Add to particle list
         if(tempID[sort_index[i]] == pdgDB->GetParticle("pi0")->PdgCode())
         {
-            pi0->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
+            neutralPions->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
             if(index1[sort_index[i]] < countRootinos)
             {
                 index_rootino_delete[nIndex_rootino_delete] = daughter_index[index1[sort_index[i]]];
@@ -435,7 +435,7 @@ void  GMesonReconstruction::ProcessEvent()
     eventParameters->SetNReconstructed(GetNReconstructed());
     eventParameters->Fill();
 
-    pi0->Fill();
+    neutralPions->Fill();
     eta->Fill();
     etap->Fill();
     FillReadList();

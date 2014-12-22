@@ -66,7 +66,7 @@ protected:
     GTreeParticle*      chargedPions;
     GTreeParticle*      protons;
     GTreeParticle*      neutrons;
-    GTreeMeson*         pi0;
+    GTreeMeson*         neutralPions;
     GTreeMeson*         eta;
     GTreeMeson*         etap;
 

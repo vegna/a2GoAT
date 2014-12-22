@@ -154,7 +154,7 @@ Bool_t	GSort::Init()
 				
                 cout << "Sort: " << particleName << " (" << num << cond <<","<<th_min<<"," << th_max<<")" << endl;
 			}	
-            else if(pdgDB->GetParticle(particleName) != 0x0) // Check for particle in pdg database
+            else// if(pdgDB->GetParticle(particleName) != 0x0) // Check for particle in pdg database
             {
                 int     i       =0;
                 bool    found   =false;
@@ -182,12 +182,14 @@ Bool_t	GSort::Init()
                     return kFALSE;
                 }
 			}
+            /*
             else
             {
                 cout << endl << "ERROR unknown particle type ("  << particleName
 					 << ") set by Sort-Particle." << endl << endl;
 				return kFALSE;
 			}
+            */
 		}	
 		else if (strcmp(config.c_str(), "nokey") != 0)
 		{
