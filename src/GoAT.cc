@@ -2,8 +2,8 @@
 
 
 GoAT::GoAT() :
-    UseParticleReconstruction(0),
-    nEvents_written(0)
+    useParticleReconstruction(0),
+    nEventsWritten(0)
 { 
 }
 
@@ -11,14 +11,14 @@ GoAT::~GoAT()
 {
 }
 
-Bool_t	GoAT::Init(const char* configfile)
+Bool_t	GoAT::Init(const char* configFile)
 {
     cout << endl << "Initialising GoAT analysis..." << endl << endl;
 
-    if(configfile)
-        SetConfigFile(configfile);
+    if(configFile)
+        SetConfigFile(configFile);
     std::string config = ReadConfig("Period-Macro");
-	if( sscanf(config.c_str(),"%d\n", &period) == 1 ) UsePeriodMacro = 1;
+    if( sscanf(config.c_str(),"%d\n", &period) == 1 ) usePeriodMacro = 1;
 
 	cout << "==========================================================" << endl;	
 	cout << "Setting up Data Checks:" << endl;	
@@ -46,10 +46,10 @@ Bool_t	GoAT::Init(const char* configfile)
     {
         int buffer=0;
         sscanf( config.c_str(), "%d\n", &buffer);
-        UseParticleReconstruction = (buffer==1);
+        useParticleReconstruction = (buffer==1);
     }
 
-	if(UseParticleReconstruction) 
+    if(useParticleReconstruction)
 	{
         if(!GParticleReconstruction::Init())
 		{
@@ -63,10 +63,10 @@ Bool_t	GoAT::Init(const char* configfile)
     {
         int buffer=0;
         sscanf( config.c_str(), "%d\n", &buffer);
-        UseMesonReconstruction = (buffer==1);
+        useMesonReconstruction = (buffer==1);
     }
 
-    if(UseMesonReconstruction)
+    if(useMesonReconstruction)
     {
         if(!GMesonReconstruction::Init())
         {
@@ -85,17 +85,17 @@ Bool_t	GoAT::Init(const char* configfile)
 
 void	GoAT::ProcessEvent()
 {
-    if(UsePeriodMacro == 1)
+    if(usePeriodMacro == 1)
     {
         if(GetEventNumber() % period == 0)
-            cout << "Event: " << GetEventNumber() << "  Events Accepted: " << nEvents_written << endl;
+            cout << "Event: " << GetEventNumber() << "  Events Accepted: " << nEventsWritten << endl;
     }
 
     if(SortAnalyseEvent())
     {
-        if(UseParticleReconstruction)
+        if(useParticleReconstruction)
         {
-            if(UseMesonReconstruction)
+            if(useMesonReconstruction)
             {
                 if(!GParticleReconstruction::ProcessEventWithoutFilling())  return;
                 if(!GMesonReconstruction::ProcessEventWithoutFilling())  return;
@@ -116,7 +116,7 @@ void	GoAT::ProcessEvent()
                 neutrons->Fill();
             }
         }
-        else if(UseMesonReconstruction)
+        else if(useMesonReconstruction)
         {
             GMesonReconstruction::ProcessEventWithoutFilling();
             if(!SortFillEvent())    return;
@@ -130,7 +130,7 @@ void	GoAT::ProcessEvent()
         photons->Fill();
         chargedPi->Fill();
         FillReadList();
-        nEvents_written++;
+        nEventsWritten++;
     }
 }
 
@@ -143,9 +143,9 @@ Bool_t	GoAT::Start()
     }
     SetAsGoATFile();
 
-    if(UseParticleReconstruction)
+    if(useParticleReconstruction)
     {
-        if(UseMesonReconstruction)
+        if(useMesonReconstruction)
         {
 			rootinos->CloseForInput();
             photons->CloseForInput();
@@ -167,7 +167,7 @@ Bool_t	GoAT::Start()
             neutrons->CloseForInput();
         }
     }
-    else if(UseMesonReconstruction)
+    else if(useMesonReconstruction)
     {
         pi0->CloseForInput();
         eta->CloseForInput();

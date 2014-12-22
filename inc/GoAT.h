@@ -15,13 +15,13 @@
 class	GoAT : public GSort, public GParticleReconstruction, public GMesonReconstruction
 {
 private:
-	Int_t	UsePeriodMacro;
+    Int_t	usePeriodMacro;
 	Int_t 	period;
 	
-	Bool_t 	UseParticleReconstruction;
-    Bool_t 	UseMesonReconstruction;
+    Bool_t 	useParticleReconstruction;
+    Bool_t 	useMesonReconstruction;
 
-	Int_t 	nEvents_written;
+    Int_t 	nEventsWritten;
 protected:
     virtual void 	ProcessEvent();
     virtual Bool_t	Start();
