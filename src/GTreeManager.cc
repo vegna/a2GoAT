@@ -47,12 +47,12 @@ GTreeManager::GTreeManager()    :
     etap = new GTreeMeson(this, "etaprime");
     eta = new GTreeMeson(this, "eta");
     pi0 = new GTreeMeson(this, "pi0");
-    rootinos = new GTreeParticle(this, "rootino");
+    rootinos = new GTreeParticle(this, "rootinos");
     photons = new GTreeParticle(this, "photons");
-    electrons = new GTreeParticle(this, "e_charged");
+    electrons = new GTreeParticle(this, "electrons");
     chargedPi = new GTreeParticle(this, "pi_charged");
-    protons = new GTreeParticle(this, "proton");
-    neutrons = new GTreeParticle(this, "neutron");
+    protons = new GTreeParticle(this, "protons");
+    neutrons = new GTreeParticle(this, "neutrons");
     eventParameters = new GTreeEventParameters(this);
     detectorHits = new GTreeDetectorHits(this);
     rawParticle = new GTreeRawParticle(this);
