@@ -5,9 +5,9 @@ using namespace std;
 
 
 GMesonReconstruction::GMesonReconstruction()    :
-    width_pi0(22),
-    width_eta(40),
-    width_etap(60)
+    widthNeutralPion(0),
+    widthEta(0),
+    widthEtaPrime(0)
 {
 }
 
@@ -33,45 +33,45 @@ Bool_t	GMesonReconstruction::Init()
     string  config = ReadConfig("Do-Meson-Reconstruction");
     if (strcmp(config.c_str(), "nokey") == 0)
     {
-        meson_theta_min = 0.0;
-        meson_theta_max = 180.0;
+        mesonThetaMin = 0.0;
+        mesonThetaMax = 180.0;
     }
-    else if(sscanf( config.c_str(), "%*d %lf %lf\n", &meson_theta_min, &meson_theta_max) == 2)
+    else if(sscanf( config.c_str(), "%*d %lf %lf\n", &mesonThetaMin, &mesonThetaMax) == 2)
     {
         cout << "meson reconstruction is active over theta range [" <<
-        meson_theta_min << "," << meson_theta_max <<"]" << endl;
+        mesonThetaMin << "," << mesonThetaMax <<"]" << endl;
     }
     else
     {
-        meson_theta_min = 0.0;
-        meson_theta_max = 180.0;
+        mesonThetaMin = 0.0;
+        mesonThetaMax = 180.0;
     }
 
     config = ReadConfig("Cut-IM-Width-Pi0");
-    sscanf( config.c_str(), "%lf\n", &width_pi0);
-    if(width_pi0) cout << "Pi0 IM width cut set to " << width_pi0 << " MeV" << endl;
+    sscanf( config.c_str(), "%lf\n", &widthNeutralPion);
+    if(widthNeutralPion) cout << "Pi0 IM width cut set to " << widthNeutralPion << " MeV" << endl;
     else
     {
-        width_pi0 = DEFAULT_PI0_IM_WIDTH;
-        cout << "Pi0 IM width cut set to default (" << width_pi0 << " MeV)" << endl;
+        widthNeutralPion = DEFAULT_WIDTH_NEUTRAL_PION;
+        cout << "Pi0 IM width cut set to default (" << widthNeutralPion << " MeV)" << endl;
     }
 
     config = ReadConfig("Cut-IM-Width-Eta");
-    sscanf( config.c_str(), "%lf\n", &width_eta);
-    if(width_pi0) cout << "Eta IM width cut set to " << width_eta << " MeV" << endl;
+    sscanf( config.c_str(), "%lf\n", &widthEta);
+    if(widthNeutralPion) cout << "Eta IM width cut set to " << widthEta << " MeV" << endl;
     else
     {
-        width_eta = DEFAULT_ETA_IM_WIDTH;
-        cout << "Pi0 IM width cut set to default (" << width_eta << " MeV)" << endl;
+        widthEta = DEFAULT_WIDTH_ETA;
+        cout << "Pi0 IM width cut set to default (" << widthEta << " MeV)" << endl;
     }
 
     config = ReadConfig("Cut-IM-Width-Eta-Prime");
-    sscanf( config.c_str(), "%lf\n", &width_etap);
-    if(width_etap) cout << "Eta-Prime IM width cut set to " << width_etap << " MeV" << endl;
+    sscanf( config.c_str(), "%lf\n", &widthEtaPrime);
+    if(widthEtaPrime) cout << "Eta-Prime IM width cut set to " << widthEtaPrime << " MeV" << endl;
     else
     {
-        width_etap = DEFAULT_ETAP_IM_WIDTH;
-        cout << "Eta-Prime IM width cut set to default (" << width_etap << " MeV)" << endl;
+        widthEtaPrime = DEFAULT_WIDTH_ETA_PRIME;
+        cout << "Eta-Prime IM width cut set to default (" << widthEtaPrime << " MeV)" << endl;
     }
     cout << endl;
 
@@ -130,8 +130,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 
 	for (int i = 0; i < rootinos->GetNParticles(); i++)
     {
-        if (rootinos->Particle(i).Theta() < meson_theta_min) continue; // user rejected theta region
-        if (rootinos->Particle(i).Theta() > meson_theta_max) continue; // user rejected theta region
+        if (rootinos->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
+        if (rootinos->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
 		
 		// reject zero energy particles (no CB cluster involved)
 		if (rootinos->Particle(i).T() == 0) continue;
@@ -153,8 +153,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     }
     for (int i = 0; i < photons->GetNParticles(); i++)
     {
-        if (photons->Particle(i).Theta() < meson_theta_min) continue; // user rejected theta region
-        if (photons->Particle(i).Theta() > meson_theta_max) continue; // user rejected theta region
+        if (photons->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
+        if (photons->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
 
 		// reject zero energy particles (no CB cluster involved)
 		if (photons->Particle(i).T() == 0) continue;
@@ -175,8 +175,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     }
     for (int i = 0; i < chargedPi->GetNParticles(); i++)
     {
-        if (chargedPi->Particle(i).Theta() < meson_theta_min) continue; // user rejected theta region
-        if (chargedPi->Particle(i).Theta() > meson_theta_max) continue; // user rejected theta region
+        if (chargedPi->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
+        if (chargedPi->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
 
 		// reject zero energy particles (no CB cluster involved)
 		// note, not currently possible for charged pions 
@@ -196,9 +196,9 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 
     }
 
-    Double_t diff_pi0  = TMath::Abs( reaction_p4.M() 	  - (pdgDB->GetParticle("pi0" )->Mass()*1000) )/width_pi0;
-    Double_t diff_eta  = TMath::Abs( reaction_p4_full.M() - (pdgDB->GetParticle("eta" )->Mass()*1000) )/width_eta;
-    Double_t diff_etap = TMath::Abs( reaction_p4_full.M() - (pdgDB->GetParticle("eta'")->Mass()*1000) )/width_etap;
+    Double_t diff_pi0  = TMath::Abs( reaction_p4.M() 	  - (pdgDB->GetParticle("pi0" )->Mass()*1000) )/widthNeutralPion;
+    Double_t diff_eta  = TMath::Abs( reaction_p4_full.M() - (pdgDB->GetParticle("eta" )->Mass()*1000) )/widthEta;
+    Double_t diff_etap = TMath::Abs( reaction_p4_full.M() - (pdgDB->GetParticle("eta'")->Mass()*1000) )/widthEtaPrime;
 
     if ((diff_pi0 <= 1.0) && (diff_pi0 < diff_eta) && (diff_pi0 < diff_etap) && (ndaughter >= 2))
     {
@@ -256,19 +256,19 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     Int_t k = 0;
     for (int i = 0; i < ndaughter; i++)
     {
-        if (daughter_list[i]->Theta() < meson_theta_min) continue; // user rejected theta region
-        if (daughter_list[i]->Theta() > meson_theta_max) continue; // user rejected theta region
+        if (daughter_list[i]->Theta() < mesonThetaMin) continue; // user rejected theta region
+        if (daughter_list[i]->Theta() > mesonThetaMax) continue; // user rejected theta region
 
         for (int j = i+1; j < ndaughter; j++)
         {
-            if (daughter_list[j]->Theta() < meson_theta_min) continue; // user rejected theta region
-            if (daughter_list[j]->Theta() > meson_theta_max) continue; // user rejected theta region
+            if (daughter_list[j]->Theta() < mesonThetaMin) continue; // user rejected theta region
+            if (daughter_list[j]->Theta() > mesonThetaMax) continue; // user rejected theta region
 
             TLorentzVector p4 = *daughter_list[i] + *daughter_list[j];
 
-            Double_t diff_pi0  = TMath::Abs( p4.M() - (pdgDB->GetParticle("pi0" )->Mass()*1000) )/width_pi0;
-            Double_t diff_eta  = TMath::Abs( p4.M() - (pdgDB->GetParticle("eta" )->Mass()*1000) )/width_eta;
-            Double_t diff_etap = TMath::Abs( p4.M() - (pdgDB->GetParticle("eta'")->Mass()*1000) )/width_etap;
+            Double_t diff_pi0  = TMath::Abs( p4.M() - (pdgDB->GetParticle("pi0" )->Mass()*1000) )/widthNeutralPion;
+            Double_t diff_eta  = TMath::Abs( p4.M() - (pdgDB->GetParticle("eta" )->Mass()*1000) )/widthEta;
+            Double_t diff_etap = TMath::Abs( p4.M() - (pdgDB->GetParticle("eta'")->Mass()*1000) )/widthEtaPrime;
 
             if ((diff_pi0 <= 1.0) && (diff_pi0 < diff_eta) && (diff_pi0 < diff_etap))
             {
