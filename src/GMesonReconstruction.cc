@@ -19,7 +19,7 @@ GMesonReconstruction::~GMesonReconstruction()
 Bool_t GMesonReconstruction::Start()
 {
     neutralPions->CloseForInput();
-    eta->CloseForInput();
+    etas->CloseForInput();
     etap->CloseForInput();
 
     if(!TraverseEntries(0, photons->GetNEntries()))		return kFALSE;
@@ -81,7 +81,7 @@ Bool_t	GMesonReconstruction::Init()
 Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 {
     neutralPions->Clear();
-    eta->Clear();
+    etas->Clear();
     etap->Clear();
 
     Int_t       maxSubs = rootinos->GetNParticles() + photons->GetNParticles() + chargedPions->GetNParticles();
@@ -217,7 +217,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     else if ((diff_eta <= 1.0) && (diff_eta < diff_pi0) && (diff_eta < diff_etap) && (ndaughter_full >= 2))
     {
         // Add eta 
-        eta->AddParticle(countRootinos, daughter_index, daughter_list, 
+        etas->AddParticle(countRootinos, daughter_index, daughter_list,
 						countPhotons, &daughter_index[countRootinos], &daughter_list[countRootinos], 
 						countChargedPi, &daughter_index[countRootinos+countPhotons], &daughter_list[countRootinos+countPhotons]);
 
@@ -353,7 +353,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         }
         else if(tempID[sort_index[i]] == pdgDB->GetParticle("eta")->PdgCode())
         {
-            eta->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
+            etas->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
             if(index1[sort_index[i]] < countRootinos)
             {
                 index_rootino_delete[nIndex_rootino_delete] = daughter_index[index1[sort_index[i]]];
@@ -436,7 +436,7 @@ void  GMesonReconstruction::ProcessEvent()
     eventParameters->Fill();
 
     neutralPions->Fill();
-    eta->Fill();
+    etas->Fill();
     etap->Fill();
     FillReadList();
 }

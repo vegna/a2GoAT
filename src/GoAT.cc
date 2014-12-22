@@ -104,7 +104,7 @@ void	GoAT::ProcessEvent()
                 protons->Fill();
                 neutrons->Fill();
                 neutralPions->Fill();
-                eta->Fill();
+                etas->Fill();
                 etap->Fill();
             }
             else
@@ -121,7 +121,7 @@ void	GoAT::ProcessEvent()
             GMesonReconstruction::ProcessEventWithoutFilling();
             if(!SortFillEvent())    return;
             neutralPions->Fill();
-            eta->Fill();
+            etas->Fill();
             etap->Fill();
         }
         eventParameters->SetNReconstructed(GetNReconstructed());
@@ -154,7 +154,7 @@ Bool_t	GoAT::Start()
             protons->CloseForInput();
             neutrons->CloseForInput();
             neutralPions->CloseForInput();
-            eta->CloseForInput();
+            etas->CloseForInput();
             etap->CloseForInput();
         }
         else
@@ -170,7 +170,7 @@ Bool_t	GoAT::Start()
     else if(useMesonReconstruction)
     {
         neutralPions->CloseForInput();
-        eta->CloseForInput();
+        etas->CloseForInput();
         etap->CloseForInput();
     }
 
