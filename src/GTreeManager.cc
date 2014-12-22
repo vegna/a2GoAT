@@ -48,7 +48,7 @@ GTreeManager::GTreeManager()    :
     eta = new GTreeMeson(this, "eta");
     pi0 = new GTreeMeson(this, "pi0");
     rootinos = new GTreeParticle(this, "rootino");
-    photons = new GTreeParticle(this, "gamma");
+    photons = new GTreeParticle(this, "photons");
     electrons = new GTreeParticle(this, "e_charged");
     chargedPi = new GTreeParticle(this, "pi_charged");
     protons = new GTreeParticle(this, "proton");
