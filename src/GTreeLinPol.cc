@@ -24,19 +24,19 @@ GTreeLinPol::~GTreeLinPol()
 
 void    GTreeLinPol::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("plane", &plane);
-    tree_in->SetBranchAddress("edge", &edge);
-    tree_in->SetBranchAddress("edgeSetting", &edgeSetting);
-    tree_in->SetBranchAddress("polarizationTable", polarizationTable);
-    tree_in->SetBranchAddress("enhancementTable", enhancementTable);
+    inputTree->SetBranchAddress("plane", &plane);
+    inputTree->SetBranchAddress("edge", &edge);
+    inputTree->SetBranchAddress("edgeSetting", &edgeSetting);
+    inputTree->SetBranchAddress("polarizationTable", polarizationTable);
+    inputTree->SetBranchAddress("enhancementTable", enhancementTable);
     
 }
 
 void    GTreeLinPol::SetBranches()
 {
-    tree_out->Branch("plane", &plane, "plane/I");
-    tree_out->Branch("edge", &edge, "edge/D");
-    tree_out->Branch("edgeSetting", &edgeSetting, "edgeSetting/D");
-    tree_out->Branch("polarizationTable", polarizationTable, "polarizationTable[352]/D");
-    tree_out->Branch("enhancementTable", enhancementTable, "enhancementTable[352]/D");
+    outputTree->Branch("plane", &plane, "plane/I");
+    outputTree->Branch("edge", &edge, "edge/D");
+    outputTree->Branch("edgeSetting", &edgeSetting, "edgeSetting/D");
+    outputTree->Branch("polarizationTable", polarizationTable, "polarizationTable[352]/D");
+    outputTree->Branch("enhancementTable", enhancementTable, "enhancementTable[352]/D");
 }

@@ -9,8 +9,8 @@ GTree::GTree(GTreeManager *Manager, const TString& _Name, const Bool_t Correlate
     name(_Name),
     correlatedToScalerRead(CorrelatedToScalerRead),
     status(FLAG_CLOSED),
-    tree_in(0),
-    tree_out(0),
+    inputTree(0),
+    outputTree(0),
     manager(Manager),
     saveToFile(true)
 {
@@ -56,13 +56,13 @@ void    GTree::Fill()
             return;
         }
     }
-    tree_out->Fill();
+    outputTree->Fill();
 }
 
 Bool_t  GTree::OpenForInput()
 {
-    manager->inputFile->GetObject(name.Data(),tree_in);
-    if(tree_in)
+    manager->inputFile->GetObject(name.Data(),inputTree);
+    if(inputTree)
     {
         SetBranchAdresses();
         status  = status | FLAG_OPENFORINPUT;
@@ -88,8 +88,8 @@ Bool_t  GTree::OpenForInput()
 Bool_t  GTree::OpenForOutput()
 {
     manager->outputFile->cd();
-    tree_out    = new TTree(name.Data(), name.Data());
-    if(tree_out)
+    outputTree    = new TTree(name.Data(), name.Data());
+    if(outputTree)
     {
         SetBranches();
         status  = status | FLAG_OPENFOROUTPUT;
@@ -116,8 +116,8 @@ void    GTree::Close()
         manager->readList.Remove(this);
         manager->readList.Compress();
     }
-    if(tree_out)
-        delete tree_out;
+    if(outputTree)
+        delete outputTree;
 
     if(!saveToFile)
     {
@@ -131,8 +131,8 @@ void    GTree::CloseForInput()
     status = status & ~FLAG_OPENFORINPUT;
     if(manager->readList.FindObject(this))
         manager->readList.Remove(this);
-    if(tree_in)
-        delete tree_in;
+    if(inputTree)
+        delete inputTree;
 }
 
 void    GTree::CloseForOutput()
@@ -140,8 +140,8 @@ void    GTree::CloseForOutput()
     status = status & ~FLAG_OPENFOROUTPUT;
     if(manager->writeList.FindObject(this))
         manager->writeList.Remove(this);
-    if(tree_out)
-        delete tree_out;
+    if(outputTree)
+        delete outputTree;
 }
 
 void    GTree::Print() const
@@ -159,11 +159,11 @@ void    GTree::Print() const
 Bool_t	GTree::Write()
 {
     if(!manager->outputFile)          return kFALSE;
-    if(!tree_out)                   return kFALSE;
+    if(!outputTree)                   return kFALSE;
     if(!IsOpenForOutput())          return kFALSE;
 
     manager->outputFile->cd();
-    tree_out->Write();
+    outputTree->Write();
     std::cout << "tree " << name << " has been written to disk." << std::endl;
     return kTRUE;
 }

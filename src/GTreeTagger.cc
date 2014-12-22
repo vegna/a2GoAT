@@ -20,18 +20,18 @@ GTreeTagger::~GTreeTagger()
 
 void    GTreeTagger::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("nTagged", 	   &nTagged);
-    tree_in->SetBranchAddress("taggedChannel", taggedChannel);
-    tree_in->SetBranchAddress("taggedTime",    taggedTime);
-    tree_in->SetBranchAddress("taggedEnergy",  taggedEnergy);
+    inputTree->SetBranchAddress("nTagged", 	   &nTagged);
+    inputTree->SetBranchAddress("taggedChannel", taggedChannel);
+    inputTree->SetBranchAddress("taggedTime",    taggedTime);
+    inputTree->SetBranchAddress("taggedEnergy",  taggedEnergy);
 }
 
 void    GTreeTagger::SetBranches()
 {
-    tree_out->Branch("nTagged",       &nTagged,      "nTagged/I");
-    tree_out->Branch("taggedEnergy",  taggedEnergy,  "taggedEnergy[nTagged]/D");
-    tree_out->Branch("taggedChannel", taggedChannel, "taggedChannel[nTagged]/I");
-    tree_out->Branch("taggedTime",    taggedTime,    "taggedTime[nTagged]/D");
+    outputTree->Branch("nTagged",       &nTagged,      "nTagged/I");
+    outputTree->Branch("taggedEnergy",  taggedEnergy,  "taggedEnergy[nTagged]/D");
+    outputTree->Branch("taggedChannel", taggedChannel, "taggedChannel[nTagged]/I");
+    outputTree->Branch("taggedTime",    taggedTime,    "taggedTime[nTagged]/D");
 }
 
 

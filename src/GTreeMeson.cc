@@ -39,25 +39,25 @@ void    GTreeMeson::Clear()
 void    GTreeMeson::SetBranchAdresses()
 {
     GTreeParticle::SetBranchAdresses();
-    tree_in->SetBranchAddress("nSubParticles", nSubParticles);
-    tree_in->SetBranchAddress("nSubRootinos", nSubRootinos);
-    tree_in->SetBranchAddress("nSubPhotons", nSubPhotons);
-    tree_in->SetBranchAddress("nSubChargedPi", nSubChargedPi);
-    tree_in->SetBranchAddress("subRootinos.", &subRootinos);
-    tree_in->SetBranchAddress("subPhotons.", &subPhotons);
-    tree_in->SetBranchAddress("subChargedPi.", &subChargedPi);
+    inputTree->SetBranchAddress("nSubParticles", nSubParticles);
+    inputTree->SetBranchAddress("nSubRootinos", nSubRootinos);
+    inputTree->SetBranchAddress("nSubPhotons", nSubPhotons);
+    inputTree->SetBranchAddress("nSubChargedPi", nSubChargedPi);
+    inputTree->SetBranchAddress("subRootinos.", &subRootinos);
+    inputTree->SetBranchAddress("subPhotons.", &subPhotons);
+    inputTree->SetBranchAddress("subChargedPi.", &subChargedPi);
 }
 
 void    GTreeMeson::SetBranches()
 {
     GTreeParticle::SetBranches();
-    tree_out->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/b");
-    tree_out->Branch("nSubRootinos", nSubRootinos,"nSubRootinos[nParticles]/b");
-    tree_out->Branch("nSubPhotons", nSubPhotons,"nSubParticles[nParticles]/b");
-    tree_out->Branch("nSubChargedPi", nSubChargedPi,"nSubParticles[nParticles]/b");
-    tree_out->Branch("subRootinos.", &subRootinos, 32, 0);
-    tree_out->Branch("subPhotons.", &subPhotons, 32, 0);
-    tree_out->Branch("subChargedPi.", &subChargedPi, 32, 0);
+    outputTree->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/b");
+    outputTree->Branch("nSubRootinos", nSubRootinos,"nSubRootinos[nParticles]/b");
+    outputTree->Branch("nSubPhotons", nSubPhotons,"nSubParticles[nParticles]/b");
+    outputTree->Branch("nSubChargedPi", nSubChargedPi,"nSubParticles[nParticles]/b");
+    outputTree->Branch("subRootinos.", &subRootinos, 32, 0);
+    outputTree->Branch("subPhotons.", &subPhotons, 32, 0);
+    outputTree->Branch("subChargedPi.", &subChargedPi, 32, 0);
 }
 
 void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, Int_t* subRootinos_index, TLorentzVector** subRootinos_list, const Int_t _NSubPhotons, Int_t* subPhotons_index, TLorentzVector** subPhotons_list, const Int_t _NSubChargedPi, Int_t* subChargedPi_index, TLorentzVector** subChargedPi_list)

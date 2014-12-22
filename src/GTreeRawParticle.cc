@@ -28,34 +28,34 @@ GTreeRawParticle::~GTreeRawParticle()
 
 void    GTreeRawParticle::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("nParticles",&nParticles);
-    tree_in->SetBranchAddress("clusterEnergy",  clusterEnergy);
-    tree_in->SetBranchAddress("theta", theta);
-    tree_in->SetBranchAddress("phi",  phi);
-    tree_in->SetBranchAddress("time", time);
-    tree_in->SetBranchAddress("clusterSize", clusterSize);
-    tree_in->SetBranchAddress("centralCrystal", centralCrystal);
-    tree_in->SetBranchAddress("centralVeto", centralVeto);
-    tree_in->SetBranchAddress("apparatus", apparatus);
-    tree_in->SetBranchAddress("vetoEnergy", vetoEnergy);
-    tree_in->SetBranchAddress("MWPC0Energy", MWPC0Energy);
-    tree_in->SetBranchAddress("MWPC1Energy", MWPC1Energy);
+    inputTree->SetBranchAddress("nParticles",&nParticles);
+    inputTree->SetBranchAddress("clusterEnergy",  clusterEnergy);
+    inputTree->SetBranchAddress("theta", theta);
+    inputTree->SetBranchAddress("phi",  phi);
+    inputTree->SetBranchAddress("time", time);
+    inputTree->SetBranchAddress("clusterSize", clusterSize);
+    inputTree->SetBranchAddress("centralCrystal", centralCrystal);
+    inputTree->SetBranchAddress("centralVeto", centralVeto);
+    inputTree->SetBranchAddress("apparatus", apparatus);
+    inputTree->SetBranchAddress("vetoEnergy", vetoEnergy);
+    inputTree->SetBranchAddress("MWPC0Energy", MWPC0Energy);
+    inputTree->SetBranchAddress("MWPC1Energy", MWPC1Energy);
 }
 
 void    GTreeRawParticle::SetBranches()
 {
-    tree_out->Branch("nParticles",&nParticles,"nParticles/I");
-    tree_out->Branch("clusterEnergy",  clusterEnergy,  "clusterEnergy[nParticles]/D");
-    tree_out->Branch("theta",  theta,  "theta[nParticles]/D");
-    tree_out->Branch("phi",  phi,  "phi[nParticles]/D");
-    tree_out->Branch("time", time, "time[nParticles]/D");
-    tree_out->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
-    tree_out->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
-    tree_out->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
-    tree_out->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
-    tree_out->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
-    tree_out->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
-    tree_out->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+    outputTree->Branch("nParticles",&nParticles,"nParticles/I");
+    outputTree->Branch("clusterEnergy",  clusterEnergy,  "clusterEnergy[nParticles]/D");
+    outputTree->Branch("theta",  theta,  "theta[nParticles]/D");
+    outputTree->Branch("phi",  phi,  "phi[nParticles]/D");
+    outputTree->Branch("time", time, "time[nParticles]/D");
+    outputTree->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+    outputTree->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+    outputTree->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
+    outputTree->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+    outputTree->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+    outputTree->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+    outputTree->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
 }
 
 void    GTreeRawParticle::Print(const Bool_t All) const

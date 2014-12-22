@@ -29,38 +29,38 @@ GTreeParticle::~GTreeParticle()
 
 void    GTreeParticle::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("nParticles",&nParticles);
-    tree_in->SetBranchAddress("particles", &particles);
-    tree_in->SetBranchAddress("apparatus", apparatus);
-    tree_in->SetBranchAddress("time", time);
-    tree_in->SetBranchAddress("clusterSize", clusterSize);
-    tree_in->SetBranchAddress("vetoEnergy", vetoEnergy);
-    tree_in->SetBranchAddress("MWPC0Energy", MWPC0Energy);
-    tree_in->SetBranchAddress("MWPC1Energy", MWPC1Energy);
+    inputTree->SetBranchAddress("nParticles",&nParticles);
+    inputTree->SetBranchAddress("particles", &particles);
+    inputTree->SetBranchAddress("apparatus", apparatus);
+    inputTree->SetBranchAddress("time", time);
+    inputTree->SetBranchAddress("clusterSize", clusterSize);
+    inputTree->SetBranchAddress("vetoEnergy", vetoEnergy);
+    inputTree->SetBranchAddress("MWPC0Energy", MWPC0Energy);
+    inputTree->SetBranchAddress("MWPC1Energy", MWPC1Energy);
 }
 
 void    GTreeParticle::SetBranches()
 {
-    tree_out->Branch("nParticles",&nParticles, "nParticles/i");
-    tree_out->Branch("particles", &particles, 32000, 0);
-    tree_out->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
-    tree_out->Branch("time", time, "time[nParticles]/D");
-    tree_out->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
-    tree_out->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
-    tree_out->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
-    tree_out->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+    outputTree->Branch("nParticles",&nParticles, "nParticles/i");
+    outputTree->Branch("particles", &particles, 32000, 0);
+    outputTree->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+    outputTree->Branch("time", time, "time[nParticles]/D");
+    outputTree->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+    outputTree->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+    outputTree->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+    outputTree->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
 }
 
 
 Bool_t	GTreeParticle::Write()
 {
     if(!manager->outputFile)          return kFALSE;
-    if(!tree_out)                   return kFALSE;
+    if(!outputTree)                   return kFALSE;
     if(!IsOpenForOutput())          return kFALSE;
 
     TCanvas c1("c1");
     c1.cd();
-    tree_out->Draw("nParticles>>htmp(1,0,1)");
+    outputTree->Draw("nParticles>>htmp(1,0,1)");
     TH1F* hist = (TH1F*)gDirectory->Get("htmp");
     //std::cout << hist->GetEntries()<< "\t" << hist->GetBinContent(hist->GetBin(1)) << std::endl;
     if(hist->GetEntries() == hist->GetBinContent(hist->GetBin(1)))

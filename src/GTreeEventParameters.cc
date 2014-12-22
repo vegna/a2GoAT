@@ -17,15 +17,15 @@ GTreeEventParameters::~GTreeEventParameters()
 
 void    GTreeEventParameters::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("eventNumber", 	&eventNumber);
-    tree_in->SetBranchAddress("nReconstructed", 	&nReconstructed);
+    inputTree->SetBranchAddress("eventNumber", 	&eventNumber);
+    inputTree->SetBranchAddress("nReconstructed", 	&nReconstructed);
 
 }
 
 void    GTreeEventParameters::SetBranches()
 {
-    tree_out->Branch("eventNumber", &eventNumber, "eventNumber/i");
-    tree_out->Branch("nReconstructed", &nReconstructed, "nReconstructed/b");
+    outputTree->Branch("eventNumber", &eventNumber, "eventNumber/i");
+    outputTree->Branch("nReconstructed", &nReconstructed, "nReconstructed/b");
 
   }
 
