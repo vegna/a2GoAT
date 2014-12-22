@@ -68,7 +68,7 @@ protected:
     GTreeParticle*      neutrons;
     GTreeMeson*         neutralPions;
     GTreeMeson*         etas;
-    GTreeMeson*         etap;
+    GTreeMeson*         etaPrimes;
 
 #ifdef hasPluto
     GTreePluto*         pluto;

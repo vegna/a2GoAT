@@ -105,7 +105,7 @@ void	GoAT::ProcessEvent()
                 neutrons->Fill();
                 neutralPions->Fill();
                 etas->Fill();
-                etap->Fill();
+                etaPrimes->Fill();
             }
             else
             {
@@ -122,7 +122,7 @@ void	GoAT::ProcessEvent()
             if(!SortFillEvent())    return;
             neutralPions->Fill();
             etas->Fill();
-            etap->Fill();
+            etaPrimes->Fill();
         }
         eventParameters->SetNReconstructed(GetNReconstructed());
         eventParameters->Fill();
@@ -155,7 +155,7 @@ Bool_t	GoAT::Start()
             neutrons->CloseForInput();
             neutralPions->CloseForInput();
             etas->CloseForInput();
-            etap->CloseForInput();
+            etaPrimes->CloseForInput();
         }
         else
         {
@@ -171,7 +171,7 @@ Bool_t	GoAT::Start()
     {
         neutralPions->CloseForInput();
         etas->CloseForInput();
-        etap->CloseForInput();
+        etaPrimes->CloseForInput();
     }
 
     if(!TraverseValidEvents())		return kFALSE;

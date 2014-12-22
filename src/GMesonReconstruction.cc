@@ -20,7 +20,7 @@ Bool_t GMesonReconstruction::Start()
 {
     neutralPions->CloseForInput();
     etas->CloseForInput();
-    etap->CloseForInput();
+    etaPrimes->CloseForInput();
 
     if(!TraverseEntries(0, photons->GetNEntries()))		return kFALSE;
 
@@ -82,7 +82,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 {
     neutralPions->Clear();
     etas->Clear();
-    etap->Clear();
+    etaPrimes->Clear();
 
     Int_t       maxSubs = rootinos->GetNParticles() + photons->GetNParticles() + chargedPions->GetNParticles();
 
@@ -231,8 +231,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     }
     else if ((diff_etap <= 1.0) && (diff_etap < diff_pi0) && (diff_etap < diff_eta) && (ndaughter_full >= 2))
     {
-        // Add eta 
-        etap->AddParticle(countRootinos, daughter_index, daughter_list, 
+        // Add eta prime
+        etaPrimes->AddParticle(countRootinos, daughter_index, daughter_list,
 						countPhotons, &daughter_index[countRootinos], &daughter_list[countRootinos], 
 						countChargedPi, &daughter_index[countRootinos+countPhotons], &daughter_list[countRootinos+countPhotons]);
 
@@ -387,7 +387,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         }
         else if(tempID[sort_index[i]] == pdgDB->GetParticle("eta'")->PdgCode())
         {
-            etap->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
+            etaPrimes->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
             if(index1[sort_index[i]] < countRootinos)
             {
                 index_rootino_delete[nIndex_rootino_delete] = daughter_index[index1[sort_index[i]]];
@@ -437,6 +437,6 @@ void  GMesonReconstruction::ProcessEvent()
 
     neutralPions->Fill();
     etas->Fill();
-    etap->Fill();
+    etaPrimes->Fill();
     FillReadList();
 }

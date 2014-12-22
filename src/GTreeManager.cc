@@ -32,7 +32,7 @@ GTreeManager::GTreeManager()    :
     neutrons(0),
     neutralPions(0),
     etas(0),
-    etap(0),
+    etaPrimes(0),
 #ifdef hasPluto
     linpol(0),
     pluto(NULL),
@@ -44,15 +44,17 @@ GTreeManager::GTreeManager()    :
 {
     pdgDB = TDatabasePDG::Instance();
 
-    etap = new GTreeMeson(this, "etaprime");
-    etas = new GTreeMeson(this, "etas");
-    neutralPions = new GTreeMeson(this, "neutralPions");
     rootinos = new GTreeParticle(this, "rootinos");
     photons = new GTreeParticle(this, "photons");
     electrons = new GTreeParticle(this, "electrons");
     chargedPions = new GTreeParticle(this, "chargedPions");
     protons = new GTreeParticle(this, "protons");
     neutrons = new GTreeParticle(this, "neutrons");
+
+    neutralPions = new GTreeMeson(this, "neutralPions");
+    etas = new GTreeMeson(this, "etas");
+    etaPrimes = new GTreeMeson(this, "etaPrimes");
+
     eventParameters = new GTreeEventParameters(this);
     detectorHits = new GTreeDetectorHits(this);
     rawParticle = new GTreeRawParticle(this);
