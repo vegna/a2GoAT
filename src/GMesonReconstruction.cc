@@ -140,7 +140,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 
         daughter_list[ ndaughter] = &rootinos->Particle(i);
         daughter_index[ndaughter] = i;
-        pdg_list[ndaughter] 	  = pdg_rootino;
+        pdg_list[ndaughter] 	  = PDG_ROOTINO;
 
         reaction_p4 	 += rootinos->Particle(i);     
         reaction_p4_full += rootinos->Particle(i);  

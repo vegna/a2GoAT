@@ -4,24 +4,24 @@
 using namespace std;
 
 GParticleReconstruction::GParticleReconstruction() :
-    Identified(new Int_t[GTreeRawParticle_MAX]),
-    Charge(new Int_t[GTreeRawParticle_MAX]),
-    Hadron(new Int_t[GTreeRawParticle_MAX]),
-    DoScalerCorrection(kFALSE),
-    DoTrigger(kFALSE),
-    E_Sum(50),
+    identified(new Int_t[GTreeRawParticle_MAX]),
+    charge(new Int_t[GTreeRawParticle_MAX]),
+    hadron(new Int_t[GTreeRawParticle_MAX]),
+    doScalerCorrection(kFALSE),
+    doTrigger(kFALSE),
+    energySum(50),
     multiplicity(1),
-    charged_theta_min(0),
-    charged_theta_max(180),
-    charge_ignore_PID(kFALSE),
-    charge_ignore_WC0(kFALSE),
-    charge_ignore_WC1(kFALSE),
-    charge_ignore_VETO(kFALSE)    
+    chargedThetaMin(0),
+    chargedThetaMax(180),
+    chargeIgnorePID(kFALSE),
+    chargeIgnoreMWPC0(kFALSE),
+    chargeIgnoreMWPC1(kFALSE),
+    chargeIgnoreVETO(kFALSE)
 {
-    CBTimeCut[0] = -1000000.0;
-    CBTimeCut[1] = 1000000.0;
-    TAPSTimeCut[0] = -1000000.0;
-    TAPSTimeCut[1] = 1000000.0;
+    timeCutCB[0] = -1000000.0;
+    timeCutCB[1] = 1000000.0;
+    timeCutTAPS[0] = -1000000.0;
+    timeCutTAPS[1] = 1000000.0;
 }
 
 GParticleReconstruction::~GParticleReconstruction()
@@ -30,7 +30,7 @@ GParticleReconstruction::~GParticleReconstruction()
 
 Bool_t GParticleReconstruction::Trigger()
 {
-    if(trigger->GetEnergySum() < E_Sum)
+    if(trigger->GetEnergySum() < energySum)
         return kFALSE;
     if(trigger->GetMultiplicity() < multiplicity)
         return kFALSE;
@@ -60,15 +60,15 @@ Bool_t	GParticleReconstruction::Init()
     
     //CB
     // set default reconstruction (none)
-    CB_type = Recon_None;
+    typeCB = ReconstructNone;
 
     config = ReadConfig("Cut-dE-E-CB-Proton");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            CB_type = ReconType(Recon_dE_Proton | CB_type);
-            if(!(Cut_CB_proton = OpenCutFile(cutfilename,cutname)))
+            typeCB = ReconstructType(ReconstructCutProton | typeCB);
+            if(!(cutProtonCB = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -84,10 +84,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-CB-Pion");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            CB_type = ReconType(Recon_dE_Pion | CB_type);
-            if(!(Cut_CB_pion = OpenCutFile(cutfilename,cutname)))
+            typeCB = ReconstructType(ReconstructCutPion | typeCB);
+            if(!(cutPionCB = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -103,10 +103,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-CB-Electron");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            CB_type = ReconType(Recon_dE_Electron | CB_type);
-            if(!(Cut_CB_electron = OpenCutFile(cutfilename,cutname)))
+            typeCB = ReconstructType(ReconstructCutElectron | typeCB);
+            if(!(cutElectronCB = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -122,10 +122,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-CB-TOF");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            CB_type = ReconType(Recon_TOF | CB_type);
-            if(!(Cut_CB_TOF = OpenCutFile(cutfilename,cutname)))
+            typeCB = ReconstructType(ReconstructTimeOfFlight | typeCB);
+            if(!(cutTimeOfFlightCB = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -141,10 +141,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-CB-ClustSize");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            CB_type = ReconType(Recon_ClustSize | CB_type);
-            if(!(Cut_CB_ClustSize = OpenCutFile(cutfilename,cutname)))
+            typeCB = ReconstructType(ReconstructClusterSize | typeCB);
+            if(!(cutClusterSizeCB = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -161,7 +161,7 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("CB-all-photons");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        CB_type = Recon_AllPhotons;
+        typeCB = ReconstructAllPhotons;
         cout << "Setting all CB particles to photons" << endl;
     }
 
@@ -169,21 +169,21 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("CB-all-protons");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        CB_type = Recon_AllProtons;
+        typeCB = ReconstructAllProtons;
         cout << "Setting all CB particles to protons" << endl;
     }
 
     //TAPS
     // set default reconstruction (none)
-    TAPS_type = Recon_None;
+    typeTAPS = ReconstructNone;
 
     config = ReadConfig("Cut-dE-E-TAPS-Proton");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            TAPS_type = ReconType(Recon_dE_Proton | TAPS_type);
-            if(!(Cut_TAPS_proton = OpenCutFile(cutfilename,cutname)))
+            typeTAPS = ReconstructType(ReconstructCutProton | typeTAPS);
+            if(!(cutProtonTAPS = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -199,10 +199,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-TAPS-Pion");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            TAPS_type = ReconType(Recon_dE_Pion | TAPS_type);
-            if(!(Cut_TAPS_pion = OpenCutFile(cutfilename,cutname)))
+            typeTAPS = ReconstructType(ReconstructCutPion | typeTAPS);
+            if(!(cutPionTAPS = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -218,10 +218,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-dE-E-TAPS-Electron");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            TAPS_type = ReconType(Recon_dE_Electron | TAPS_type);
-            if(!(Cut_TAPS_electron  = OpenCutFile(cutfilename,cutname)))
+            typeTAPS = ReconstructType(ReconstructCutElectron | typeTAPS);
+            if(!(cutElectronTAPS  = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -237,10 +237,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-TAPS-TOF");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            TAPS_type = ReconType(Recon_TOF | TAPS_type);
-            if(!(Cut_TAPS_TOF = OpenCutFile(cutfilename,cutname)))
+            typeTAPS = ReconstructType(ReconstructTimeOfFlight | typeTAPS);
+            if(!(cutTimeOfFlightTAPS = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -256,10 +256,10 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("Cut-TAPS-ClustSize");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%s %s\n", cutfilename,cutname) == 2)
+        if(sscanf( config.c_str(), "%s %s\n", cutFilename,cutName) == 2)
         {
-            TAPS_type = ReconType(Recon_ClustSize | TAPS_type);
-            if(!(Cut_TAPS_ClustSize = OpenCutFile(cutfilename,cutname)))
+            typeTAPS = ReconstructType(ReconstructClusterSize | typeTAPS);
+            if(!(cutClusterSizeTAPS = OpenCutFile(cutFilename,cutName)))
             {
                 cerr << "Failed to load cut! Terminating..." << endl;
                 exit(1);
@@ -276,7 +276,7 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("TAPS-all-photons");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        TAPS_type = Recon_AllPhotons;
+        typeTAPS = ReconstructAllPhotons;
         cout << "Setting all TAPS particles to photons" << endl;
     }
 
@@ -284,29 +284,29 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("TAPS-all-protons");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        TAPS_type = Recon_AllProtons;
+        typeTAPS = ReconstructAllProtons;
         cout << "Setting all TAPS particles to protons" << endl;
     }
 
     // Option to ignore energy deposit in detectors when determining charge
     config = ReadConfig("charge-ignore-PID");
-    if (strcmp(config.c_str(), "nokey") != 0) charge_ignore_PID = kTRUE;
+    if (strcmp(config.c_str(), "nokey") != 0) chargeIgnorePID = kTRUE;
 
-    config = ReadConfig("charge-ignore-WC0");
-    if (strcmp(config.c_str(), "nokey") != 0) charge_ignore_WC0 = kTRUE;
+    config = ReadConfig("charge-ignore-MWPC0");
+    if (strcmp(config.c_str(), "nokey") != 0) chargeIgnoreMWPC0 = kTRUE;
     
-    config = ReadConfig("charge-ignore-WC1");
-    if (strcmp(config.c_str(), "nokey") != 0) charge_ignore_WC1 = kTRUE;
+    config = ReadConfig("charge-ignore-MWPC1");
+    if (strcmp(config.c_str(), "nokey") != 0) chargeIgnoreMWPC1 = kTRUE;
     
     config = ReadConfig("charge-ignore-VETO");
-    if (strcmp(config.c_str(), "nokey") != 0) charge_ignore_VETO = kTRUE;
+    if (strcmp(config.c_str(), "nokey") != 0) chargeIgnoreVETO = kTRUE;
     
     
 	// Particle timing cuts
     config = ReadConfig("CB-PARTICLE-TIME-CUT");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%lf %lf\n", &CBTimeCut[0], &CBTimeCut[1]) != 2)
+        if(sscanf( config.c_str(), "%lf %lf\n", &timeCutCB[0], &timeCutCB[1]) != 2)
         {
             cout << "ERROR: CB-PARTICLE-TIME-CUT set improperly" << endl;
             return kFALSE;
@@ -316,7 +316,7 @@ Bool_t	GParticleReconstruction::Init()
     config = ReadConfig("TAPS-PARTICLE-TIME-CUT");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        if(sscanf( config.c_str(), "%lf %lf\n", &TAPSTimeCut[0], &TAPSTimeCut[1]) != 2)
+        if(sscanf( config.c_str(), "%lf %lf\n", &timeCutTAPS[0], &timeCutTAPS[1]) != 2)
         {
             cout << "ERROR: TAPS-PARTICLE-TIME-CUT set improperly" << endl;
             return kFALSE;
@@ -328,7 +328,7 @@ Bool_t	GParticleReconstruction::Init()
 
 Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 {
-    if(DoTrigger)
+    if(doTrigger)
     {
         if(!Trigger())
             return kFALSE;
@@ -345,142 +345,142 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
     {
         if(rawParticle->GetApparatus(i) == GTreeRawParticle::APPARATUS_CB)
         {
-            if(rawParticle->GetTime(i)<CBTimeCut[0] || rawParticle->GetTime(i)>CBTimeCut[1])
+            if(rawParticle->GetTime(i)<timeCutCB[0] || rawParticle->GetTime(i)>timeCutCB[1])
                 return kFALSE;
 
-            Identified[i] = pdg_rootino;
-            Charge[i] = 0;
-            Hadron[i] = 0;
+            identified[i] = PDG_ROOTINO;
+            charge[i] = 0;
+            hadron[i] = 0;
 
-            if(CB_type & Recon_AllPhotons)
+            if(typeCB & ReconstructAllPhotons)
             {
-                Identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
+                identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
                 continue;
             }
 
-            if(CB_type & Recon_AllProtons)
+            if(typeCB & ReconstructAllProtons)
             {
-                Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
+                identified[i] = pdgDB->GetParticle("proton")->PdgCode();
                 continue;
             }
 
-            if ((!charge_ignore_PID) && (rawParticle->GetVetoEnergy(i) > 0.0))	Charge[i] = 1;
-            if ((!charge_ignore_WC0) && (rawParticle->GetMWPC0Energy(i) > 0.0))	Charge[i] = 1;
-            if ((!charge_ignore_WC1) && (rawParticle->GetMWPC1Energy(i) > 0.0))	Charge[i] = 1;
+            if ((!chargeIgnorePID) && (rawParticle->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreMWPC0) && (rawParticle->GetMWPC0Energy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreMWPC1) && (rawParticle->GetMWPC1Energy(i) > 0.0))	charge[i] = 1;
 
-            if(CB_type & Recon_TOF)
+            if(typeCB & ReconstructTimeOfFlight)
             {
-                if(Cut_CB_TOF->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetTime(i)))
-                    Hadron[i] = 1;
+                if(cutTimeOfFlightCB->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetTime(i)))
+                    hadron[i] = 1;
             }
 
-            if(CB_type & Recon_ClustSize)
+            if(typeCB & ReconstructClusterSize)
             {
-                if(Cut_CB_ClustSize->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetClusterSize(i)))
-                    Hadron[i] = 1;
+                if(cutClusterSizeCB->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetClusterSize(i)))
+                    hadron[i] = 1;
             }
 
-            if (Charge[i] == 0)
+            if (charge[i] == 0)
             {
-                if(Hadron[i] == 0) Identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
-                else Identified[i] = pdgDB->GetParticle("neutron")->PdgCode();
+                if(hadron[i] == 0) identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
+                else identified[i] = pdgDB->GetParticle("neutron")->PdgCode();
                 continue;
             }
 
-            if (rawParticle->GetTheta(i) < charged_theta_min) break; // user rejected theta region
-            if (rawParticle->GetTheta(i) > charged_theta_max) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
 
-            if(Hadron[i] == 1)
+            if(hadron[i] == 1)
             {
-                Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
+                identified[i] = pdgDB->GetParticle("proton")->PdgCode();
                 continue;
             }
 
-            if(CB_type & Recon_dE_Proton)
+            if(typeCB & ReconstructCutProton)
             {
-                if(Cut_CB_proton->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
-                    Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
+                if(cutProtonCB->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
+                    identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
-            if(CB_type & Recon_dE_Pion)
+            if(typeCB & ReconstructCutPion)
             {
-                if(Cut_CB_pion->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
-                    Identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
+                if(cutPionCB->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
+                    identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
-            if(CB_type & Recon_dE_Electron)
+            if(typeCB & ReconstructCutElectron)
             {
-                if(Cut_CB_electron->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
-                    Identified[i] = pdgDB->GetParticle("e-")->PdgCode();
+                if(cutElectronCB->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
+                    identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
 
         if(rawParticle->GetApparatus(i) == GTreeRawParticle::APPARATUS_TAPS)
         {
-            if(rawParticle->GetTime(i)<TAPSTimeCut[0] || rawParticle->GetTime(i)>TAPSTimeCut[1])
+            if(rawParticle->GetTime(i)<timeCutTAPS[0] || rawParticle->GetTime(i)>timeCutTAPS[1])
                 return kFALSE;
 
-            Identified[i] = pdg_rootino;
-            Charge[i] = 0;
-            Hadron[i] = 0;
+            identified[i] = PDG_ROOTINO;
+            charge[i] = 0;
+            hadron[i] = 0;
 
-            if(TAPS_type & Recon_AllPhotons)
+            if(typeTAPS & ReconstructAllPhotons)
             {
-                Identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
+                identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
                 continue;
             }
 
-            if(TAPS_type & Recon_AllProtons)
+            if(typeTAPS & ReconstructAllProtons)
             {
-                Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
+                identified[i] = pdgDB->GetParticle("proton")->PdgCode();
                 continue;
             }
 
-            if ((!charge_ignore_VETO) && (rawParticle->GetVetoEnergy(i) > 0.0))	Charge[i] = 1;
+            if ((!chargeIgnoreVETO) && (rawParticle->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
 
-            if(TAPS_type & Recon_TOF)
+            if(typeTAPS & ReconstructTimeOfFlight)
             {
-                if(Cut_TAPS_TOF->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetTime(i)))
-                    Hadron[i] = 1;
+                if(cutTimeOfFlightTAPS->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetTime(i)))
+                    hadron[i] = 1;
             }
 
-            if(TAPS_type & Recon_ClustSize)
+            if(typeTAPS & ReconstructClusterSize)
             {
-                if(Cut_TAPS_ClustSize->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetClusterSize(i)))
-                    Hadron[i] = 1;
+                if(cutClusterSizeTAPS->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetClusterSize(i)))
+                    hadron[i] = 1;
             }
 
-            if (Charge[i] == 0)
+            if (charge[i] == 0)
             {
-                if(Hadron[i] == 0) Identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
-                else Identified[i] = pdgDB->GetParticle("neutron")->PdgCode();
+                if(hadron[i] == 0) identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
+                else identified[i] = pdgDB->GetParticle("neutron")->PdgCode();
                 continue;
             }
 
-            if (rawParticle->GetTheta(i) < charged_theta_min) break; // user rejected theta region
-            if (rawParticle->GetTheta(i) > charged_theta_max) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
+            if (rawParticle->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
 
-            if(Hadron[i] == 1)
+            if(hadron[i] == 1)
             {
-                Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
+                identified[i] = pdgDB->GetParticle("proton")->PdgCode();
                 continue;
             }
 
-            if(TAPS_type & Recon_dE_Proton)
+            if(typeTAPS & ReconstructCutProton)
             {
-                if(Cut_TAPS_proton->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
-                    Identified[i] = pdgDB->GetParticle("proton")->PdgCode();
+                if(cutProtonTAPS->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
+                    identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
-            if(TAPS_type & Recon_dE_Pion)
+            if(typeTAPS & ReconstructCutPion)
             {
-                if(Cut_TAPS_pion->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
-                    Identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
+                if(cutPionTAPS->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
+                    identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
-            if(TAPS_type & Recon_dE_Electron)
+            if(typeTAPS & ReconstructCutElectron)
             {
-                if(Cut_TAPS_electron->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
-                    Identified[i] = pdgDB->GetParticle("e-")->PdgCode();
+                if(cutElectronTAPS->IsInside(rawParticle->GetClusterEnergy(i),rawParticle->GetVetoEnergy(i)))
+                    identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
@@ -489,17 +489,17 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
     for (int i = 0; i < rawParticle->GetNParticles(); i++)
     {
         // Finally add particles which were temporarily identified
-        if (Identified[i] == pdgDB->GetParticle("proton")->PdgCode())
+        if (identified[i] == pdgDB->GetParticle("proton")->PdgCode())
             protons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
-        else if (Identified[i] == pdgDB->GetParticle("pi+")->PdgCode())
+        else if (identified[i] == pdgDB->GetParticle("pi+")->PdgCode())
             chargedPi->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
-        else if (Identified[i] == pdgDB->GetParticle("e-")->PdgCode())
+        else if (identified[i] == pdgDB->GetParticle("e-")->PdgCode())
             electrons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
-        else if (Identified[i] == pdgDB->GetParticle("neutron")->PdgCode())
+        else if (identified[i] == pdgDB->GetParticle("neutron")->PdgCode())
             neutrons->AddParticle(rawParticle->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
-        else if (Identified[i] == pdgDB->GetParticle("gamma")->PdgCode())
+        else if (identified[i] == pdgDB->GetParticle("gamma")->PdgCode())
             photons->AddParticle(rawParticle->GetVector(i), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
-        else if (Identified[i] == pdg_rootino)
+        else if (identified[i] == PDG_ROOTINO)
             rootinos->AddParticle(rawParticle->GetVector(i), rawParticle->GetApparatus(i), rawParticle->GetVetoEnergy(i), rawParticle->GetMWPC0Energy(i), rawParticle->GetMWPC1Energy(i), rawParticle->GetTime(i), rawParticle->GetClusterSize(i));
     }
 
@@ -529,12 +529,12 @@ void	GParticleReconstruction::ProcessEvent()
  * @return Pointer to the cut
  * @throw bool false on any error
  */
-TCutG*	GParticleReconstruction::OpenCutFile(Char_t* filename, Char_t* cutname)
+TCutG*	GParticleReconstruction::OpenCutFile(Char_t* file, Char_t* name)
 {
-	CutFile 	= new TFile(filename, "READ");
+    cutFile 	= new TFile(file, "READ");
 
-    if( !CutFile || !CutFile->IsOpen() ) {
-        cerr << "Can't open cut file: " << filename << endl;
+    if( !cutFile || !cutFile->IsOpen() ) {
+        cerr << "Can't open cut file: " << file << endl;
         throw false;
     }
 
@@ -542,16 +542,16 @@ TCutG*	GParticleReconstruction::OpenCutFile(Char_t* filename, Char_t* cutname)
     // Try to find a TCutG with the name we want
     // GetObject checks the type to be TCutG,
     // see http://root.cern.ch/root/html534/TDirectory.html#TDirectory:GetObject
-    CutFile->GetObject(cutname, Cut);
+    cutFile->GetObject(name, cut);
 
-    if( !Cut ) {
-        cerr << "Could not find a TCutG with the name " << cutname << " in " << filename << endl;
+    if( !cut ) {
+        cerr << "Could not find a TCutG with the name " << name << " in " << file << endl;
         throw false;
     }
 
-    TCutG* Cut_clone = Cut;
-    CutFile->Close();
+    TCutG* cutClone = cut;
+    cutFile->Close();
 
-    cout << "cut file " << filename << 	" opened (Cut-name = " << cutname << ")"<< endl;
-    return Cut_clone;
+    cout << "cut file " << file << 	" opened (Cut-name = " << name << ")"<< endl;
+    return cutClone;
 }
