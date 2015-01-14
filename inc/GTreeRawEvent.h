@@ -64,7 +64,7 @@ public:
     inline  Int_t           GetNTAPS()                          const;
     const	Double_t*       GetPhi()                            const	{return Phi;}
             Double_t        GetPhi(const Int_t index)           const	{return Phi[index];}
-            Double_t        GetPhiRad(const Int_t index)        const	{return Theta[index] * TMath::DegToRad();}
+            Double_t        GetPhiRad(const Int_t index)        const	{return Phi[index] * TMath::DegToRad();}
     const	Double_t*       GetTheta()                          const	{return Theta;}
             Double_t        GetTheta(const Int_t index)         const	{return Theta[index];}
             Double_t        GetThetaRad(const Int_t index)      const	{return Theta[index] * TMath::DegToRad();}
