@@ -7,7 +7,7 @@
 #include <TDatabasePDG.h>
 
 #include "GConfigFile.h"
-#include "GTreeRawParticle.h"
+#include "GTreeTrack.h"
 #include "GTreeTagger.h"
 #include "GTreeLinPol.h"
 #include "GTreeScaler.h"
@@ -46,7 +46,7 @@ private:
             Bool_t      TraverseValidEvents_GoATTreeFile();
 
     //private tree variables
-    GTreeRawParticle*   rawParticles;
+    GTreeTrack*   tracks;
     GTreeTagger*        tagger;
     GTreeLinPol*        linpol;
     GTreeTrigger*       trigger;
@@ -73,7 +73,7 @@ protected:
     TFile*          outputFile;
 
     //protected tree variables Getters
-    GTreeRawParticle*   GetRawParticles()           {return rawParticles;}
+    GTreeTrack*   GetTracks()                 {return tracks;}
     GTreeTagger*        GetTagger()                 {return tagger;}
     GTreeLinPol*        GetLinpol()                 {return linpol;}
     GTreeTrigger*       GetTrigger()                {return trigger;}
@@ -97,7 +97,7 @@ protected:
     GTreeA2Geant*       GetGeant()                  {return geant;}
 
     //protected tree variables const Getters
-    const   GTreeRawParticle*   GetRawParticles()       const       {return rawParticles;}
+    const   GTreeTrack*   GetTracks()             const       {return tracks;}
     const   GTreeTagger*        GetTagger()             const       {return tagger;}
     const   GTreeLinPol*        GetLinpol()             const       {return linpol;}
     const   GTreeTrigger*       GetTrigger()            const       {return trigger;}

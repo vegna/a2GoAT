@@ -61,45 +61,45 @@ Bool_t	GSort::Init()
 	}	
 
 	// Cut on raw number of particle tracks (raw data cut)
-	config = ReadConfig("SortRaw-NParticles");
-	if (strcmp(config.c_str(), "nokey") == 0) SortRawNParticles = 0;
+    config = ReadConfig("SortRaw-NTracks");
+    if (strcmp(config.c_str(), "nokey") == 0) SortNTracks = 0;
 	else if( sscanf( config.c_str(), "%d %s %d %s %d %s\n", 
-		&SR_nPart_total, 	string_in1,
-		&SR_nPart_CB,   	string_in2,
-        &SR_nPart_TAPS,  	string_in3) == 6 )
+        &SR_nTracks_total, 	string_in1,
+        &SR_nTracks_CB,   	string_in2,
+        &SR_nTracks_TAPS,  	string_in3) == 6 )
 	{		
-		SortRawNParticles = 1;	
+        SortNTracks = 1;
 
 		// Total Number of particle tracks
-		CheckConfigCondition(string_in1, &SR_nPart_total_condition, string_out1);
-		if(SR_nPart_total_condition == -1) SortRawNParticles = 0;
+        CheckConfigCondition(string_in1, &SR_nTracks_total_condition, string_out1);
+        if(SR_nTracks_total_condition == -1) SortNTracks = 0;
 		
 		// Number of particle tracks in CB
-		CheckConfigCondition(string_in2, &SR_nPart_CB_condition, string_out2);
-		if(SR_nPart_CB_condition == -1) SortRawNParticles = 0;
+        CheckConfigCondition(string_in2, &SR_nTracks_CB_condition, string_out2);
+        if(SR_nTracks_CB_condition == -1) SortNTracks = 0;
 
 		// Number of particle tracks in TAPS
-		CheckConfigCondition(string_in3, &SR_nPart_TAPS_condition, string_out3);
-		if(SR_nPart_TAPS_condition == -1) SortRawNParticles = 0;
+        CheckConfigCondition(string_in3, &SR_nTracks_TAPS_condition, string_out3);
+        if(SR_nTracks_TAPS_condition == -1) SortNTracks = 0;
 
-		if(SortRawNParticles == 1)
+        if(SortNTracks == 1)
 		{
-			cout << "Sort: Total # of Particles before reconstruction   " 
-				 << SR_nPart_total << " "<< string_out1 << endl;
-			cout << "Sort: # of Particles before reconstruction in CB   " 
-				 << SR_nPart_CB << " "<< string_out2 << endl;
-			cout << "Sort: # of Particles before reconstruction in TAPS " 
-				 << SR_nPart_TAPS << " "<< string_out3 << endl;
+            cout << "Sort: Total # of Tracks before reconstruction   "
+                 << SR_nTracks_total << " "<< string_out1 << endl;
+            cout << "Sort: # of Tracks before reconstruction in CB   "
+                 << SR_nTracks_CB << " "<< string_out2 << endl;
+            cout << "Sort: # of Tracks before reconstruction in TAPS "
+                 << SR_nTracks_TAPS << " "<< string_out3 << endl;
 		 }
 		 else
 		 {
-			cout << "SortRaw-NParticles cut set improperly" <<endl;
+            cout << "SortRaw-NTracks cut set improperly" <<endl;
 			return kFALSE;
 		 }
 		 cout << endl;
 	}
 	else {
-		SortRawNParticles = 0;
+        SortNTracks = 0;
 	}
 	
 	// Cut on reconstructed number of particles
@@ -211,48 +211,48 @@ Bool_t GSort::SortAnalyseEvent()
 {
 
 	// Sort on raw variables before analysis (increases speed)
-	if(SortRawNParticles == 1)
+    if(SortNTracks == 1)
 	{
-		switch (SR_nPart_total_condition) 	// Total number of particles
+        switch (SR_nTracks_total_condition) 	// Total number of tracks
 		{
             case Condion_EqualOrMore:
-                if (GetRawParticles()->GetNParticles() < SR_nPart_total) 	return kFALSE;
+                if (GetTracks()->GetNTracks() < SR_nTracks_total) 	return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (GetRawParticles()->GetNParticles() > SR_nPart_total) 	return kFALSE;
+                if (GetTracks()->GetNTracks() > SR_nTracks_total) 	return kFALSE;
 				break;
             case Condion_Equal:
-                if (GetRawParticles()->GetNParticles() != SR_nPart_total) 	return kFALSE;
+                if (GetTracks()->GetNTracks() != SR_nTracks_total) 	return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
 		}
 		
-		switch (SR_nPart_CB_condition) 	// Number of particles in CB
+        switch (SR_nTracks_CB_condition) 	// Number of tracks in CB
 		{
             case Condion_EqualOrMore:
-                if (GetRawParticles()->GetNCB() < SR_nPart_CB) 			return kFALSE;
+                if (GetTracks()->GetNCB() < SR_nTracks_CB) 			return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (GetRawParticles()->GetNCB() > SR_nPart_CB) 			return kFALSE;
+                if (GetTracks()->GetNCB() > SR_nTracks_CB) 			return kFALSE;
 				break;
             case Condion_Equal:
-                if (GetRawParticles()->GetNCB() != SR_nPart_CB) 			return kFALSE;
+                if (GetTracks()->GetNCB() != SR_nTracks_CB) 			return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
 		}
 		
-		switch (SR_nPart_TAPS_condition) 	// Number of particles in TAPS
+        switch (SR_nTracks_TAPS_condition) 	// Number of tracks in TAPS
 		{
             case Condion_EqualOrMore:
-                if (GetRawParticles()->GetNTAPS() < SR_nPart_TAPS) 		return kFALSE;
+                if (GetTracks()->GetNTAPS() < SR_nTracks_TAPS) 		return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (GetRawParticles()->GetNTAPS() > SR_nPart_TAPS) 		return kFALSE;
+                if (GetTracks()->GetNTAPS() > SR_nTracks_TAPS) 		return kFALSE;
 				break;
             case Condion_Equal:
-                if (GetRawParticles()->GetNTAPS() != SR_nPart_TAPS)		return kFALSE;
+                if (GetTracks()->GetNTAPS() != SR_nTracks_TAPS)		return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;

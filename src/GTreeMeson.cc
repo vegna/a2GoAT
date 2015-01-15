@@ -65,7 +65,7 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, Int_t* subRootinos_in
     new((*subRootinos)[nParticles]) TClonesArray("TLorentzVector", _NSubRootinos);
     new((*subPhotons)[nParticles]) TClonesArray("TLorentzVector", _NSubPhotons);
     new((*subChargedPions)[nParticles]) TClonesArray("TLorentzVector", _NSubChargedPions);
-    apparatus[nParticles]    = GTreeRawParticle::APPARATUS_NONE;
+    apparatus[nParticles]    = GTreeTrack::APPARATUS_NONE;
     time[nParticles]         = 0;
     clusterSize[nParticles]  = 0;
     vetoEnergy[nParticles]          = 0;

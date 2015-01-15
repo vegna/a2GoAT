@@ -1,5 +1,5 @@
-#ifndef __GTreeRawParticle_h__
-#define __GTreeRawParticle_h__
+#ifndef __GTreeTrack_h__
+#define __GTreeTrack_h__
 
 
 #include <TLorentzVector.h>
@@ -7,9 +7,9 @@
 #include "GTree.h"
 
 
-#define GTreeRawParticle_MAX 256
+#define GTreeTrack_MAX 256
 
-class  GTreeRawParticle : public GTree
+class  GTreeTrack : public GTree
 {
 public:
     enum
@@ -19,29 +19,29 @@ public:
         APPARATUS_TAPS  = 2
     };
 private:
-    Int_t		nParticles;
-    Double_t	clusterEnergy[GTreeRawParticle_MAX];
-    Double_t 	theta[GTreeRawParticle_MAX];
-    Double_t 	phi[GTreeRawParticle_MAX];
-    Double_t	time[GTreeRawParticle_MAX];
-    UChar_t     clusterSize[GTreeRawParticle_MAX];
-    Int_t       centralCrystal[GTreeRawParticle_MAX];
-    Int_t       centralVeto[GTreeRawParticle_MAX];
-    UChar_t 	apparatus[GTreeRawParticle_MAX];
+    Int_t		nTracks;
+    Double_t	clusterEnergy[GTreeTrack_MAX];
+    Double_t 	theta[GTreeTrack_MAX];
+    Double_t 	phi[GTreeTrack_MAX];
+    Double_t	time[GTreeTrack_MAX];
+    UChar_t     clusterSize[GTreeTrack_MAX];
+    Int_t       centralCrystal[GTreeTrack_MAX];
+    Int_t       centralVeto[GTreeTrack_MAX];
+    UChar_t 	apparatus[GTreeTrack_MAX];
     //Charged detector energies
-    Double_t	vetoEnergy[GTreeRawParticle_MAX];
-    Double_t	MWPC0Energy[GTreeRawParticle_MAX];
-    Double_t	MWPC1Energy[GTreeRawParticle_MAX];
+    Double_t	vetoEnergy[GTreeTrack_MAX];
+    Double_t	MWPC0Energy[GTreeTrack_MAX];
+    Double_t	MWPC1Energy[GTreeTrack_MAX];
 
 protected:
     virtual void    SetBranchAdresses();
     virtual void    SetBranches();
 
 public:
-    GTreeRawParticle(GTreeManager *Manager);
-    virtual ~GTreeRawParticle();
+    GTreeTrack(GTreeManager *Manager);
+    virtual ~GTreeTrack();
 
-    virtual void    Clear()     {nParticles = 0;}
+    virtual void    Clear()     {nTracks = 0;}
 
     const	UChar_t*        GetApparatus()                      const	{return apparatus;}
             UChar_t         GetApparatus(const Int_t index)     const	{return apparatus[index];}
@@ -56,7 +56,7 @@ public:
     const	Double_t*       GetClusterEnergy()                  const	{return clusterEnergy;}
             Double_t        GetClusterEnergy(const Int_t index) const	{return clusterEnergy[index];}
     inline  Int_t           GetNCB()                            const;
-            Int_t           GetNParticles()                     const	{return nParticles;}
+            Int_t           GetNTracks()                     const	{return nTracks;}
     inline  Int_t           GetNTAPS()                          const;
     const	Double_t*       GetPhi()                            const	{return phi;}
             Double_t        GetPhi(const Int_t index)           const	{return phi[index];}
@@ -75,7 +75,7 @@ public:
     virtual void            Print(const Bool_t All = kFALSE)    const;
 };
 
-TLorentzVector	GTreeRawParticle::GetVector(const Int_t index) const
+TLorentzVector	GTreeTrack::GetVector(const Int_t index) const
 {
     Double_t th = theta[index] * TMath::DegToRad();
     Double_t ph = phi[index]   * TMath::DegToRad();
@@ -87,7 +87,7 @@ TLorentzVector	GTreeRawParticle::GetVector(const Int_t index) const
     return TLorentzVector(Px, Py, Pz, clusterEnergy[index]);
 }
 
-TLorentzVector	GTreeRawParticle::GetVector(const Int_t index, const Double_t mass) const
+TLorentzVector	GTreeTrack::GetVector(const Int_t index, const Double_t mass) const
 {
     Double_t th = theta[index] * TMath::DegToRad();
     Double_t ph = phi[index]   * TMath::DegToRad();
@@ -101,19 +101,19 @@ TLorentzVector	GTreeRawParticle::GetVector(const Int_t index, const Double_t mas
     return TLorentzVector(Px, Py, Pz, E);
 }
 
-Int_t		GTreeRawParticle::GetNCB()	const
+Int_t		GTreeTrack::GetNCB()	const
 {
     Int_t NCB = 0;
-    for(Int_t i = 0; i < nParticles; i++)
+    for(Int_t i = 0; i < nTracks; i++)
     {
         if (apparatus[i] == APPARATUS_CB) NCB++;
     }
     return NCB;
 }
-Int_t		GTreeRawParticle::GetNTAPS()	const
+Int_t		GTreeTrack::GetNTAPS()	const
 {
     Int_t NTAPS = 0;
-    for(Int_t i = 0; i < nParticles; i++)
+    for(Int_t i = 0; i < nTracks; i++)
     {
         if (apparatus[i] == APPARATUS_TAPS) NTAPS++;
     }

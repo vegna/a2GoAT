@@ -4,9 +4,9 @@
 using namespace std;
 
 GParticleReconstruction::GParticleReconstruction() :
-    identified(new Int_t[GTreeRawParticle_MAX]),
-    charge(new Int_t[GTreeRawParticle_MAX]),
-    hadron(new Int_t[GTreeRawParticle_MAX]),
+    identified(new Int_t[GTreeTrack_MAX]),
+    charge(new Int_t[GTreeTrack_MAX]),
+    hadron(new Int_t[GTreeTrack_MAX]),
     doScalerCorrection(kFALSE),
     doTrigger(kFALSE),
     energySum(50),
@@ -344,11 +344,11 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
     GetProtons()->Clear();
     GetNeutrons()->Clear();
 
-    for(Int_t i=0; i<GetRawParticles()->GetNParticles(); i++)
+    for(Int_t i=0; i<GetTracks()->GetNTracks(); i++)
     {
-        if(GetRawParticles()->GetApparatus(i) == GTreeRawParticle::APPARATUS_CB)
+        if(GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_CB)
         {
-            if(GetRawParticles()->GetTime(i)<timeCutCB[0] || GetRawParticles()->GetTime(i)>timeCutCB[1])
+            if(GetTracks()->GetTime(i)<timeCutCB[0] || GetTracks()->GetTime(i)>timeCutCB[1])
                 return kFALSE;
 
             identified[i] = PDG_ROOTINO;
@@ -368,19 +368,19 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
             }
 
 
-            if ((!chargeIgnorePID) && (GetRawParticles()->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
-            if ((!chargeIgnoreMWPC0) && (GetRawParticles()->GetMWPC0Energy(i) > 0.0))	charge[i] = 1;
-            if ((!chargeIgnoreMWPC1) && (GetRawParticles()->GetMWPC1Energy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnorePID) && (GetTracks()->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreMWPC0) && (GetTracks()->GetMWPC0Energy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreMWPC1) && (GetTracks()->GetMWPC1Energy(i) > 0.0))	charge[i] = 1;
 
             if(typeCB & ReconstructTimeOfFlight)
             {
-                if(cutTimeOfFlightCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetTime(i)))
+                if(cutTimeOfFlightCB->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetTime(i)))
                     hadron[i] = 1;
             }
 
             if(typeCB & ReconstructClusterSize)
             {
-                if(cutClusterSizeCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetClusterSize(i)))
+                if(cutClusterSizeCB->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetClusterSize(i)))
                     hadron[i] = 1;
             }
 
@@ -391,8 +391,8 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if (GetRawParticles()->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
-            if (GetRawParticles()->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
+            if (GetTracks()->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
+            if (GetTracks()->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
 
             if(hadron[i] == 1)
             {
@@ -402,26 +402,26 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 
             if(typeCB & ReconstructCutProton)
             {
-                if(cutProtonCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
+                if(cutProtonCB->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
             if(typeCB & ReconstructCutPion)
             {
-                if(cutPionCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
+                if(cutPionCB->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
             if(typeCB & ReconstructCutElectron)
             {
-                if(cutElectronCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
+                if(cutElectronCB->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
 
-        if(GetRawParticles()->GetApparatus(i) == GTreeRawParticle::APPARATUS_TAPS)
+        if(GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS)
         {
-            if(GetRawParticles()->GetTime(i)<timeCutTAPS[0] || GetRawParticles()->GetTime(i)>timeCutTAPS[1])
+            if(GetTracks()->GetTime(i)<timeCutTAPS[0] || GetTracks()->GetTime(i)>timeCutTAPS[1])
                 return kFALSE;
 
             identified[i] = PDG_ROOTINO;
@@ -440,17 +440,17 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if ((!chargeIgnoreVETO) && (GetRawParticles()->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreVETO) && (GetTracks()->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
 
             if(typeTAPS & ReconstructTimeOfFlight)
             {
-                if(cutTimeOfFlightTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetTime(i)))
+                if(cutTimeOfFlightTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetTime(i)))
                     hadron[i] = 1;
             }
 
             if(typeTAPS & ReconstructClusterSize)
             {
-                if(cutClusterSizeTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetClusterSize(i)))
+                if(cutClusterSizeTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetClusterSize(i)))
                     hadron[i] = 1;
             }
 
@@ -461,8 +461,8 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if (GetRawParticles()->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
-            if (GetRawParticles()->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
+            if (GetTracks()->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
+            if (GetTracks()->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
 
             if(hadron[i] == 1)
             {
@@ -472,39 +472,39 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 
             if(typeTAPS & ReconstructCutProton)
             {
-                if(cutProtonTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
+                if(cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
             if(typeTAPS & ReconstructCutPion)
             {
-                if(cutPionTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
+                if(cutPionTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
             if(typeTAPS & ReconstructCutElectron)
             {
-                if(cutElectronTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
+                if(cutElectronTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
     }
 
-    for (int i = 0; i < GetRawParticles()->GetNParticles(); i++)
+    for (int i = 0; i < GetTracks()->GetNTracks(); i++)
     {
         // Finally add particles which were temporarily identified
         if (identified[i] == pdgDB->GetParticle("proton")->PdgCode())
-            GetProtons()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
+            GetProtons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("pi+")->PdgCode())
-            GetChargedPions()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
+            GetChargedPions()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("e-")->PdgCode())
-            GetElectrons()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
+            GetElectrons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("neutron")->PdgCode())
-            GetNeutrons()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
+            GetNeutrons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("gamma")->PdgCode())
-            GetPhotons()->AddParticle(GetRawParticles()->GetVector(i), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
+            GetPhotons()->AddParticle(GetTracks()->GetVector(i), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
         else if (identified[i] == PDG_ROOTINO)
-            GetRootinos()->AddParticle(GetRawParticles()->GetVector(i), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
+            GetRootinos()->AddParticle(GetTracks()->GetVector(i), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
     }
 
     return kTRUE;

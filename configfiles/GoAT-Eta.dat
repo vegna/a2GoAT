@@ -37,7 +37,7 @@ Cut-IM-Width-Eta-Prime: 60
 # Sort on number of raw particle tracks (total, CB, and TAPS)
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #		    Total 	CB	TAPS
-SortRaw-NParticles: 7-		6=	1-
+SortRaw-NTracks:    7-		6=	1-
 
 
 # Sort on Trigger conditions (Crystal Ball Energy Sum)

@@ -17,13 +17,13 @@ public:
     };
 private:
 
-    Int_t               SortRawNParticles;	 			// Sort on-off
-    Int_t               SR_nPart_total;
-    Sort_Condition  	SR_nPart_total_condition;
-    Int_t               SR_nPart_CB;
-    Sort_Condition   	SR_nPart_CB_condition;
-    Int_t               SR_nPart_TAPS;
-    Sort_Condition   	SR_nPart_TAPS_condition;
+    Int_t               SortNTracks;	 			// Sort on-off
+    Int_t               SR_nTracks_total;
+    Sort_Condition  	SR_nTracks_total_condition;
+    Int_t               SR_nTracks_CB;
+    Sort_Condition   	SR_nTracks_CB_condition;
+    Int_t               SR_nTracks_TAPS;
+    Sort_Condition   	SR_nTracks_TAPS_condition;
  
     Int_t               SortRawCBESum;	 				// Sort on-off
     Double_t            SR_CBESum;
