@@ -52,7 +52,7 @@ private:
     virtual TDirectory* GetOutputDirectory()    {return outputFile;}
 
 protected:
-    GTreeRawParticle*   rawParticle;
+    GTreeRawParticle*   rawParticles;
     GTreeTagger*        tagger;
     GTreeLinPol*        linpol;
     GTreeTrigger*       trigger;

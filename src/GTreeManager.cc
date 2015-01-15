@@ -19,7 +19,7 @@ GTreeManager::GTreeManager()    :
     readCorreleatedToScalerReadList(),
     writeList(),
     countReconstructed(0),
-    rawParticle(0),
+    rawParticles(0),
     tagger(0),
     trigger(0),
     scalers(0),
@@ -57,7 +57,7 @@ GTreeManager::GTreeManager()    :
 
     eventParameters = new GTreeEventParameters(this);
     detectorHits = new GTreeDetectorHits(this);
-    rawParticle = new GTreeRawParticle(this);
+    rawParticles = new GTreeRawParticle(this);
     tagger = new GTreeTagger(this);
     trigger = new GTreeTrigger(this);
     scalers = new GTreeScaler(this);
