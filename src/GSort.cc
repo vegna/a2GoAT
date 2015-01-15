@@ -216,13 +216,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_nPart_total_condition) 	// Total number of particles
 		{
             case Condion_EqualOrMore:
-                if (rawParticles->GetNParticles() < SR_nPart_total) 	return kFALSE;
+                if (GetRawParticles()->GetNParticles() < SR_nPart_total) 	return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (rawParticles->GetNParticles() > SR_nPart_total) 	return kFALSE;
+                if (GetRawParticles()->GetNParticles() > SR_nPart_total) 	return kFALSE;
 				break;
             case Condion_Equal:
-                if (rawParticles->GetNParticles() != SR_nPart_total) 	return kFALSE;
+                if (GetRawParticles()->GetNParticles() != SR_nPart_total) 	return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
@@ -231,13 +231,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_nPart_CB_condition) 	// Number of particles in CB
 		{
             case Condion_EqualOrMore:
-                if (rawParticles->GetNCB() < SR_nPart_CB) 			return kFALSE;
+                if (GetRawParticles()->GetNCB() < SR_nPart_CB) 			return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (rawParticles->GetNCB() > SR_nPart_CB) 			return kFALSE;
+                if (GetRawParticles()->GetNCB() > SR_nPart_CB) 			return kFALSE;
 				break;
             case Condion_Equal:
-                if (rawParticles->GetNCB() != SR_nPart_CB) 			return kFALSE;
+                if (GetRawParticles()->GetNCB() != SR_nPart_CB) 			return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
@@ -246,13 +246,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_nPart_TAPS_condition) 	// Number of particles in TAPS
 		{
             case Condion_EqualOrMore:
-                if (rawParticles->GetNTAPS() < SR_nPart_TAPS) 		return kFALSE;
+                if (GetRawParticles()->GetNTAPS() < SR_nPart_TAPS) 		return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (rawParticles->GetNTAPS() > SR_nPart_TAPS) 		return kFALSE;
+                if (GetRawParticles()->GetNTAPS() > SR_nPart_TAPS) 		return kFALSE;
 				break;
             case Condion_Equal:
-                if (rawParticles->GetNTAPS() != SR_nPart_TAPS)		return kFALSE;
+                if (GetRawParticles()->GetNTAPS() != SR_nPart_TAPS)		return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
@@ -264,13 +264,13 @@ Bool_t GSort::SortAnalyseEvent()
 		switch (SR_CBESum_condition) 	// Crystal Ball Energy Sum
 		{
             case Condion_EqualOrMore:
-                if (trigger->GetEnergySum() < SR_CBESum) 				return kFALSE;
+                if (GetTrigger()->GetEnergySum() < SR_CBESum) 				return kFALSE;
 				break;
             case Condion_EqualOrLess:
-                if (trigger->GetEnergySum() > SR_CBESum) 				return kFALSE;
+                if (GetTrigger()->GetEnergySum() > SR_CBESum) 				return kFALSE;
 				break;
             case Condion_Equal:
-                if (trigger->GetEnergySum() != SR_CBESum)				return kFALSE;
+                if (GetTrigger()->GetEnergySum() != SR_CBESum)				return kFALSE;
 				break;
             case Condion_NONE:
                 return kFALSE;
@@ -362,54 +362,54 @@ Bool_t	GSort::SortOnNeutrality(Bool_t charge, Int_t Num, Sort_Condition cond, Do
 	
     if(charge)
 	{
-        for (Int_t i = 0; i <electrons->GetNParticles(); i++)
+        for (Int_t i = 0; i <GetElectrons()->GetNParticles(); i++)
         {
             //Check theta limits
-            if ((electrons->Particle(i).Theta() <= ThetaMin) ||
-                (electrons->Particle(i).Theta() >= ThetaMax))
+            if ((GetElectrons()->Particle(i).Theta() <= ThetaMin) ||
+                (GetElectrons()->Particle(i).Theta() >= ThetaMax))
                 continue;
             NumberFound++;
         }
-        for (Int_t i = 0; i <chargedPions->GetNParticles(); i++)
+        for (Int_t i = 0; i <GetChargedPions()->GetNParticles(); i++)
         {
             //Check theta limits
-            if ((chargedPions->Particle(i).Theta() <= ThetaMin) ||
-                (chargedPions->Particle(i).Theta() >= ThetaMax))
+            if ((GetChargedPions()->Particle(i).Theta() <= ThetaMin) ||
+                (GetChargedPions()->Particle(i).Theta() >= ThetaMax))
                 continue;
             NumberFound++;
         }
-        for (Int_t i = 0; i <protons->GetNParticles(); i++)
+        for (Int_t i = 0; i <GetProtons()->GetNParticles(); i++)
         {
             //Check theta limits
-            if ((protons->Particle(i).Theta() <= ThetaMin) ||
-                (protons->Particle(i).Theta() >= ThetaMax))
+            if ((GetProtons()->Particle(i).Theta() <= ThetaMin) ||
+                (GetProtons()->Particle(i).Theta() >= ThetaMax))
                 continue;
             NumberFound++;
         }
-        for (Int_t i = 0; i <rootinos->GetNParticles(); i++)
+        for (Int_t i = 0; i <GetRootinos()->GetNParticles(); i++)
         {
             //Check theta limits
-            if ((rootinos->Particle(i).Theta() <= ThetaMin) ||
-                (rootinos->Particle(i).Theta() >= ThetaMax))
+            if ((GetRootinos()->Particle(i).Theta() <= ThetaMin) ||
+                (GetRootinos()->Particle(i).Theta() >= ThetaMax))
                 continue;
             NumberFound++;
         }
     }
     else
     {
-        for (Int_t i = 0; i < photons->GetNParticles(); i++)
+        for (Int_t i = 0; i < GetPhotons()->GetNParticles(); i++)
         {
             //Check theta limits
-            if ((photons->Particle(i).Theta() <= ThetaMin) ||
-                (photons->Particle(i).Theta() >= ThetaMax))
+            if ((GetPhotons()->Particle(i).Theta() <= ThetaMin) ||
+                (GetPhotons()->Particle(i).Theta() >= ThetaMax))
                 continue;
             NumberFound++;
         }
-        for (Int_t i = 0; i < neutrons->GetNParticles(); i++)
+        for (Int_t i = 0; i < GetNeutrons()->GetNParticles(); i++)
         {
             //Check theta limits
-            if ((neutrons->Particle(i).Theta() <= ThetaMin) ||
-                (neutrons->Particle(i).Theta() >= ThetaMax))
+            if ((GetNeutrons()->Particle(i).Theta() <= ThetaMin) ||
+                (GetNeutrons()->Particle(i).Theta() >= ThetaMax))
                 continue;
             NumberFound++;
         }

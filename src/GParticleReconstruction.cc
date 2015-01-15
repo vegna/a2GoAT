@@ -30,9 +30,9 @@ GParticleReconstruction::~GParticleReconstruction()
 
 Bool_t GParticleReconstruction::Trigger()
 {
-    if(trigger->GetEnergySum() < energySum)
+    if(GetTrigger()->GetEnergySum() < energySum)
         return kFALSE;
-    if(trigger->GetMultiplicity() < multiplicity)
+    if(GetTrigger()->GetMultiplicity() < multiplicity)
         return kFALSE;
     return kTRUE;
 }
@@ -40,12 +40,12 @@ Bool_t GParticleReconstruction::Trigger()
 
 Bool_t GParticleReconstruction::Start()
 {
-    rootinos->CloseForInput();
-    photons->CloseForInput();
-    electrons->CloseForInput();
-    chargedPions->CloseForInput();
-    protons->CloseForInput();
-    neutrons->CloseForInput();
+    GetRootinos()->CloseForInput();
+    GetPhotons()->CloseForInput();
+    GetElectrons()->CloseForInput();
+    GetChargedPions()->CloseForInput();
+    GetProtons()->CloseForInput();
+    GetNeutrons()->CloseForInput();
 
     if(!TraverseValidEvents())		return kFALSE;
 
@@ -169,11 +169,11 @@ Bool_t	GParticleReconstruction::Init()
     }
 
     // check for optional "all proton" reconstruction
-    config = ReadConfig("CB-all-protons");
+    config = ReadConfig("CB-all-GetProtons()");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
         typeCB = ReconstructAllProtons;
-        cout << "Setting all CB particles to protons" << endl;
+        cout << "Setting all CB particles to GetProtons()" << endl;
     }
 
     //TAPS
@@ -284,11 +284,11 @@ Bool_t	GParticleReconstruction::Init()
     }
 
     // check for optional "all proton" reconstruction
-    config = ReadConfig("TAPS-all-protons");
+    config = ReadConfig("TAPS-all-GetProtons()");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
         typeTAPS = ReconstructAllProtons;
-        cout << "Setting all TAPS particles to protons" << endl;
+        cout << "Setting all TAPS particles to GetProtons()" << endl;
     }
 
     // Option to ignore energy deposit in detectors when determining charge
@@ -337,18 +337,18 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
             return kFALSE;
     }
 
-    rootinos->Clear();
-    photons->Clear();
-    electrons->Clear();
-    chargedPions->Clear();
-    protons->Clear();
-    neutrons->Clear();
+    GetRootinos()->Clear();
+    GetPhotons()->Clear();
+    GetElectrons()->Clear();
+    GetChargedPions()->Clear();
+    GetProtons()->Clear();
+    GetNeutrons()->Clear();
 
-    for(Int_t i=0; i<rawParticles->GetNParticles(); i++)
+    for(Int_t i=0; i<GetRawParticles()->GetNParticles(); i++)
     {
-        if(rawParticles->GetApparatus(i) == GTreeRawParticle::APPARATUS_CB)
+        if(GetRawParticles()->GetApparatus(i) == GTreeRawParticle::APPARATUS_CB)
         {
-            if(rawParticles->GetTime(i)<timeCutCB[0] || rawParticles->GetTime(i)>timeCutCB[1])
+            if(GetRawParticles()->GetTime(i)<timeCutCB[0] || GetRawParticles()->GetTime(i)>timeCutCB[1])
                 return kFALSE;
 
             identified[i] = PDG_ROOTINO;
@@ -367,19 +367,20 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if ((!chargeIgnorePID) && (rawParticles->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
-            if ((!chargeIgnoreMWPC0) && (rawParticles->GetMWPC0Energy(i) > 0.0))	charge[i] = 1;
-            if ((!chargeIgnoreMWPC1) && (rawParticles->GetMWPC1Energy(i) > 0.0))	charge[i] = 1;
+
+            if ((!chargeIgnorePID) && (GetRawParticles()->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreMWPC0) && (GetRawParticles()->GetMWPC0Energy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreMWPC1) && (GetRawParticles()->GetMWPC1Energy(i) > 0.0))	charge[i] = 1;
 
             if(typeCB & ReconstructTimeOfFlight)
             {
-                if(cutTimeOfFlightCB->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetTime(i)))
+                if(cutTimeOfFlightCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetTime(i)))
                     hadron[i] = 1;
             }
 
             if(typeCB & ReconstructClusterSize)
             {
-                if(cutClusterSizeCB->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetClusterSize(i)))
+                if(cutClusterSizeCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetClusterSize(i)))
                     hadron[i] = 1;
             }
 
@@ -390,8 +391,8 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if (rawParticles->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
-            if (rawParticles->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
+            if (GetRawParticles()->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
+            if (GetRawParticles()->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
 
             if(hadron[i] == 1)
             {
@@ -401,26 +402,26 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 
             if(typeCB & ReconstructCutProton)
             {
-                if(cutProtonCB->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetVetoEnergy(i)))
+                if(cutProtonCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
             if(typeCB & ReconstructCutPion)
             {
-                if(cutPionCB->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetVetoEnergy(i)))
+                if(cutPionCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
             if(typeCB & ReconstructCutElectron)
             {
-                if(cutElectronCB->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetVetoEnergy(i)))
+                if(cutElectronCB->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
 
-        if(rawParticles->GetApparatus(i) == GTreeRawParticle::APPARATUS_TAPS)
+        if(GetRawParticles()->GetApparatus(i) == GTreeRawParticle::APPARATUS_TAPS)
         {
-            if(rawParticles->GetTime(i)<timeCutTAPS[0] || rawParticles->GetTime(i)>timeCutTAPS[1])
+            if(GetRawParticles()->GetTime(i)<timeCutTAPS[0] || GetRawParticles()->GetTime(i)>timeCutTAPS[1])
                 return kFALSE;
 
             identified[i] = PDG_ROOTINO;
@@ -439,17 +440,17 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if ((!chargeIgnoreVETO) && (rawParticles->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
+            if ((!chargeIgnoreVETO) && (GetRawParticles()->GetVetoEnergy(i) > 0.0))	charge[i] = 1;
 
             if(typeTAPS & ReconstructTimeOfFlight)
             {
-                if(cutTimeOfFlightTAPS->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetTime(i)))
+                if(cutTimeOfFlightTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetTime(i)))
                     hadron[i] = 1;
             }
 
             if(typeTAPS & ReconstructClusterSize)
             {
-                if(cutClusterSizeTAPS->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetClusterSize(i)))
+                if(cutClusterSizeTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetClusterSize(i)))
                     hadron[i] = 1;
             }
 
@@ -460,8 +461,8 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                 continue;
             }
 
-            if (rawParticles->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
-            if (rawParticles->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
+            if (GetRawParticles()->GetTheta(i) < chargedThetaMin) break; // user rejected theta region
+            if (GetRawParticles()->GetTheta(i) > chargedThetaMax) break; // user rejected theta region
 
             if(hadron[i] == 1)
             {
@@ -471,39 +472,39 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 
             if(typeTAPS & ReconstructCutProton)
             {
-                if(cutProtonTAPS->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetVetoEnergy(i)))
+                if(cutProtonTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("proton")->PdgCode();
             }
             if(typeTAPS & ReconstructCutPion)
             {
-                if(cutPionTAPS->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetVetoEnergy(i)))
+                if(cutPionTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("pi+")->PdgCode();
             }
 
             if(typeTAPS & ReconstructCutElectron)
             {
-                if(cutElectronTAPS->IsInside(rawParticles->GetClusterEnergy(i),rawParticles->GetVetoEnergy(i)))
+                if(cutElectronTAPS->IsInside(GetRawParticles()->GetClusterEnergy(i),GetRawParticles()->GetVetoEnergy(i)))
                     identified[i] = pdgDB->GetParticle("e-")->PdgCode();
             }
 
         }
     }
 
-    for (int i = 0; i < rawParticles->GetNParticles(); i++)
+    for (int i = 0; i < GetRawParticles()->GetNParticles(); i++)
     {
         // Finally add particles which were temporarily identified
         if (identified[i] == pdgDB->GetParticle("proton")->PdgCode())
-            protons->AddParticle(rawParticles->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), rawParticles->GetApparatus(i), rawParticles->GetVetoEnergy(i), rawParticles->GetMWPC0Energy(i), rawParticles->GetMWPC1Energy(i), rawParticles->GetTime(i), rawParticles->GetClusterSize(i));
+            GetProtons()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("pi+")->PdgCode())
-            chargedPions->AddParticle(rawParticles->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), rawParticles->GetApparatus(i), rawParticles->GetVetoEnergy(i), rawParticles->GetMWPC0Energy(i), rawParticles->GetMWPC1Energy(i), rawParticles->GetTime(i), rawParticles->GetClusterSize(i));
+            GetChargedPions()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("e-")->PdgCode())
-            electrons->AddParticle(rawParticles->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), rawParticles->GetApparatus(i), rawParticles->GetVetoEnergy(i), rawParticles->GetMWPC0Energy(i), rawParticles->GetMWPC1Energy(i), rawParticles->GetTime(i), rawParticles->GetClusterSize(i));
+            GetElectrons()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("neutron")->PdgCode())
-            neutrons->AddParticle(rawParticles->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), rawParticles->GetApparatus(i), rawParticles->GetVetoEnergy(i), rawParticles->GetMWPC0Energy(i), rawParticles->GetMWPC1Energy(i), rawParticles->GetTime(i), rawParticles->GetClusterSize(i));
+            GetNeutrons()->AddParticle(GetRawParticles()->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
         else if (identified[i] == pdgDB->GetParticle("gamma")->PdgCode())
-            photons->AddParticle(rawParticles->GetVector(i), rawParticles->GetApparatus(i), rawParticles->GetVetoEnergy(i), rawParticles->GetMWPC0Energy(i), rawParticles->GetMWPC1Energy(i), rawParticles->GetTime(i), rawParticles->GetClusterSize(i));
+            GetPhotons()->AddParticle(GetRawParticles()->GetVector(i), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
         else if (identified[i] == PDG_ROOTINO)
-            rootinos->AddParticle(rawParticles->GetVector(i), rawParticles->GetApparatus(i), rawParticles->GetVetoEnergy(i), rawParticles->GetMWPC0Energy(i), rawParticles->GetMWPC1Energy(i), rawParticles->GetTime(i), rawParticles->GetClusterSize(i));
+            GetRootinos()->AddParticle(GetRawParticles()->GetVector(i), GetRawParticles()->GetApparatus(i), GetRawParticles()->GetVetoEnergy(i), GetRawParticles()->GetMWPC0Energy(i), GetRawParticles()->GetMWPC1Energy(i), GetRawParticles()->GetTime(i), GetRawParticles()->GetClusterSize(i));
     }
 
     return kTRUE;
@@ -513,15 +514,15 @@ void	GParticleReconstruction::ProcessEvent()
 {    
     if(!ProcessEventWithoutFilling())   return;
 
-    eventParameters->SetNReconstructed(GetNReconstructed());
-    eventParameters->Fill();
+    GetEventParameters()->SetNReconstructed(GetNReconstructed());
+    GetEventParameters()->Fill();
 
-    rootinos->Fill();
-    photons->Fill();
-    electrons->Fill();
-    chargedPions->Fill();
-    protons->Fill();
-    neutrons->Fill();
+    GetRootinos()->Fill();
+    GetPhotons()->Fill();
+    GetElectrons()->Fill();
+    GetChargedPions()->Fill();
+    GetProtons()->Fill();
+    GetNeutrons()->Fill();
     FillReadList();
 }
 

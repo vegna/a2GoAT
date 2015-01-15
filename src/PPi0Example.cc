@@ -52,30 +52,30 @@ Bool_t	PPi0Example::Start()
 void	PPi0Example::ProcessEvent()
 {
 	// fill time diff (tagger - pi0), all pi0
-    FillTime(*neutralPions,time);
-    FillTimeCut(*neutralPions,time_cut);
+    FillTime(*GetNeutralPions(),time);
+    FillTimeCut(*GetNeutralPions(),time_cut);
 	
 	// fill missing mass, all pi0
-    FillMissingMass(*neutralPions,MM);
+    FillMissingMass(*GetNeutralPions(),MM);
 	
 	// fill invariant mass, all pi0
-    FillMass(*neutralPions,IM);
+    FillMass(*GetNeutralPions(),IM);
 		
     // Some neutral decays
-    for (Int_t i = 0; i < neutralPions->GetNParticles(); i++)
+    for (Int_t i = 0; i < GetNeutralPions()->GetNParticles(); i++)
     {
         // Fill MM for 2 photon decay
-        if ((neutralPions->GetNSubParticles(i) == 2) & (neutralPions->GetNSubPhotons(i) == 2))
+        if ((GetNeutralPions()->GetNSubParticles(i) == 2) & (GetNeutralPions()->GetNSubPhotons(i) == 2))
         {
 		// fill time diff (tagger - pi0), this pi0
-        FillTime(*neutralPions,i,time_2g);
-        FillTimeCut(*neutralPions,i,time_2g_cut);
+        FillTime(*GetNeutralPions(),i,time_2g);
+        FillTimeCut(*GetNeutralPions(),i,time_2g_cut);
 			
 		// fill missing mass, this pi0
-                FillMissingMass(*neutralPions,i,MM_2g);
+                FillMissingMass(*GetNeutralPions(),i,MM_2g);
             
 		// fill invariant mass, this pi0
-            FillMass(*neutralPions,i,IM_2g);
+            FillMass(*GetNeutralPions(),i,IM_2g);
         }
 
     }

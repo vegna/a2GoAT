@@ -45,13 +45,7 @@ private:
             Bool_t      TraverseValidEvents_AcquTreeFile();
             Bool_t      TraverseValidEvents_GoATTreeFile();
 
-protected:
-    TFile*          outputFile;
-
-private:
-    virtual TDirectory* GetOutputDirectory()    {return outputFile;}
-
-protected:
+    //private tree variables
     GTreeRawParticle*   rawParticles;
     GTreeTagger*        tagger;
     GTreeLinPol*        linpol;
@@ -74,6 +68,63 @@ protected:
     GTreePluto*         pluto;
 #endif
     GTreeA2Geant*       geant;
+
+protected:
+    TFile*          outputFile;
+
+    //protected tree variables Getters
+    GTreeRawParticle*   GetRawParticles()           {return rawParticles;}
+    GTreeTagger*        GetTagger()                 {return tagger;}
+    GTreeLinPol*        GetLinpol()                 {return linpol;}
+    GTreeTrigger*       GetTrigger()                {return trigger;}
+    GTreeScaler*        GetScalers()                {return scalers;}
+
+    GTreeEventParameters* GetEventParameters()      {return eventParameters;}
+    GTreeDetectorHits*  GetDetectorHits()           {return detectorHits;}
+    GTreeParticle*      GetRootinos()               {return rootinos;}
+    GTreeParticle*      GetPhotons()                {return photons;}
+    GTreeParticle*      GetElectrons()              {return electrons;}
+    GTreeParticle*      GetChargedPions()           {return chargedPions;}
+    GTreeParticle*      GetProtons()                {return protons;}
+    GTreeParticle*      GetNeutrons()               {return neutrons;}
+    GTreeMeson*         GetNeutralPions()           {return neutralPions;}
+    GTreeMeson*         GetEtas()                   {return etas;}
+    GTreeMeson*         GetEtaPrimes()              {return etaPrimes;}
+
+#ifdef hasPluto
+    GTreePluto*         GetPluto()                  {return pluto;}
+#endif
+    GTreeA2Geant*       GetGeant()                  {return geant;}
+
+    //protected tree variables const Getters
+    const   GTreeRawParticle*   GetRawParticles()       const       {return rawParticles;}
+    const   GTreeTagger*        GetTagger()             const       {return tagger;}
+    const   GTreeLinPol*        GetLinpol()             const       {return linpol;}
+    const   GTreeTrigger*       GetTrigger()            const       {return trigger;}
+    const   GTreeScaler*        GetScalers()            const       {return scalers;}
+
+    const   GTreeEventParameters* GetEventParameters()  const       {return eventParameters;}
+    const   GTreeDetectorHits*  GetDetectorHits()       const       {return detectorHits;}
+    const   GTreeParticle*      GetRootinos()           const       {return rootinos;}
+    const   GTreeParticle*      GetPhotons()            const       {return photons;}
+    const   GTreeParticle*      GetElectrons()          const       {return electrons;}
+    const   GTreeParticle*      GetChargedPions()       const       {return chargedPions;}
+    const   GTreeParticle*      GetProtons()            const       {return protons;}
+    const   GTreeParticle*      GetNeutrons()           const       {return neutrons;}
+    const   GTreeMeson*         GetNeutralPions()       const       {return neutralPions;}
+    const   GTreeMeson*         GetEtas()               const       {return etas;}
+    const   GTreeMeson*         GetEtaPrimes()          const       {return etaPrimes;}
+
+#ifdef hasPluto
+    const   GTreePluto*         GetPluto()              const       {return pluto;}
+#endif
+    const   GTreeA2Geant*       GetGeant()              const       {return geant;}
+
+
+private:
+    virtual TDirectory* GetOutputDirectory()    {return outputFile;}
+
+protected:
 
     TDatabasePDG *pdgDB;
 

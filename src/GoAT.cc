@@ -100,35 +100,35 @@ void	GoAT::ProcessEvent()
                 if(!GParticleReconstruction::ProcessEventWithoutFilling())  return;
                 if(!GMesonReconstruction::ProcessEventWithoutFilling())  return;
                 if(!SortFillEvent())    return;
-                electrons->Fill();
-                protons->Fill();
-                neutrons->Fill();
-                neutralPions->Fill();
-                etas->Fill();
-                etaPrimes->Fill();
+                GetElectrons()->Fill();
+                GetProtons()->Fill();
+                GetNeutrons()->Fill();
+                GetNeutralPions()->Fill();
+                GetEtas()->Fill();
+                GetEtaPrimes()->Fill();
             }
             else
             {
                 if(!GParticleReconstruction::ProcessEventWithoutFilling())  return;
                 if(!SortFillEvent())    return;
-                electrons->Fill();
-                protons->Fill();
-                neutrons->Fill();
+                GetElectrons()->Fill();
+                GetProtons()->Fill();
+                GetNeutrons()->Fill();
             }
         }
         else if(useMesonReconstruction)
         {
             GMesonReconstruction::ProcessEventWithoutFilling();
             if(!SortFillEvent())    return;
-            neutralPions->Fill();
-            etas->Fill();
-            etaPrimes->Fill();
+            GetNeutralPions()->Fill();
+            GetEtas()->Fill();
+            GetEtaPrimes()->Fill();
         }
-        eventParameters->SetNReconstructed(GetNReconstructed());
-        eventParameters->Fill();
-		rootinos->Fill();
-        photons->Fill();
-        chargedPions->Fill();
+        GetEventParameters()->SetNReconstructed(GetNReconstructed());
+        GetEventParameters()->Fill();
+        GetRootinos()->Fill();
+        GetPhotons()->Fill();
+        GetChargedPions()->Fill();
         FillReadList();
         nEventsWritten++;
     }
@@ -147,31 +147,31 @@ Bool_t	GoAT::Start()
     {
         if(useMesonReconstruction)
         {
-			rootinos->CloseForInput();
-            photons->CloseForInput();
-            electrons->CloseForInput();
-            chargedPions->CloseForInput();
-            protons->CloseForInput();
-            neutrons->CloseForInput();
-            neutralPions->CloseForInput();
-            etas->CloseForInput();
-            etaPrimes->CloseForInput();
+            GetRootinos()->CloseForInput();
+            GetPhotons()->CloseForInput();
+            GetElectrons()->CloseForInput();
+            GetChargedPions()->CloseForInput();
+            GetProtons()->CloseForInput();
+            GetNeutrons()->CloseForInput();
+            GetNeutralPions()->CloseForInput();
+            GetEtas()->CloseForInput();
+            GetEtaPrimes()->CloseForInput();
         }
         else
         {
-			rootinos->CloseForInput();
-            photons->CloseForInput();
-            electrons->CloseForInput();
-            chargedPions->CloseForInput();
-            protons->CloseForInput();
-            neutrons->CloseForInput();
+            GetRootinos()->CloseForInput();
+            GetPhotons()->CloseForInput();
+            GetElectrons()->CloseForInput();
+            GetChargedPions()->CloseForInput();
+            GetProtons()->CloseForInput();
+            GetNeutrons()->CloseForInput();
         }
     }
     else if(useMesonReconstruction)
     {
-        neutralPions->CloseForInput();
-        etas->CloseForInput();
-        etaPrimes->CloseForInput();
+        GetNeutralPions()->CloseForInput();
+        GetEtas()->CloseForInput();
+        GetEtaPrimes()->CloseForInput();
     }
 
     if(!TraverseValidEvents())		return kFALSE;

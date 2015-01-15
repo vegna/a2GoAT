@@ -63,9 +63,9 @@ inline Bool_t 	GDataChecks::CheckCBHits(const Int_t min, const Int_t max)
     Int_t SumQ3 = 0;
     Int_t SumQ4 = 0;
 
-    if(!detectorHits->IsOpenForInput())
+    if(!GetDetectorHits()->IsOpenForInput())
     {
-        if(!detectorHits->OpenForInput())
+        if(!GetDetectorHits()->OpenForInput())
         {
             cout << "Can not check CB Hits. DetectorHits tree not available." << endl;
             return false;
@@ -74,14 +74,14 @@ inline Bool_t 	GDataChecks::CheckCBHits(const Int_t min, const Int_t max)
 
     for(int i=min; i<=max; i++)
     {
-        detectorHits->GetEntry(i);
+        GetDetectorHits()->GetEntry(i);
 
-        for (int j=0; j<=detectorHits->GetNNaIHits(); j++)
+        for (int j=0; j<=GetDetectorHits()->GetNNaIHits(); j++)
         {
-            if  (detectorHits->GetNaIHits(j) <  180) SumQ1++;
-            if ((detectorHits->GetNaIHits(j) >= 180) && (detectorHits->GetNaIHits(j) < 360)) SumQ2++;
-            if ((detectorHits->GetNaIHits(j) >= 360) && (detectorHits->GetNaIHits(j) < 540)) SumQ3++;
-            if ((detectorHits->GetNaIHits(j) >= 540) && (detectorHits->GetNaIHits(j) < 720)) SumQ4++;
+            if  (GetDetectorHits()->GetNaIHits(j) <  180) SumQ1++;
+            if ((GetDetectorHits()->GetNaIHits(j) >= 180) && (GetDetectorHits()->GetNaIHits(j) < 360)) SumQ2++;
+            if ((GetDetectorHits()->GetNaIHits(j) >= 360) && (GetDetectorHits()->GetNaIHits(j) < 540)) SumQ3++;
+            if ((GetDetectorHits()->GetNaIHits(j) >= 540) && (GetDetectorHits()->GetNaIHits(j) < 720)) SumQ4++;
         }
     }
 
