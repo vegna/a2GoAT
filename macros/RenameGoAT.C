@@ -3,33 +3,37 @@ void RenameGoAT(TString sFile){
   TFile fOld(sFile,"READ");
 
   // Acqu Trees
-  TTree *taggerOld = (TTree*)fOld.Get("treeTagger");
-  TTree *tracksOld = (TTree*)fOld.Get("treeRawEvent");
+  TTree *taggerOld       = (TTree*)fOld.Get("treeTagger");
+  TTree *tracksOld       = (TTree*)fOld.Get("treeRawEvent");
   TTree *detectorHitsOld = (TTree*)fOld.Get("treeDetectorHits");
-  TTree *linPolOld = (TTree*)fOld.Get("treeLinPol");
-  TTree *triggerOld = (TTree*)fOld.Get("treeTrigger");
-  TTree *scalerOld = (TTree*)fOld.Get("treeScaler");
+  TTree *linPolOld       = (TTree*)fOld.Get("treeLinPol");
+  TTree *triggerOld      = (TTree*)fOld.Get("treeTrigger");
+  TTree *scalerOld       = (TTree*)fOld.Get("treeScaler");
 
   // GoAT Trees
   TTree *eventParametersOld = (TTree*)fOld.Get("treeEventParameters");
-  TTree *rootinosOld = (TTree*)fOld.Get("rootino");
-  TTree *photonsOld = (TTree*)fOld.Get("gamma");
-  TTree *electronsOld = (TTree*)fOld.Get("e-");
-  TTree *chargedPionsOld = (TTree*)fOld.Get("pi+");
-  TTree *protonsOld = (TTree*)fOld.Get("proton");
-  TTree *neutronsOld = (TTree*)fOld.Get("neutron");
-  TTree *neutralPionsOld = (TTree*)fOld.Get("pi0");
-  TTree *etasOld = (TTree*)fOld.Get("eta");
-  TTree *etaPrimesOld = (TTree*)fOld.Get("eta'");
+  TTree *rootinosOld        = (TTree*)fOld.Get("rootino");
+  TTree *photonsOld         = (TTree*)fOld.Get("gamma");
+  TTree *electronsOld       = (TTree*)fOld.Get("e-");
+  TTree *chargedPionsOld    = (TTree*)fOld.Get("pi+");
+  TTree *protonsOld         = (TTree*)fOld.Get("proton");
+  TTree *neutronsOld        = (TTree*)fOld.Get("neutron");
+  TTree *neutralPionsOld    = (TTree*)fOld.Get("pi0");
+  TTree *etasOld            = (TTree*)fOld.Get("eta");
+  TTree *etaPrimesOld       = (TTree*)fOld.Get("eta'");
+
+  TClonesArray *particles   = new TClonesArray("TLorentzVector", 64);
 
   sFile.ReplaceAll(".root","_renamed.root");
   TFile fNew(sFile,"RECREATE");
 
   if(taggerOld){
-    Int_t nTagged = 0;
-    Double_t *taggedEnergy  = new Double_t[1024];
-    Int_t *taggedChannel    = new Int_t[1024];
-    Double_t *taggedTime    = new Double_t[1024];
+    printf("Renaming treeTagger to tagger\n");
+
+    Int_t nTagged          = 0;
+    Double_t *taggedEnergy = new Double_t[1024];
+    Int_t *taggedChannel   = new Int_t[1024];
+    Double_t *taggedTime   = new Double_t[1024];
 
     TTree *tagger = new TTree("tagger", "tagger");
 
@@ -57,19 +61,23 @@ void RenameGoAT(TString sFile){
     tagger->Write();
   }
 
+  UInt_t nParticles     = 0;
+  Double_t *time        = new Double_t[128];
+  UChar_t *clusterSize  = new UChar_t[128];
+  UChar_t *apparatus    = new UChar_t[128];
+  Double_t *vetoEnergy  = new Double_t[128];
+  Double_t *MWPC0Energy = new Double_t[128];
+  Double_t *MWPC1Energy = new Double_t[128];
+
   if(tracksOld){
-    Int_t nTracks = 0;
+    printf("Renaming treeRawEvent to tracks\n");
+
+    Int_t nTracks           = 0;
     Double_t *clusterEnergy = new Double_t[128];
     Double_t *theta         = new Double_t[128];
     Double_t *phi           = new Double_t[128];
-    Double_t *time          = new Double_t[128];
-    UChar_t *clusterSize    = new UChar_t[128];
     Int_t *centralCrystal   = new Int_t[128];
     Int_t *centralVeto      = new Int_t[128];
-    UChar_t *apparatus      = new UChar_t[128];
-    Double_t *vetoEnergy    = new Double_t[128];
-    Double_t *MWPC0Energy   = new Double_t[128];
-    Double_t *MWPC1Energy   = new Double_t[128];
 
     TTree *tracks = new TTree("tracks", "tracks");
 
@@ -130,17 +138,19 @@ void RenameGoAT(TString sFile){
   }
 
   if(detectorHitsOld){
-    Int_t nNaIHits = 0;
-    Int_t *NaIHits	  = new Int_t[860];
+    printf("Renaming treeDetectorHits to detectorHits\n");
+
+    Int_t nNaIHits          = 0;
+    Int_t *NaIHits          = new Int_t[860];
     Int_t *NaICluster       = new Int_t[860];
-    Int_t nPIDHits = 0;
-    Int_t *PIDHits	  = new Int_t[860];
-    Int_t nMWPCHits = 0;
-    Int_t *MWPCHits	  = new Int_t[860];
-    Int_t nBaF2PbWO4Hits = 0;
-    Int_t *BaF2PbWO4Hits	  = new Int_t[860];
+    Int_t nPIDHits          = 0;
+    Int_t *PIDHits          = new Int_t[860];
+    Int_t nMWPCHits         = 0;
+    Int_t *MWPCHits         = new Int_t[860];
+    Int_t nBaF2PbWO4Hits    = 0;
+    Int_t *BaF2PbWO4Hits    = new Int_t[860];
     Int_t *BaF2PbWO4Cluster = new Int_t[860];
-    Int_t nVetoHits = 0;
+    Int_t nVetoHits         = 0;
     Int_t *VetoHits         = new Int_t[860];
 	
     TTree *detectorHits = new TTree("detectorHits", "detectorHits");
@@ -202,9 +212,11 @@ void RenameGoAT(TString sFile){
   }
 
   if(linPolOld){
-    Int_t plane = 0;
-    Double_t edge = 0;
-    Double_t edgeSetting = 0;
+    printf("Renaming treeLinPol to linPol\n");
+
+    Int_t plane                 = 0;
+    Double_t edge               = 0;
+    Double_t edgeSetting        = 0;
     Double_t *polarizationTable = new Double_t[352];
     Double_t *enhancementTable  = new Double_t[352];
 
@@ -239,15 +251,17 @@ void RenameGoAT(TString sFile){
   }
 
   if(triggerOld){
-    Double_t energySum = 0;
-    Int_t multiplicity = 0;
-    Bool_t helicity = false;
-    Int_t nErrors = 0;
-    Int_t nErrors = 0;
+    printf("Renaming treeTrigger to trigger\n");
+
+    Double_t energySum      = 0;
+    Int_t multiplicity      = 0;
+    Bool_t helicity         = false;
+    Int_t nErrors           = 0;
+    Int_t nErrors           = 0;
     Int_t *errorModuleID    = new Int_t[300];
     Int_t *errorModuleIndex = new Int_t[300];
     Int_t *errorCode        = new Int_t[300];
-    Int_t nTriggerPattern = 0;
+    Int_t nTriggerPattern   = 0;
     Int_t *triggerPattern   = new Int_t[32];
 
     TTree *trigger = new TTree("trigger", "trigger");
@@ -297,6 +311,8 @@ void RenameGoAT(TString sFile){
   }
 
   if(scalerOld){
+    printf("Renaming treeScaler to scaler\n");
+
     TString sScaler = scalerOld->GetBranch("Scaler")->GetTitle();
     sScaler.Remove(0,sScaler.First("[")+1);
     sScaler.Remove(sScaler.First("]"));
@@ -331,6 +347,8 @@ void RenameGoAT(TString sFile){
   }
 
   if(eventParametersOld){
+    printf("Renaming treeEventParameters to eventParameters\n");
+
     UInt_t eventNumber2 = 0;
     UChar_t nReconstructed = 0;
 
@@ -353,65 +371,500 @@ void RenameGoAT(TString sFile){
   }
 
   if(rootinosOld){
-    rootinosOld->SetName("rootinos");
-    rootinosOld->SetTitle("rootinos");
-    TTree *rootinos = (TTree*)rootinosOld->CloneTree();
+    printf("Renaming rootino to rootinos\n");
+
+    TTree *rootinos = new TTree("rootinos", "rootinos");
+
+    if(rootinosOld->GetBranch("nParticles")){
+      rootinosOld->SetBranchAddress("nParticles", &nParticles);
+      rootinos->Branch("nParticles", &nParticles, "nParticles/i");
+      if(rootinosOld->GetBranch("particles.")){
+	rootinosOld->SetBranchAddress("particles.", &particles);
+	rootinos->Branch("particles", &particles, 32000, 0);
+      }
+      if(rootinosOld->GetBranch("time")){
+	rootinosOld->SetBranchAddress("time", time);
+	rootinos->Branch("time", time, "time[nParticles]/D");
+      }
+      if(rootinosOld->GetBranch("clusterSize")){
+	rootinosOld->SetBranchAddress("clusterSize", clusterSize);
+	rootinos->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(rootinosOld->GetBranch("Apparatus")){
+	rootinosOld->SetBranchAddress("Apparatus", apparatus);
+	rootinos->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(rootinosOld->GetBranch("d_E")){
+	rootinosOld->SetBranchAddress("d_E", vetoEnergy);
+	rootinos->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(rootinosOld->GetBranch("WC0_E")){
+	rootinosOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	rootinos->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(rootinosOld->GetBranch("WC1_E")){
+	rootinosOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	rootinos->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+    }
+
+    for(Int_t i=0; i<rootinosOld->GetEntries(); i++){
+      rootinosOld->GetEvent(i);
+      rootinos->Fill();
+    }
     rootinos->Write();
   }
 
   if(photonsOld){
-    photonsOld->SetName("photons");
-    photonsOld->SetTitle("photons");
-    TTree *photons = (TTree*)photonsOld->CloneTree();
+    printf("Renaming gamma to photons\n");
+
+    TTree *photons = new TTree("photons", "photons");
+
+    if(photonsOld->GetBranch("nParticles")){
+      photonsOld->SetBranchAddress("nParticles", &nParticles);
+      photons->Branch("nParticles", &nParticles, "nParticles/i");
+      if(photonsOld->GetBranch("particles.")){
+	photonsOld->SetBranchAddress("particles.", &particles);
+	photons->Branch("particles", &particles, 32000, 0);
+      }
+      if(photonsOld->GetBranch("time")){
+	photonsOld->SetBranchAddress("time", time);
+	photons->Branch("time", time, "time[nParticles]/D");
+      }
+      if(photonsOld->GetBranch("clusterSize")){
+	photonsOld->SetBranchAddress("clusterSize", clusterSize);
+	photons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(photonsOld->GetBranch("Apparatus")){
+	photonsOld->SetBranchAddress("Apparatus", apparatus);
+	photons->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(photonsOld->GetBranch("d_E")){
+	photonsOld->SetBranchAddress("d_E", vetoEnergy);
+	photons->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(photonsOld->GetBranch("WC0_E")){
+	photonsOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	photons->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(photonsOld->GetBranch("WC1_E")){
+	photonsOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	photons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+    }
+
+    for(Int_t i=0; i<photonsOld->GetEntries(); i++){
+      photonsOld->GetEvent(i);
+      photons->Fill();
+    }
     photons->Write();
   }
 
   if(electronsOld){
-    electronsOld->SetName("electrons");
-    electronsOld->SetTitle("electrons");
-    TTree *electrons = (TTree*)electronsOld->CloneTree();
+    printf("Renaming e- to electrons\n");
+
+    TTree *electrons = new TTree("electrons", "electrons");
+
+    if(electronsOld->GetBranch("nParticles")){
+      electronsOld->SetBranchAddress("nParticles", &nParticles);
+      electrons->Branch("nParticles", &nParticles, "nParticles/i");
+      if(electronsOld->GetBranch("particles.")){
+	electronsOld->SetBranchAddress("particles.", &particles);
+	electrons->Branch("particles", &particles, 32000, 0);
+      }
+      if(electronsOld->GetBranch("time")){
+	electronsOld->SetBranchAddress("time", time);
+	electrons->Branch("time", time, "time[nParticles]/D");
+      }
+      if(electronsOld->GetBranch("clusterSize")){
+	electronsOld->SetBranchAddress("clusterSize", clusterSize);
+	electrons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(electronsOld->GetBranch("Apparatus")){
+	electronsOld->SetBranchAddress("Apparatus", apparatus);
+	electrons->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(electronsOld->GetBranch("d_E")){
+	electronsOld->SetBranchAddress("d_E", vetoEnergy);
+	electrons->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(electronsOld->GetBranch("WC0_E")){
+	electronsOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	electrons->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(electronsOld->GetBranch("WC1_E")){
+	electronsOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	electrons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+    }
+
+    for(Int_t i=0; i<electronsOld->GetEntries(); i++){
+      electronsOld->GetEvent(i);
+      electrons->Fill();
+    }
     electrons->Write();
   }
 
   if(chargedPionsOld){
-    chargedPionsOld->SetName("chargedPions");
-    chargedPionsOld->SetTitle("chargedPions");
-    TTree *chargedPions = (TTree*)chargedPionsOld->CloneTree();
+    printf("Renaming pi+ to chargedPions\n");
+
+    TTree *chargedPions = new TTree("chargedPions", "chargedPions");
+
+    if(chargedPionsOld->GetBranch("nParticles")){
+      chargedPionsOld->SetBranchAddress("nParticles", &nParticles);
+      chargedPions->Branch("nParticles", &nParticles, "nParticles/i");
+      if(chargedPionsOld->GetBranch("particles.")){
+	chargedPionsOld->SetBranchAddress("particles.", &particles);
+	chargedPions->Branch("particles", &particles, 32000, 0);
+      }
+      if(chargedPionsOld->GetBranch("time")){
+	chargedPionsOld->SetBranchAddress("time", time);
+	chargedPions->Branch("time", time, "time[nParticles]/D");
+      }
+      if(chargedPionsOld->GetBranch("clusterSize")){
+	chargedPionsOld->SetBranchAddress("clusterSize", clusterSize);
+	chargedPions->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(chargedPionsOld->GetBranch("Apparatus")){
+	chargedPionsOld->SetBranchAddress("Apparatus", apparatus);
+	chargedPions->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(chargedPionsOld->GetBranch("d_E")){
+	chargedPionsOld->SetBranchAddress("d_E", vetoEnergy);
+	chargedPions->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(chargedPionsOld->GetBranch("WC0_E")){
+	chargedPionsOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	chargedPions->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(chargedPionsOld->GetBranch("WC1_E")){
+	chargedPionsOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	chargedPions->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+    }
+
+    for(Int_t i=0; i<chargedPionsOld->GetEntries(); i++){
+      chargedPionsOld->GetEvent(i);
+      chargedPions->Fill();
+    }
     chargedPions->Write();
   }
 
   if(protonsOld){
-    protonsOld->SetName("protons");
-    protonsOld->SetTitle("protons");
-    TTree *protons = (TTree*)protonsOld->CloneTree();
+    printf("Renaming proton to protons\n");
+
+    TTree *protons = new TTree("protons", "protons");
+
+    if(protonsOld->GetBranch("nParticles")){
+      protonsOld->SetBranchAddress("nParticles", &nParticles);
+      protons->Branch("nParticles", &nParticles, "nParticles/i");
+      if(protonsOld->GetBranch("particles.")){
+	protonsOld->SetBranchAddress("particles.", &particles);
+	protons->Branch("particles", &particles, 32000, 0);
+      }
+      if(protonsOld->GetBranch("time")){
+	protonsOld->SetBranchAddress("time", time);
+	protons->Branch("time", time, "time[nParticles]/D");
+      }
+      if(protonsOld->GetBranch("clusterSize")){
+	protonsOld->SetBranchAddress("clusterSize", clusterSize);
+	protons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(protonsOld->GetBranch("Apparatus")){
+	protonsOld->SetBranchAddress("Apparatus", apparatus);
+	protons->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(protonsOld->GetBranch("d_E")){
+	protonsOld->SetBranchAddress("d_E", vetoEnergy);
+	protons->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(protonsOld->GetBranch("WC0_E")){
+	protonsOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	protons->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(protonsOld->GetBranch("WC1_E")){
+	protonsOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	protons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+    }
+
+    for(Int_t i=0; i<protonsOld->GetEntries(); i++){
+      protonsOld->GetEvent(i);
+      protons->Fill();
+    }
     protons->Write();
   }
 
   if(neutronsOld){
-    neutronsOld->SetName("neutrons");
-    neutronsOld->SetTitle("neutrons");
-    TTree *neutrons = (TTree*)neutronsOld->CloneTree();
+    printf("Renaming neutron to neutrons\n");
+
+    TTree *neutrons = new TTree("neutrons", "neutrons");
+
+    if(neutronsOld->GetBranch("nParticles")){
+      neutronsOld->SetBranchAddress("nParticles", &nParticles);
+      neutrons->Branch("nParticles", &nParticles, "nParticles/i");
+      if(neutronsOld->GetBranch("particles.")){
+	neutronsOld->SetBranchAddress("particles.", &particles);
+	neutrons->Branch("particles", &particles, 32000, 0);
+      }
+      if(neutronsOld->GetBranch("time")){
+	neutronsOld->SetBranchAddress("time", time);
+	neutrons->Branch("time", time, "time[nParticles]/D");
+      }
+      if(neutronsOld->GetBranch("clusterSize")){
+	neutronsOld->SetBranchAddress("clusterSize", clusterSize);
+	neutrons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(neutronsOld->GetBranch("Apparatus")){
+	neutronsOld->SetBranchAddress("Apparatus", apparatus);
+	neutrons->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(neutronsOld->GetBranch("d_E")){
+	neutronsOld->SetBranchAddress("d_E", vetoEnergy);
+	neutrons->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(neutronsOld->GetBranch("WC0_E")){
+	neutronsOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	neutrons->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(neutronsOld->GetBranch("WC1_E")){
+	neutronsOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	neutrons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+    }
+
+    for(Int_t i=0; i<neutronsOld->GetEntries(); i++){
+      neutronsOld->GetEvent(i);
+      neutrons->Fill();
+    }
     neutrons->Write();
   }
 
+  UChar_t *nSubParticles    = new UChar_t[64];
+  UChar_t *nSubRootinos     = new UChar_t[64];
+  UChar_t *nSubPhotons      = new UChar_t[64];
+  UChar_t *nSubChargedPions = new UChar_t[64];
+    
+  TClonesArray *subRootinos     = new TClonesArray("TLorentzVector", 64);
+  TClonesArray *subPhotons      = new TClonesArray("TLorentzVector", 64);
+  TClonesArray *subChargedPions = new TClonesArray("TLorentzVector", 64);
+
   if(neutralPionsOld){
-    neutralPionsOld->SetName("neutralPions");
-    neutralPionsOld->SetTitle("neutralPions");
-    TTree *neutralPions = (TTree*)neutralPionsOld->CloneTree();
+    printf("Renaming pi0 to neutralPions\n");
+
+    TTree *neutralPions = new TTree("neutralPions", "neutralPions");
+
+    if(neutralPionsOld->GetBranch("nParticles")){
+      neutralPionsOld->SetBranchAddress("nParticles", &nParticles);
+      neutralPions->Branch("nParticles", &nParticles, "nParticles/i");
+      if(neutralPionsOld->GetBranch("particles.")){
+	neutralPionsOld->SetBranchAddress("particles.", &particles);
+	neutralPions->Branch("particles", &particles, 32000, 0);
+      }
+      if(neutralPionsOld->GetBranch("time")){
+	neutralPionsOld->SetBranchAddress("time", time);
+	neutralPions->Branch("time", time, "time[nParticles]/D");
+      }
+      if(neutralPionsOld->GetBranch("clusterSize")){
+	neutralPionsOld->SetBranchAddress("clusterSize", clusterSize);
+	neutralPions->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(neutralPionsOld->GetBranch("Apparatus")){
+	neutralPionsOld->SetBranchAddress("Apparatus", apparatus);
+	neutralPions->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(neutralPionsOld->GetBranch("d_E")){
+	neutralPionsOld->SetBranchAddress("d_E", vetoEnergy);
+	neutralPions->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(neutralPionsOld->GetBranch("WC0_E")){
+	neutralPionsOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	neutralPions->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(neutralPionsOld->GetBranch("WC1_E")){
+	neutralPionsOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	neutralPions->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+      if(neutralPionsOld->GetBranch("nSubParticles")){
+	neutralPionsOld->SetBranchAddress("nSubParticles", nSubParticles);
+	neutralPions->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/b");
+      }
+      if(neutralPionsOld->GetBranch("nSubRootinos")){
+	neutralPionsOld->SetBranchAddress("nSubRootinos", nSubRootinos);
+	neutralPions->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/b");
+      }
+      if(neutralPionsOld->GetBranch("nSubPhotons")){
+	neutralPionsOld->SetBranchAddress("nSubPhotons", nSubPhotons);
+	neutralPions->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/b");
+      }
+      if(neutralPionsOld->GetBranch("nSubChargedPi")){
+	neutralPionsOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
+	neutralPions->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/b");
+      }
+      if(neutralPionsOld->GetBranch("subRootinos")){
+	neutralPionsOld->SetBranchAddress("subRootinos", &subRootinos);
+	neutralPions->Branch("subRootinos", &subRootinos, 32, 0);
+      }
+      if(neutralPionsOld->GetBranch("subPhotons")){
+	neutralPionsOld->SetBranchAddress("subPhotons", &subPhotons);
+	neutralPions->Branch("subPhotons", &subPhotons, 32, 0);
+      }
+      if(neutralPionsOld->GetBranch("subChargedPi")){
+	neutralPionsOld->SetBranchAddress("subChargedPi", &subChargedPions);
+	neutralPions->Branch("subChargedPions", &subChargedPions, 32, 0);
+      }
+    }
+
+    for(Int_t i=0; i<neutralPionsOld->GetEntries(); i++){
+      neutralPionsOld->GetEvent(i);
+      neutralPions->Fill();
+    }
     neutralPions->Write();
   }
 
   if(etasOld){
-    etasOld->SetName("etas");
-    etasOld->SetTitle("etas");
-    TTree *etas = (TTree*)etasOld->CloneTree();
+    printf("Renaming eta to etas\n");
+
+    TTree *etas = new TTree("etas", "etas");
+
+    if(etasOld->GetBranch("nParticles")){
+      etasOld->SetBranchAddress("nParticles", &nParticles);
+      etas->Branch("nParticles", &nParticles, "nParticles/i");
+      if(etasOld->GetBranch("particles.")){
+	etasOld->SetBranchAddress("particles.", &particles);
+	etas->Branch("particles", &particles, 32000, 0);
+      }
+      if(etasOld->GetBranch("time")){
+	etasOld->SetBranchAddress("time", time);
+	etas->Branch("time", time, "time[nParticles]/D");
+      }
+      if(etasOld->GetBranch("clusterSize")){
+	etasOld->SetBranchAddress("clusterSize", clusterSize);
+	etas->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(etasOld->GetBranch("Apparatus")){
+	etasOld->SetBranchAddress("Apparatus", apparatus);
+	etas->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(etasOld->GetBranch("d_E")){
+	etasOld->SetBranchAddress("d_E", vetoEnergy);
+	etas->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(etasOld->GetBranch("WC0_E")){
+	etasOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	etas->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(etasOld->GetBranch("WC1_E")){
+	etasOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	etas->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+      if(etasOld->GetBranch("nSubParticles")){
+	etasOld->SetBranchAddress("nSubParticles", nSubParticles);
+	etas->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/b");
+      }
+      if(etasOld->GetBranch("nSubRootinos")){
+	etasOld->SetBranchAddress("nSubRootinos", nSubRootinos);
+	etas->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/b");
+      }
+      if(etasOld->GetBranch("nSubPhotons")){
+	etasOld->SetBranchAddress("nSubPhotons", nSubPhotons);
+	etas->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/b");
+      }
+      if(etasOld->GetBranch("nSubChargedPi")){
+	etasOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
+	etas->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/b");
+      }
+      if(etasOld->GetBranch("subRootinos")){
+	etasOld->SetBranchAddress("subRootinos", &subRootinos);
+	etas->Branch("subRootinos", &subRootinos, 32, 0);
+      }
+      if(etasOld->GetBranch("subPhotons")){
+	etasOld->SetBranchAddress("subPhotons", &subPhotons);
+	etas->Branch("subPhotons", &subPhotons, 32, 0);
+      }
+      if(etasOld->GetBranch("subChargedPi")){
+	etasOld->SetBranchAddress("subChargedPi", &subChargedPions);
+	etas->Branch("subChargedPions", &subChargedPions, 32, 0);
+      }
+    }
+
+    for(Int_t i=0; i<etasOld->GetEntries(); i++){
+      etasOld->GetEvent(i);
+      etas->Fill();
+    }
     etas->Write();
   }
 
   if(etaPrimesOld){
-    etaPrimesOld->SetName("etaPrimes");
-    etaPrimesOld->SetTitle("etaPrimes");
-    TTree *etaPrimes = (TTree*)etaPrimesOld->CloneTree();
+    printf("Renaming eta' to etaPrimes\n");
+
+    TTree *etaPrimes = new TTree("etaPrimes", "etaPrimes");
+
+    if(etaPrimesOld->GetBranch("nParticles")){
+      etaPrimesOld->SetBranchAddress("nParticles", &nParticles);
+      etaPrimes->Branch("nParticles", &nParticles, "nParticles/i");
+      if(etaPrimesOld->GetBranch("particles.")){
+	etaPrimesOld->SetBranchAddress("particles.", &particles);
+	etaPrimes->Branch("particles", &particles, 32000, 0);
+      }
+      if(etaPrimesOld->GetBranch("time")){
+	etaPrimesOld->SetBranchAddress("time", time);
+	etaPrimes->Branch("time", time, "time[nParticles]/D");
+      }
+      if(etaPrimesOld->GetBranch("clusterSize")){
+	etaPrimesOld->SetBranchAddress("clusterSize", clusterSize);
+	etaPrimes->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+      }
+      if(etaPrimesOld->GetBranch("Apparatus")){
+	etaPrimesOld->SetBranchAddress("Apparatus", apparatus);
+	etaPrimes->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+      }
+      if(etaPrimesOld->GetBranch("d_E")){
+	etaPrimesOld->SetBranchAddress("d_E", vetoEnergy);
+	etaPrimes->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
+      }
+      if(etaPrimesOld->GetBranch("WC0_E")){
+	etaPrimesOld->SetBranchAddress("WC0_E", MWPC0Energy);
+	etaPrimes->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
+      }
+      if(etaPrimesOld->GetBranch("WC1_E")){
+	etaPrimesOld->SetBranchAddress("WC1_E", MWPC1Energy);
+	etaPrimes->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+      }
+      if(etaPrimesOld->GetBranch("nSubParticles")){
+	etaPrimesOld->SetBranchAddress("nSubParticles", nSubParticles);
+	etaPrimes->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/b");
+      }
+      if(etaPrimesOld->GetBranch("nSubRootinos")){
+	etaPrimesOld->SetBranchAddress("nSubRootinos", nSubRootinos);
+	etaPrimes->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/b");
+      }
+      if(etaPrimesOld->GetBranch("nSubPhotons")){
+	etaPrimesOld->SetBranchAddress("nSubPhotons", nSubPhotons);
+	etaPrimes->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/b");
+      }
+      if(etaPrimesOld->GetBranch("nSubChargedPi")){
+	etaPrimesOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
+	etaPrimes->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/b");
+      }
+      if(etaPrimesOld->GetBranch("subRootinos")){
+	etaPrimesOld->SetBranchAddress("subRootinos", &subRootinos);
+	etaPrimes->Branch("subRootinos", &subRootinos, 32, 0);
+      }
+      if(etaPrimesOld->GetBranch("subPhotons")){
+	etaPrimesOld->SetBranchAddress("subPhotons", &subPhotons);
+	etaPrimes->Branch("subPhotons", &subPhotons, 32, 0);
+      }
+      if(etaPrimesOld->GetBranch("subChargedPi")){
+	etaPrimesOld->SetBranchAddress("subChargedPi", &subChargedPions);
+	etaPrimes->Branch("subChargedPions", &subChargedPions, 32, 0);
+      }
+    }
+
+    for(Int_t i=0; i<etaPrimesOld->GetEntries(); i++){
+      etaPrimesOld->GetEvent(i);
+      etaPrimes->Fill();
+    }
     etaPrimes->Write();
   }
 
