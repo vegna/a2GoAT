@@ -19,10 +19,10 @@ using namespace std;
 class  GTreeMeson   : public GTreeParticle
 {
 private:
-    UChar_t             nSubParticles[GTreeParticle_MAX];
-    UChar_t             nSubRootinos[GTreeParticle_MAX];
-    UChar_t             nSubPhotons[GTreeParticle_MAX];
-    UChar_t             nSubChargedPions[GTreeParticle_MAX];
+    Int_t             nSubParticles[GTreeParticle_MAX];
+    Int_t             nSubRootinos[GTreeParticle_MAX];
+    Int_t             nSubPhotons[GTreeParticle_MAX];
+    Int_t             nSubChargedPions[GTreeParticle_MAX];
     TClonesArray*       subRootinos;
     TClonesArray*       subPhotons;
     TClonesArray*       subChargedPions;
@@ -40,11 +40,11 @@ public:
     //        void            AddParticle(const TLorentzVector& subParticle0, const TLorentzVector& subParticle1, const Int_t pdg0, const Int_t pdg1);
     //        void            AddParticle(const Int_t _NSubPhotons, TLorentzVector** subPhotons_list, const Int_t _NSubChargedPions, TLorentzVector** subChargedPions_list);
     virtual void            Clear();
-            UInt_t          GetNMesons()                            const	{return GetNParticles();}
-            UInt_t          GetNSubParticles(const Int_t meson)     const	{return nSubParticles[meson];}
-            UInt_t          GetNSubRootinos(const Int_t meson)      const	{return nSubRootinos[meson];}
-            UInt_t          GetNSubPhotons(const Int_t meson)       const	{return nSubPhotons[meson];}
-            UInt_t          GetNSubChargedPi(const Int_t meson)     const	{return nSubChargedPions[meson];}
+            Int_t          GetNMesons()                            const	{return GetNParticles();}
+            Int_t          GetNSubParticles(const Int_t meson)     const	{return nSubParticles[meson];}
+            Int_t          GetNSubRootinos(const Int_t meson)      const	{return nSubRootinos[meson];}
+            Int_t          GetNSubPhotons(const Int_t meson)       const	{return nSubPhotons[meson];}
+            Int_t          GetNSubChargedPi(const Int_t meson)     const	{return nSubChargedPions[meson];}
             TLorentzVector& Meson(const Int_t meson)             {return Particle(meson);}
     const   TLorentzVector& Meson(const Int_t meson) const       {return Particle(meson);}
     virtual void            Print() const;

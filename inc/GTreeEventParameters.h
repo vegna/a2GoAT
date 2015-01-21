@@ -10,8 +10,8 @@
 class  GTreeEventParameters : public GTree
 {
 private:
-    UInt_t 		eventNumber;
-    UChar_t     nReconstructed;
+    Int_t     eventNumber;
+    Int_t     nReconstructed;
 
    protected:
     virtual void    SetBranchAdresses();
@@ -23,10 +23,10 @@ public:
 
 
     virtual void        Clear()                         {nReconstructed = 0;}
-            UInt_t      GetEventNumber()        const	{return eventNumber;}
-            UChar_t 	GetNReconstructed()    	const	{return nReconstructed;}
-            void        SetEventNumber(const UInt_t number)    {eventNumber = number;}
-            void        SetNReconstructed(const UChar_t number)    {nReconstructed = number;}
+            Int_t       GetEventNumber()                const {return eventNumber;}
+            Int_t       GetNReconstructed()    	        const {return nReconstructed;}
+            void        SetEventNumber(const Int_t number)    {eventNumber = number;}
+            void        SetNReconstructed(const Int_t number) {nReconstructed = number;}
 
 };
 

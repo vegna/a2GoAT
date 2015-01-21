@@ -9,7 +9,7 @@ GTreeScaler::GTreeScaler(GTreeManager *Manager)    :
     eventID(0),
     nScalers(0)
 {
-    for(int i=0; i<GTreeScaler_MAX; i++)
+    for(Int_t i=0; i<GTreeScaler_MAX; i++)
         scalers[i] = 0;
 }
 
@@ -73,7 +73,7 @@ void    GTreeScaler::Print() const
 
     std::cout << "GTreeScaler: eventNumber->" << eventNumber << " eventID->" << eventID << std::endl;
     std::cout << "             nScalers->" << nScalers << std::endl;
-    for(int i=0; i<nScalers; i++)
+    for(Int_t i=0; i<nScalers; i++)
         std::cout << "Scaler " << i << ": " << scalers[i] << std::endl;
 }
 
@@ -96,7 +96,7 @@ void    GTreeScaler::CloneValidEntries()
         }
     }
 
-    for(int i=1; i<GetNEntries(); i++)
+    for(Int_t i=1; i<GetNEntries(); i++)
     {
         GetEntry(i);
         Fill();

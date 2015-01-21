@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     end = clock();
     cout << endl;
     cout << "Time required for execution: "
-    << (double)(end-start)/CLOCKS_PER_SEC
+    << (Double_t)(end-start)/CLOCKS_PER_SEC
     << " seconds." << "\n\n";
 
     if(analysis) delete analysis;

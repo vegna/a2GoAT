@@ -24,10 +24,10 @@ private:
     Double_t 	theta[GTreeTrack_MAX];
     Double_t 	phi[GTreeTrack_MAX];
     Double_t	time[GTreeTrack_MAX];
-    UChar_t     clusterSize[GTreeTrack_MAX];
+    Int_t       clusterSize[GTreeTrack_MAX];
     Int_t       centralCrystal[GTreeTrack_MAX];
     Int_t       centralVeto[GTreeTrack_MAX];
-    UChar_t 	apparatus[GTreeTrack_MAX];
+    Int_t       apparatus[GTreeTrack_MAX];
     //Charged detector energies
     Double_t	vetoEnergy[GTreeTrack_MAX];
     Double_t	MWPC0Energy[GTreeTrack_MAX];
@@ -43,10 +43,10 @@ public:
 
     virtual void    Clear()     {nTracks = 0;}
 
-    const	UChar_t*        GetApparatus()                      const	{return apparatus;}
-            UChar_t         GetApparatus(const Int_t index)     const	{return apparatus[index];}
-    const	UChar_t*        GetClusterSize()                      const	{return clusterSize;}
-            UChar_t         GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
+    const	Int_t*          GetApparatus()                      const	{return apparatus;}
+            Int_t           GetApparatus(const Int_t index)     const	{return apparatus[index];}
+    const	Int_t*          GetClusterSize()                    const	{return clusterSize;}
+            Int_t           GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
     const	Int_t*          GetCentralCrystal()                   const	{return centralCrystal;}
             Int_t           GetCentralCrystal(const Int_t index)  const {return centralCrystal[index];}
     const	Int_t*          GetCentralVeto()                      const	{return centralVeto;}

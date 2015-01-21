@@ -490,7 +490,7 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
         }
     }
 
-    for (int i = 0; i < GetTracks()->GetNTracks(); i++)
+    for (Int_t i = 0; i < GetTracks()->GetNTracks(); i++)
     {
         // Finally add particles which were temporarily identified
         if (identified[i] == pdgDB->GetParticle("proton")->PdgCode())

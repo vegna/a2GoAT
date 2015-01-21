@@ -4,7 +4,7 @@ GTreeTrack::GTreeTrack(GTreeManager *Manager)    :
     GTree(Manager, TString("tracks")),
     nTracks(0)
 {
-    for(int i=0; i<GTreeTrack_MAX; i++)
+    for(Int_t i=0; i<GTreeTrack_MAX; i++)
     {
         clusterEnergy[i] = 0;
         theta[i] = 0;
@@ -49,10 +49,10 @@ void    GTreeTrack::SetBranches()
     outputTree->Branch("theta",  theta,  "theta[nTracks]/D");
     outputTree->Branch("phi",  phi,  "phi[nTracks]/D");
     outputTree->Branch("time", time, "time[nTracks]/D");
-    outputTree->Branch("clusterSize", clusterSize, "clusterSize[nTracks]/b");
+    outputTree->Branch("clusterSize", clusterSize, "clusterSize[nTracks]/I");
     outputTree->Branch("centralCrystal", centralCrystal, "centralCrystal[nTracks]/I");
     outputTree->Branch("centralVeto", centralVeto, "centralVeto[nTracks]/I");
-    outputTree->Branch("apparatus", apparatus, "apparatus[nTracks]/b");
+    outputTree->Branch("apparatus", apparatus, "apparatus[nTracks]/I");
     outputTree->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nTracks]/D");
     outputTree->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nTracks]/D");
     outputTree->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nTracks]/D");

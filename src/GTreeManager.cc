@@ -84,7 +84,7 @@ Bool_t  GTreeManager::TraverseEntries(const UInt_t min, const UInt_t max)
 
     for(UInt_t i=min; i<max; i++)
     {
-        for(int l=0; l<readList.GetEntriesFast(); l++)
+        for(Int_t l=0; l<readList.GetEntriesFast(); l++)
             ((GTree*)readList[l])->GetEntryFast(i);
 
         eventParameters->SetEventNumber(i);
@@ -146,12 +146,12 @@ Bool_t  GTreeManager::StartFile(const char* inputFileName, const char* outputFil
     }
     cout << "Opened input file " << inputFile->GetName() << "!" << inputFile->GetTitle() << endl;
 
-    for(int l=0; l<treeList.GetEntries(); l++)
+    for(Int_t l=0; l<treeList.GetEntries(); l++)
     {
         if(inputFile->Get(((GTree*)treeList[l])->GetName()))
             ((GTree*)treeList[l])->OpenForInput();
     }
-    for(int l=0; l<treeCorreleatedToScalerReadList.GetEntries(); l++)
+    for(Int_t l=0; l<treeCorreleatedToScalerReadList.GetEntries(); l++)
     {
         if(inputFile->Get(((GTree*)treeCorreleatedToScalerReadList[l])->GetName()))
             ((GTree*)treeCorreleatedToScalerReadList[l])->OpenForInput();
@@ -178,9 +178,9 @@ Bool_t  GTreeManager::StartFile(const char* inputFileName, const char* outputFil
         Write();
     cache->Flush();
 
-    for(int l=0; l<treeList.GetEntries(); l++)
+    for(Int_t l=0; l<treeList.GetEntries(); l++)
         ((GTree*)treeList[l])->Close();
-    for(int l=0; l<treeCorreleatedToScalerReadList.GetEntries(); l++)
+    for(Int_t l=0; l<treeCorreleatedToScalerReadList.GetEntries(); l++)
         ((GTree*)treeCorreleatedToScalerReadList[l])->Close();
 
 
@@ -196,7 +196,7 @@ Bool_t  GTreeManager::Write()
     if(!outputFile)   return kFALSE;
     outputFile->cd();
 
-    for(int l=0; l<writeList.GetEntries(); l++)
+    for(Int_t l=0; l<writeList.GetEntries(); l++)
         ((GTree*)writeList[l])->Write();
 
     WriteLinkedHistograms(outputFile);
@@ -240,19 +240,19 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
     }
 
     // find correct shift
-    int shift;
+    Int_t shift;
     {
-        double shiftMean = 0;
-        for(int l=1; l<scalers->GetNEntries(); l++)
+        Double_t shiftMean = 0;
+        for(Int_t l=1; l<scalers->GetNEntries(); l++)
         {
             scalers->GetEntryFast(l);
             shiftMean    += scalers->GetEventNumber() - scalers->GetEventID();
         }
         shiftMean   /= scalers->GetNEntries()-1;
-        int bestIndex = 0;
+        Int_t bestIndex = 0;
         scalers->GetEntryFast(0);
-        double smallestDifference = shiftMean - (scalers->GetEventNumber() - scalers->GetEventID());
-        for(int l=1; l<scalers->GetNEntries(); l++)
+        Double_t smallestDifference = shiftMean - (scalers->GetEventNumber() - scalers->GetEventID());
+        for(Int_t l=1; l<scalers->GetNEntries(); l++)
         {
             scalers->GetEntryFast(l);
             if((shiftMean - (scalers->GetEventNumber() - scalers->GetEventID())) < smallestDifference)
@@ -270,14 +270,14 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
     accepted->SetBinContent(1, GetNEntries());
 
     scalers->GetEntry(scalers->GetNEntries()-1);
-    int start = scalers->GetEventNumber();
+    Int_t start = scalers->GetEventNumber();
     scalers->GetEntry(0);
     cout << "Checking scaler reads! Valid events from " << scalers->GetEventNumber() << " to " << start << endl;
     start = scalers->GetEventNumber();
 
-    for(int i=1; i<GetNScalerEntries(); i++)
+    for(Int_t i=1; i<GetNScalerEntries(); i++)
     {
-        for(int l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
+        for(Int_t l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
             ((GTree*)readCorreleatedToScalerReadList[l])->GetEntry(i);
         if(scalers->GetEventNumber() - scalers->GetEventID() == shift)
         {
@@ -285,7 +285,7 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
             accepted->SetBinContent(2, accepted->GetBinContent(2) + (scalers->GetEventNumber()-start));
             TraverseEntries(start, scalers->GetEventNumber());
             ProcessScalerRead();
-            for(int l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
+            for(Int_t l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
                 ((GTree*)readCorreleatedToScalerReadList[l])->Fill();
             start = scalers->GetEventNumber();
         }
@@ -319,21 +319,21 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
     Int_t   event       = 0;
     Int_t   start       = 0;
     Int_t   maxEvent    = GetNEntries();
-    for(int l=0; l<readList.GetEntriesFast(); l++)
+    for(Int_t l=0; l<readList.GetEntriesFast(); l++)
         ((GTree*)readList[l])->GetEntryFast(event);
 
     cout << GetNScalerEntries() << " scaler reads. " << maxEvent << " events." << endl;
 
-    for(int i=0; i<GetNScalerEntries(); i++)
+    for(Int_t i=0; i<GetNScalerEntries(); i++)
     {
-        for(int l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
+        for(Int_t l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
             ((GTree*)readCorreleatedToScalerReadList[l])->GetEntry(i);
         while(eventParameters->GetEventNumber()<scalers->GetEventNumber())
         {
             event++;
             if(event>=maxEvent)
                 break;
-            for(int l=0; l<readList.GetEntriesFast(); l++)
+            for(Int_t l=0; l<readList.GetEntriesFast(); l++)
                 ((GTree*)readList[l])->GetEntryFast(event);
             ProcessEvent();
         }
@@ -352,7 +352,7 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
 
 UInt_t  GTreeManager::GetNEntries()       const
 {
-    for(int l=1; l<readList.GetEntriesFast(); l++)
+    for(Int_t l=1; l<readList.GetEntriesFast(); l++)
     {
         if(((GTree*)readList[l])->GetNEntries() != ((GTree*)readList[l-1])->GetNEntries())
         {
@@ -369,7 +369,7 @@ UInt_t  GTreeManager::GetNEntries()       const
 
 UInt_t  GTreeManager::GetNScalerEntries()       const
 {
-    for(int l=1; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
+    for(Int_t l=1; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
     {
         if(((GTree*)readCorreleatedToScalerReadList[l])->GetNEntries() != ((GTree*)readCorreleatedToScalerReadList[l-1])->GetNEntries())
         {

@@ -57,7 +57,7 @@ void    GHistTaggerBinning::CalcResult()
 
 Int_t   GHistTaggerBinning::Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning)
 {
-    for(int i=0; i<tagger.GetNTagged(); i++)
+    for(Int_t i=0; i<tagger.GetNTagged(); i++)
     {
         if(CreateHistogramsForTaggerBinning)
             Fill(value, tagger.GetTaggedChannel(i), tagger.GetTaggedTime(i));

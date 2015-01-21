@@ -128,7 +128,7 @@ protected:
 
     TDatabasePDG *pdgDB;
 
-            void    FillReadList()      {for(int l=0; l<readList.GetEntriesFast(); l++) ((GTree*)readList[l])->Fill();}
+            void    FillReadList()      {for(Int_t l=0; l<readList.GetEntriesFast(); l++) ((GTree*)readList[l])->Fill();}
     const   TObjArray&  GetTreeList()    const   {return treeList;}
     virtual void    ProcessEvent() = 0;
     virtual void    ProcessScalerRead() {}
@@ -146,9 +146,9 @@ public:
     virtual ~GTreeManager();
 
     static  Int_t   CheckInput(const char* input_filename);
-            UInt_t  GetEventNumber()    const   {return eventParameters->GetEventNumber();}
+            Int_t   GetEventNumber()    const   {return eventParameters->GetEventNumber();}
             UInt_t  GetNEntries()       const;
-            UInt_t  GetNReconstructed() const   {return countReconstructed;}
+            Int_t   GetNReconstructed() const   {return countReconstructed;}
             UInt_t  GetNScalerEntries() const;
             Bool_t  IsAcquFile()    const;
             Bool_t  IsGoATFile()    const;

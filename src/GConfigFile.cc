@@ -58,7 +58,7 @@ Bool_t	GConfigFile::BaseConfig(const int argc, char* argv[], const std::string& 
     }
     else
     {
-        for(int i=1; i<argc; i++)
+        for(Int_t i=1; i<argc; i++)
         {
             flag = argv[i];
             if(flag.find_first_of("-") == 0)

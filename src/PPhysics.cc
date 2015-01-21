@@ -53,7 +53,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
         high_scaler_number = GetScalers()->GetNScalers();
 	}
 
-	for (int i = low_scaler_number; i <= high_scaler_number; i++) 
+    for (Int_t i = low_scaler_number; i <= high_scaler_number; i++)
 	{
 		Int_t bin = i - low_scaler_number;
         hist_current_SR->SetBinContent(bin,GetScalers()->GetScaler(i));
@@ -187,7 +187,7 @@ void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index
     if((missingp4.M() < MM_min) || (missingp4.M() > MM_max)) return;
 
    // Calc phi
-   double phi = tree.Particle(particle_index).Phi() * TMath::RadToDeg();
+   Double_t phi = tree.Particle(particle_index).Phi() * TMath::RadToDeg();
 //    cout << "phi " << phi << endl;     
    
    if (GHistBGSub::IsPrompt(time)) Hprompt->Fill(phi); //cout << "prompt" << endl;}
@@ -196,9 +196,9 @@ void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index
 
 Double_t PPhysics::CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_index1, const GTreeParticle& tree2, Int_t particle_index2)
 {
-   double phi1 = tree1.Particle(particle_index1).Phi() * TMath::RadToDeg();
-   double phi2 = tree2.Particle(particle_index2).Phi() * TMath::RadToDeg();
-   double phidiff = TMath::Abs(phi1 - phi2);
+   Double_t phi1 = tree1.Particle(particle_index1).Phi() * TMath::RadToDeg();
+   Double_t phi2 = tree2.Particle(particle_index2).Phi() * TMath::RadToDeg();
+   Double_t phidiff = TMath::Abs(phi1 - phi2);
 
    return phidiff;
 }
@@ -290,7 +290,7 @@ void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index
     if((missingp4.M() < MM_min) || (missingp4.M() > MM_max)) return;
 
    // Calc phi and Fill GH1
-   double phi = tree.Particle(particle_index).Phi() * TMath::RadToDeg();
+   Double_t phi = tree.Particle(particle_index).Phi() * TMath::RadToDeg();
    
    if(TaggerBinning)   gHist->Fill(phi,time,GetTagger()->GetTaggedChannel(tagger_index));
    else gHist->Fill(phi,time);

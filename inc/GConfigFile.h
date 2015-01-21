@@ -26,8 +26,8 @@ public:
     const   Char_t* GetConfigFile() const                       {}
             Bool_t  BaseConfig(const int argc, char* argv[], const std::string& defaultInputPrefix, const std::string& defaultOutputPrefix);
     const   Int_t   GetNFiles() {return inputFileList.size();}
-    std::string GetInputFile(const int i) {return inputFileList.at(i);}
-    std::string GetOutputFile(const int i) {return outputFileList.at(i);}
+    std::string GetInputFile(const Int_t i) {return inputFileList.at(i);}
+    std::string GetOutputFile(const Int_t i) {return outputFileList.at(i);}
 
     std::string	ReadConfig(const std::string& inputKey, const Int_t instance, const Char_t* configName);
     std::string	ReadConfig(const std::string& inputKey, const Int_t instance)                             {return ReadConfig(inputKey, instance, globalConfigFile.c_str());}

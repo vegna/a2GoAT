@@ -128,7 +128,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     // n  -> pi+  pi-  g		- direct n decay
     // 							    (or rho_0 intermediate state)    
 
-    for (int i = 0; i < GetRootinos()->GetNParticles(); i++)
+    for (Int_t i = 0; i < GetRootinos()->GetNParticles(); i++)
     {
         if (GetRootinos()->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
         if (GetRootinos()->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
@@ -151,7 +151,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         countRootinos++;
 
     }
-    for (int i = 0; i < GetPhotons()->GetNParticles(); i++)
+    for (Int_t i = 0; i < GetPhotons()->GetNParticles(); i++)
     {
         if (GetPhotons()->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
         if (GetPhotons()->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
@@ -173,7 +173,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         
         countPhotons++;
     }
-    for (int i = 0; i < GetChargedPions()->GetNParticles(); i++)
+    for (Int_t i = 0; i < GetChargedPions()->GetNParticles(); i++)
     {
         if (GetChargedPions()->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
         if (GetChargedPions()->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
@@ -254,12 +254,12 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     // Don't double count in sorting!
 
     Int_t k = 0;
-    for (int i = 0; i < ndaughter; i++)
+    for (Int_t i = 0; i < ndaughter; i++)
     {
         if (daughter_list[i]->Theta() < mesonThetaMin) continue; // user rejected theta region
         if (daughter_list[i]->Theta() > mesonThetaMax) continue; // user rejected theta region
 
-        for (int j = i+1; j < ndaughter; j++)
+        for (Int_t j = i+1; j < ndaughter; j++)
         {
             if (daughter_list[j]->Theta() < mesonThetaMin) continue; // user rejected theta region
             if (daughter_list[j]->Theta() > mesonThetaMax) continue; // user rejected theta region

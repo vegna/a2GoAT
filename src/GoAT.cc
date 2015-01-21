@@ -44,7 +44,7 @@ Bool_t	GoAT::Init(const char* configFile)
     config = ReadConfig("DO-PARTICLE-RECONSTRUCTION");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        int buffer=0;
+        Int_t buffer=0;
         sscanf( config.c_str(), "%d\n", &buffer);
         useParticleReconstruction = (buffer==1);
     }
@@ -61,7 +61,7 @@ Bool_t	GoAT::Init(const char* configFile)
     config = ReadConfig("DO-MESON-RECONSTRUCTION");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
-        int buffer=0;
+        Int_t buffer=0;
         sscanf( config.c_str(), "%d\n", &buffer);
         useMesonReconstruction = (buffer==1);
     }

@@ -24,8 +24,8 @@ void    GTreeEventParameters::SetBranchAdresses()
 
 void    GTreeEventParameters::SetBranches()
 {
-    outputTree->Branch("eventNumber", &eventNumber, "eventNumber/i");
-    outputTree->Branch("nReconstructed", &nReconstructed, "nReconstructed/b");
+    outputTree->Branch("eventNumber", &eventNumber, "eventNumber/I");
+    outputTree->Branch("nReconstructed", &nReconstructed, "nReconstructed/I");
 
   }
 

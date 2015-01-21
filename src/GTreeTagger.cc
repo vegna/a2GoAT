@@ -5,7 +5,7 @@ GTreeTagger::GTreeTagger(GTreeManager *Manager)    :
     GTree(Manager, TString("tagger")),
     nTagged(0)
 {
-    for(int i=0; i<GTreeTagger_MAX; i++)
+    for(Int_t i=0; i<GTreeTagger_MAX; i++)
     {
         taggedChannel[i] = 0;
         taggedTime[i]    = 0;

@@ -78,7 +78,7 @@ Int_t   GHistBGSub3::Fill(const Double_t x, const Double_t y, const Double_t z, 
 {
     if(taggerTime>=cutPromptMin && taggerTime<=cutPromptMax)
         return ((GHistScaCor3*)prompt)->Fill(x, y, z);
-    for(int i=0; i<GetNRandCuts(); i++)
+    for(Int_t i=0; i<GetNRandCuts(); i++)
     {
         if(i>=rand.GetEntriesFast())
             ExpandRandBins(i+1);
@@ -89,7 +89,7 @@ Int_t   GHistBGSub3::Fill(const Double_t x, const Double_t y, const Double_t z, 
 
 Int_t   GHistBGSub3::Fill(const Double_t x, const Double_t y, const Double_t z, const GTreeTagger& tagger)
 {
-    for(int i=0; i<tagger.GetNTagged(); i++)
+    for(Int_t i=0; i<tagger.GetNTagged(); i++)
         Fill(x, y, z, tagger.GetTaggedTime(i));
 }
 

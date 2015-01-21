@@ -12,7 +12,7 @@ GTreeTrigger::GTreeTrigger(GTreeManager* Manager)    :
     MC_evt_id(-1),
     MC_rnd_id(-1)
 {
-    for(int i=0; i<GTreeTrigger_MAX; i++)
+    for(Int_t i=0; i<GTreeTrigger_MAX; i++)
     {
         triggerPattern[i] = 0;
         errorModuleID[i] = 0;

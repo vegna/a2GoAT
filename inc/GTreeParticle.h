@@ -14,11 +14,11 @@ class   GTreeMeson;
 class  GTreeParticle    : public GTree
 {
 private:
-    UInt_t              nParticles;
+    Int_t               nParticles;
     TClonesArray*       particles;	// reconstructed
-    UChar_t             apparatus[GTreeParticle_MAX];
+    Int_t               apparatus[GTreeParticle_MAX];
     Double_t            time[GTreeParticle_MAX];
-    UChar_t             clusterSize[GTreeParticle_MAX];
+    Int_t               clusterSize[GTreeParticle_MAX];
     //Charged detector energies
     Double_t            vetoEnergy[GTreeParticle_MAX];
     Double_t            MWPC0Energy[GTreeParticle_MAX];
@@ -34,12 +34,12 @@ public:
     GTreeParticle(GTreeManager *Manager, const TString& _Name);
     virtual ~GTreeParticle();
 
-            void            AddParticle(const TLorentzVector& vec, const UChar_t _Apparatus = 0, const Double_t _vetoEnergy = 0, const Double_t _MWPC0Energy = 0, const Double_t _MWPC1Energy = 0, const Double_t _Time = 0, const UChar_t _ClusterSize = 0);
+            void            AddParticle(const TLorentzVector& vec, const Int_t _Apparatus = 0, const Double_t _vetoEnergy = 0, const Double_t _MWPC0Energy = 0, const Double_t _MWPC1Energy = 0, const Double_t _Time = 0, const Int_t _ClusterSize = 0);
     virtual void            Clear() {nParticles = 0; particles->Clear();}
-            UChar_t         GetApparatus(const Int_t index)     const	{return apparatus[index];}
-            UChar_t         GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
+            Int_t           GetApparatus(const Int_t index)     const	{return apparatus[index];}
+            Int_t           GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
             Double_t        GetVetoEnergy(const Int_t index)    const	{return vetoEnergy[index];}
-            UInt_t          GetNParticles()                     const	{return nParticles;}
+            Int_t           GetNParticles()                     const	{return nParticles;}
     const	Double_t*       GetTime()                           const	{return time;}
             Double_t        GetTime(const Int_t index)          const	{return time[index];}
     const	Double_t*       GetMWPC0Energy()                    const	{return MWPC0Energy;}
