@@ -14,17 +14,15 @@
 #define MASS_PROTON 938.272046
 
 
-#define GTreeMeson_MaxSubEntries    32
-
 using namespace std;
 
 class  GTreeMeson   : public GTreeParticle
 {
 private:
-    UChar_t             nSubParticles[GTreeParticle_MaxEntries];
-    UChar_t             nSubRootinos[GTreeParticle_MaxEntries];
-    UChar_t             nSubPhotons[GTreeParticle_MaxEntries];
-    UChar_t             nSubChargedPions[GTreeParticle_MaxEntries];
+    UChar_t             nSubParticles[GTreeParticle_MAX];
+    UChar_t             nSubRootinos[GTreeParticle_MAX];
+    UChar_t             nSubPhotons[GTreeParticle_MAX];
+    UChar_t             nSubChargedPions[GTreeParticle_MAX];
     TClonesArray*       subRootinos;
     TClonesArray*       subPhotons;
     TClonesArray*       subChargedPions;

@@ -4,11 +4,11 @@
 
 GTreeMeson::GTreeMeson(GTreeManager *Manager, const TString& _Name)    :
     GTreeParticle(Manager, _Name),
-    subRootinos(new TClonesArray("TClonesArray", GTreeParticle_MaxEntries)),
-    subPhotons(new TClonesArray("TClonesArray", GTreeParticle_MaxEntries)),
-    subChargedPions(new TClonesArray("TClonesArray", GTreeParticle_MaxEntries))
+    subRootinos(new TClonesArray("TClonesArray", GTreeParticle_MAX)),
+    subPhotons(new TClonesArray("TClonesArray", GTreeParticle_MAX)),
+    subChargedPions(new TClonesArray("TClonesArray", GTreeParticle_MAX))
 {
-    for(int i=0; i<GTreeParticle_MaxEntries; i++)
+    for(int i=0; i<GTreeParticle_MAX; i++)
     {
         nSubParticles[i]  = 0;
         nSubRootinos[i]   = 0;
@@ -219,10 +219,10 @@ void    GTreeMeson::Print() const
     }
 }
 
-UChar_t             nSubParticles[GTreeParticle_MaxEntries];
-UChar_t             nSubRootinos[GTreeParticle_MaxEntries];
-UChar_t             nSubPhotons[GTreeParticle_MaxEntries];
-UChar_t             nSubChargedPions[GTreeParticle_MaxEntries];
+UChar_t             nSubParticles[GTreeParticle_MAX];
+UChar_t             nSubRootinos[GTreeParticle_MAX];
+UChar_t             nSubPhotons[GTreeParticle_MAX];
+UChar_t             nSubChargedPions[GTreeParticle_MAX];
 TClonesArray*       subRootinos;
 TClonesArray*       subPhotons;
 TClonesArray*       subChargedPions;

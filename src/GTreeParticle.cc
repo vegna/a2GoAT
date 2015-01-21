@@ -9,9 +9,9 @@ using namespace std;
 GTreeParticle::GTreeParticle(GTreeManager *Manager, const TString& _Name)    :
     GTree(Manager,_Name),
     nParticles(0),
-    particles(new TClonesArray("TLorentzVector", GTreeParticle_MaxEntries))
+    particles(new TClonesArray("TLorentzVector", GTreeParticle_MAX))
 {
-    for(int i=0; i<GTreeParticle_MaxEntries; i++)
+    for(int i=0; i<GTreeParticle_MAX; i++)
     {
         apparatus[i]    = 0;
         time[i]         = 0;

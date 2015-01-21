@@ -7,7 +7,7 @@
 
 #include "GTree.h"
 
-#define GTreeParticle_MaxEntries  64
+#define GTreeParticle_MAX 128
 
 class   GTreeMeson;
 
@@ -16,13 +16,13 @@ class  GTreeParticle    : public GTree
 private:
     UInt_t              nParticles;
     TClonesArray*       particles;	// reconstructed
-    UChar_t             apparatus[GTreeParticle_MaxEntries];
-    Double_t            time[GTreeParticle_MaxEntries];
-    UChar_t             clusterSize[GTreeParticle_MaxEntries];
+    UChar_t             apparatus[GTreeParticle_MAX];
+    Double_t            time[GTreeParticle_MAX];
+    UChar_t             clusterSize[GTreeParticle_MAX];
     //Charged detector energies
-    Double_t            vetoEnergy[GTreeParticle_MaxEntries];
-    Double_t            MWPC0Energy[GTreeParticle_MaxEntries];
-    Double_t            MWPC1Energy[GTreeParticle_MaxEntries];
+    Double_t            vetoEnergy[GTreeParticle_MAX];
+    Double_t            MWPC0Energy[GTreeParticle_MAX];
+    Double_t            MWPC1Energy[GTreeParticle_MAX];
 
 
 protected:

@@ -9,7 +9,7 @@
 #include "GTree.h"
 
 
-#define GTreeTagger_MAX 512
+#define GTreeTagger_MAX 4096
 
 class  GTreeTagger : public GTree
 {

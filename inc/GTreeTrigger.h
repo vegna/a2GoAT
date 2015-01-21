@@ -4,7 +4,7 @@
 
 #include "GTree.h"
 
-#define GTreeTrigger_MAX 128
+#define GTreeTrigger_MAX 256
 
 
 class  GTreeTrigger : public GTree

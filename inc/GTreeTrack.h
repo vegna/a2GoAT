@@ -7,7 +7,7 @@
 #include "GTree.h"
 
 
-#define GTreeTrack_MAX 256
+#define GTreeTrack_MAX 128
 
 class  GTreeTrack : public GTree
 {

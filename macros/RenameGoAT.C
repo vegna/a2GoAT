@@ -31,9 +31,9 @@ void RenameGoAT(TString sFile){
     printf("Renaming treeTagger to tagger\n");
 
     Int_t nTagged          = 0;
-    Double_t *taggedEnergy = new Double_t[1024];
-    Int_t *taggedChannel   = new Int_t[1024];
-    Double_t *taggedTime   = new Double_t[1024];
+    Double_t *taggedEnergy = new Double_t[4096];
+    Int_t *taggedChannel   = new Int_t[4096];
+    Double_t *taggedTime   = new Double_t[4096];
 
     TTree *tagger = new TTree("tagger", "tagger");
 
@@ -258,9 +258,9 @@ void RenameGoAT(TString sFile){
     Bool_t helicity         = false;
     Int_t nErrors           = 0;
     Int_t nErrors           = 0;
-    Int_t *errorModuleID    = new Int_t[300];
-    Int_t *errorModuleIndex = new Int_t[300];
-    Int_t *errorCode        = new Int_t[300];
+    Int_t *errorModuleID    = new Int_t[256];
+    Int_t *errorModuleIndex = new Int_t[256];
+    Int_t *errorCode        = new Int_t[256];
     Int_t nTriggerPattern   = 0;
     Int_t *triggerPattern   = new Int_t[32];
 
