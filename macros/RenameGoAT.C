@@ -40,10 +40,6 @@ void RenameGoAT(TString sFile){
     if(taggerOld->GetBranch("nTagged")){
       taggerOld->SetBranchAddress("nTagged", &nTagged);
       tagger->Branch("nTagged", &nTagged,"nTagged/I");
-      if(taggerOld->GetBranch("photonbeam_E")){
-	taggerOld->SetBranchAddress("photonbeam_E", taggedEnergy);
-	tagger->Branch("taggedEnergy", taggedEnergy, "taggedEnergy[nTagged]/D");
-      }
       if(taggerOld->GetBranch("tagged_ch")){
 	taggerOld->SetBranchAddress("tagged_ch", taggedChannel);
 	tagger->Branch("taggedChannel", taggedChannel, "taggedChannel[nTagged]/I");
@@ -51,6 +47,10 @@ void RenameGoAT(TString sFile){
       if(taggerOld->GetBranch("tagged_t")){
 	taggerOld->SetBranchAddress("tagged_t", taggedTime);
 	tagger->Branch("taggedTime", taggedTime, "taggedTime[nTagged]/D");
+      }
+      if(taggerOld->GetBranch("photonbeam_E")){
+	taggerOld->SetBranchAddress("photonbeam_E", taggedEnergy);
+	tagger->Branch("taggedEnergy", taggedEnergy, "taggedEnergy[nTagged]/D");
       }
     }
 

@@ -33,8 +33,10 @@ private:
     TFile*      inputFile;
     TObjArray   treeList;
     TObjArray   treeCorreleatedToScalerReadList;
+    TObjArray   treeSingleReadList;
     TObjArray   readList;
     TObjArray   readCorreleatedToScalerReadList;
+    TObjArray   readSingleReadList;
     TObjArray   writeList;
     Bool_t      isWritten;
 
