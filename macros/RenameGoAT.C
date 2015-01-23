@@ -147,9 +147,9 @@ void RenameGoAT(TString sFile){
     Int_t *PIDHits          = new Int_t[860];
     Int_t nMWPCHits         = 0;
     Int_t *MWPCHits         = new Int_t[860];
-    Int_t nBaF2PbWO4Hits    = 0;
-    Int_t *BaF2PbWO4Hits    = new Int_t[860];
-    Int_t *BaF2PbWO4Cluster = new Int_t[860];
+    Int_t nBaF2Hits    = 0;
+    Int_t *BaF2Hits    = new Int_t[860];
+    Int_t *BaF2Cluster = new Int_t[860];
     Int_t nVetoHits         = 0;
     Int_t *VetoHits         = new Int_t[860];
 	
@@ -184,15 +184,15 @@ void RenameGoAT(TString sFile){
       }
     }
     if(detectorHitsOld->GetBranch("nBaF2_PbWO4_Hits")){
-      detectorHitsOld->SetBranchAddress("nBaF2_PbWO4_Hits", &nBaF2PbWO4Hits);
-      detectorHits->Branch("nBaF2PbWO4Hits", &nBaF2PbWO4Hits, "nBaF2PbWO4Hits/I");
+      detectorHitsOld->SetBranchAddress("nBaF2_PbWO4_Hits", &nBaF2Hits);
+      detectorHits->Branch("nBaF2Hits", &nBaF2Hits, "nBaF2Hits/I");
       if(detectorHitsOld->GetBranch("BaF2_PbWO4_Hits")){
-	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Hits", BaF2PbWO4Hits);
-	detectorHits->Branch("BaF2PbWO4Hits", BaF2PbWO4Hits, "BaF2PbWO4Hits[nBaF2PbWO4Hits]/I");
+	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Hits", BaF2Hits);
+	detectorHits->Branch("BaF2Hits", BaF2Hits, "BaF2Hits[nBaF2Hits]/I");
       }
       if(detectorHitsOld->GetBranch("BaF2_PbWO4_Cluster")){
-	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Cluster", BaF2PbWO4Cluster);
-	detectorHits->Branch("BaF2PbWO4Cluster", BaF2PbWO4Cluster, "BaF2PbWO4Cluster[nBaF2PbWO4Hits]/I");
+	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Cluster", BaF2Cluster);
+	detectorHits->Branch("BaF2Cluster", BaF2Cluster, "BaF2Cluster[nBaF2Hits]/I");
       }
     }
     if(detectorHitsOld->GetBranch("nVeto_Hits")){
