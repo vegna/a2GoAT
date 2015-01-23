@@ -15,6 +15,7 @@
 #include "GTreeMeson.h"
 #include "GTreeTrigger.h"
 #include "GTreeDetectorHits.h"
+#include "GTreeParameters.h"
 #include "GTreeEventParameters.h"
 #include "GHistManager.h"
 
@@ -53,6 +54,7 @@ private:
     GTreeLinPol*        linpol;
     GTreeTrigger*       trigger;
     GTreeScaler*        scalers;
+    GTreeParameters*    parameters;
 
     GTreeEventParameters* eventParameters;
     GTreeDetectorHits*  detectorHits;
@@ -80,6 +82,7 @@ protected:
     GTreeLinPol*        GetLinpol()                 {return linpol;}
     GTreeTrigger*       GetTrigger()                {return trigger;}
     GTreeScaler*        GetScalers()                {return scalers;}
+    GTreeParameters*    GetParameters()             {return parameters;}
 
     GTreeEventParameters* GetEventParameters()      {return eventParameters;}
     GTreeDetectorHits*  GetDetectorHits()           {return detectorHits;}
@@ -104,6 +107,7 @@ protected:
     const   GTreeLinPol*        GetLinpol()             const       {return linpol;}
     const   GTreeTrigger*       GetTrigger()            const       {return trigger;}
     const   GTreeScaler*        GetScalers()            const       {return scalers;}
+    const   GTreeParameters*    GetParameters()         const       {return parameters;}
 
     const   GTreeEventParameters* GetEventParameters()  const       {return eventParameters;}
     const   GTreeDetectorHits*  GetDetectorHits()       const       {return detectorHits;}
