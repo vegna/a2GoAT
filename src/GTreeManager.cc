@@ -24,7 +24,7 @@ GTreeManager::GTreeManager()    :
     trigger(0),
     scalers(0),
     detectorHits(0),
-    parameters(0),
+    setupParameters(0),
     rootinos(0),
     photons(0),
     electrons(0),
@@ -56,7 +56,7 @@ GTreeManager::GTreeManager()    :
     etas = new GTreeMeson(this, "etas");
     etaPrimes = new GTreeMeson(this, "etaPrimes");
 
-    parameters = new GTreeParameters(this);
+    setupParameters = new GTreeSetupParameters(this);
     eventParameters = new GTreeEventParameters(this);
     detectorHits = new GTreeDetectorHits(this);
     tracks = new GTreeTrack(this);
@@ -252,7 +252,7 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
     {
         ((GTree*)readSingleReadList[l])->GetEntryFast(0);
         ((GTree*)readSingleReadList[l])->Fill();
-        if(!tagger->HasEnergy()) tagger->SetCalibration(parameters->GetTaggerPhotonEnergy());
+        if(!tagger->HasEnergy()) tagger->SetCalibration(setupParameters->GetTaggerPhotonEnergy());
     }
 
     // find correct shift
@@ -335,7 +335,7 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
     for(Int_t l=0; l<readSingleReadList.GetEntriesFast(); l++)
     {
         ((GTree*)readSingleReadList[l])->GetEntryFast(0);
-        if(!tagger->HasEnergy()) tagger->SetCalibration(parameters->GetTaggerPhotonEnergy());
+        if(!tagger->HasEnergy()) tagger->SetCalibration(setupParameters->GetTaggerPhotonEnergy());
     }
 
     Int_t   event       = 0;

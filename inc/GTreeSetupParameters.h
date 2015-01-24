@@ -1,11 +1,11 @@
-#ifndef __GTreeParameters_h__
-#define __GTreeParameters_h__
+#ifndef __GTreeSetupParameters_h__
+#define __GTreeSetupParameters_h__
 
 
 #include "GTree.h"
 
 
-class  GTreeParameters : public GTree
+class  GTreeSetupParameters : public GTree
 {
 private:
     Int_t		nTagger;
@@ -71,8 +71,8 @@ protected:
     virtual void    SetBranches();
 
 public:
-    GTreeParameters(GTreeManager *Manager);
-    virtual ~GTreeParameters();
+    GTreeSetupParameters(GTreeManager *Manager);
+    virtual ~GTreeSetupParameters();
 
     virtual void    Clear()             {}
 

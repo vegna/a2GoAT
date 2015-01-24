@@ -1,8 +1,8 @@
-#include "GTreeParameters.h"
+#include "GTreeSetupParameters.h"
 #include "GTreeManager.h"
 
-GTreeParameters::GTreeParameters(GTreeManager *Manager)    :
-    GTree(Manager, TString("parameters"), kFALSE, kTRUE),
+GTreeSetupParameters::GTreeSetupParameters(GTreeManager *Manager)    :
+    GTree(Manager, TString("setupParameters"), kFALSE, kTRUE),
     nTagger(0),
     TaggerGlobalOffset(0),
     nNaI(0),
@@ -74,12 +74,12 @@ GTreeParameters::GTreeParameters(GTreeManager *Manager)    :
     }
 }
 
-GTreeParameters::~GTreeParameters()
+GTreeSetupParameters::~GTreeSetupParameters()
 {
 
 }
 
-void    GTreeParameters::SetBranchAdresses()
+void    GTreeSetupParameters::SetBranchAdresses()
 {
     inputTree->SetBranchAddress("nTagger", &nTagger);
     inputTree->SetBranchAddress("TaggerGlobalOffset", &TaggerGlobalOffset);
@@ -140,7 +140,7 @@ void    GTreeParameters::SetBranchAdresses()
     inputTree->SetBranchAddress("VetoTDCOffset", VetoTDCOffset);
 }
 
-void    GTreeParameters::SetBranches()
+void    GTreeSetupParameters::SetBranches()
 {
     outputTree->Branch("nTagger", &nTagger, "nTagger/I");
     outputTree->Branch("TaggerGlobalOffset", &TaggerGlobalOffset, "TaggerGlobalOffset/D");
