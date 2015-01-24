@@ -8,7 +8,7 @@ void RenameGoAT(TString sFile){
   TTree *detectorHitsOld = (TTree*)fOld.Get("treeDetectorHits");
   TTree *linPolOld       = (TTree*)fOld.Get("treeLinPol");
   TTree *triggerOld      = (TTree*)fOld.Get("treeTrigger");
-  TTree *scalerOld       = (TTree*)fOld.Get("treeScaler");
+  TTree *scalersOld       = (TTree*)fOld.Get("treeScaler");
 
   // GoAT Trees
   TTree *eventParametersOld = (TTree*)fOld.Get("treeEventParameters");
@@ -312,10 +312,10 @@ void RenameGoAT(TString sFile){
 
   Int_t eventNumber = 0;
 
-  if(scalerOld){
-    printf("Renaming treeScaler to scaler\n");
+  if(scalersOld){
+    printf("Renaming treeScaler to scalers\n");
 
-    TString sScaler = scalerOld->GetBranch("Scaler")->GetTitle();
+    TString sScaler = scalersOld->GetBranch("Scaler")->GetTitle();
     sScaler.Remove(0,sScaler.First("[")+1);
     sScaler.Remove(sScaler.First("]"));
     const Int_t nScaler = sScaler.Atoi();
@@ -323,28 +323,28 @@ void RenameGoAT(TString sFile){
     sprintf(str, "scalers[%d]/i", nScaler);
 
     Int_t eventID = 0;
-    UInt_t *scalers = new UInt_t[nScaler];
+    UInt_t *scalerArray = new UInt_t[nScaler];
 
-    TTree *scaler = new TTree("scaler", "scaler");
+    TTree *scalers = new TTree("scalers", "scalers");
     
-    if(scalerOld->GetBranch("eventNumber")){
-      scalerOld->SetBranchAddress("eventNumber", &eventNumber);
-      scaler->Branch("eventNumber", &eventNumber, "eventNumber/I");
+    if(scalersOld->GetBranch("eventNumber")){
+      scalersOld->SetBranchAddress("eventNumber", &eventNumber);
+      scalers->Branch("eventNumber", &eventNumber, "eventNumber/I");
     }
-    if(scalerOld->GetBranch("eventID")){
-      scalerOld->SetBranchAddress("eventID", &eventID);
-      scaler->Branch("eventID", &eventID, "eventID/I");
+    if(scalersOld->GetBranch("eventID")){
+      scalersOld->SetBranchAddress("eventID", &eventID);
+      scalers->Branch("eventID", &eventID, "eventID/I");
     }
-    if(scalerOld->GetBranch("Scaler")){
-      scalerOld->SetBranchAddress("Scaler", scalers);
-      scaler->Branch("scalers", scalers, str);
+    if(scalersOld->GetBranch("Scaler")){
+      scalersOld->SetBranchAddress("Scaler", scalerArray);
+      scalers->Branch("scalers", scalerArray, str);
     }
 
-    for(Int_t i=0; i<scalerOld->GetEntries(); i++){
-      scalerOld->GetEvent(i);
-      scaler->Fill();
+    for(Int_t i=0; i<scalersOld->GetEntries(); i++){
+      scalersOld->GetEvent(i);
+      scalers->Fill();
     }
-    scaler->Write();
+    scalers->Write();
   }
 
   if(eventParametersOld){
