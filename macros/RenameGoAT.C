@@ -99,13 +99,17 @@ void RunFile(TString sFile){
     delete taggedTime;
   }
 
-  UInt_t nParticles      = 0;
+  UInt_t nParticles     = 0;
   Double_t *time        = new Double_t[128];
-  UChar_t *clusterSize    = new Int_t[128];
-  UChar_t *apparatus      = new Int_t[128];
+  UChar_t *clusterSize  = new UChar_t[128];
+  UChar_t *apparatus    = new UChar_t[128];
   Double_t *vetoEnergy  = new Double_t[128];
   Double_t *MWPC0Energy = new Double_t[128];
   Double_t *MWPC1Energy = new Double_t[128];
+
+  Int_t nParticlesNew   = 0;
+  Int_t *clusterSizeNew = new Int_t[128];
+  Int_t *apparatusNew   = new Int_t[128];
 
   if(tracksOld){
     printf("         treeRawEvent to tracks\n");
@@ -140,7 +144,7 @@ void RunFile(TString sFile){
       }
       if(tracksOld->GetBranch("clusterSize")){
 	tracksOld->SetBranchAddress("clusterSize", clusterSize);
-	tracks->Branch("clusterSize", clusterSize, "clusterSize[nTracks]/I");
+	tracks->Branch("clusterSize", clusterSizeNew, "clusterSize[nTracks]/I");
       }
       if(tracksOld->GetBranch("centralCrys")){
 	tracksOld->SetBranchAddress("centralCrys", centralCrystal);
@@ -152,7 +156,7 @@ void RunFile(TString sFile){
       }
       if(tracksOld->GetBranch("Apparatus")){
 	tracksOld->SetBranchAddress("Apparatus", apparatus);
-	tracks->Branch("apparatus", apparatus, "apparatus[nTracks]/I");
+	tracks->Branch("apparatus", apparatusNew, "apparatus[nTracks]/I");
       }
       if(tracksOld->GetBranch("d_E")){
 	tracksOld->SetBranchAddress("d_E", vetoEnergy);
@@ -169,7 +173,11 @@ void RunFile(TString sFile){
     }
 
     for(Int_t i=0; i<tracksOld->GetEntries(); i++){
-      tracksOld->GetEvent(i);
+      tracksOld->GetEvent(i);      
+      for(Int_t j=0; j<nTracks; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       tracks->Fill();
     }
     tracks->Write();
@@ -378,6 +386,8 @@ void RunFile(TString sFile){
     delete triggerPattern;
   }
 
+  Int_t eventNumber = 0;
+
   if(scalersOld){
     printf("         treeScaler to scalers\n");
 
@@ -388,7 +398,6 @@ void RunFile(TString sFile){
     Char_t str[256];
     sprintf(str, "scalers[%d]/i", nScaler);
 
-    Int_t eventNumber = 0;
     Int_t eventID = 0;
     UInt_t *scalerArray = new UInt_t[nScaler];
 
@@ -423,20 +432,23 @@ void RunFile(TString sFile){
 
     UInt_t eventNumberU = 0;
     UChar_t nReconstructed = 0;
+    Int_t nReconstructedNew = 0;
 
     TTree *eventParameters = new TTree("eventParameters", "eventParameters");
 
     if(eventParametersOld->GetBranch("EventNumber")){
       eventParametersOld->SetBranchAddress("EventNumber", &eventNumberU);
-      eventParameters->Branch("eventNumber", &eventNumberU, "eventNumber/I");
+      eventParameters->Branch("eventNumber", &eventNumber, "eventNumber/I");
     }
     if(eventParametersOld->GetBranch("nReconstructed")){
       eventParametersOld->SetBranchAddress("nReconstructed", &nReconstructed);
-      eventParameters->Branch("nReconstructed", &nReconstructed, "nReconstructed/I");
+      eventParameters->Branch("nReconstructed", &nReconstructedNew, "nReconstructed/I");
     }
 
     for(Int_t i=0; i<eventParametersOld->GetEntries(); i++){
       eventParametersOld->GetEvent(i);
+      eventNumber = (Int_t)eventNumberU;
+      nReconstructedNew = (Int_t)nReconstructed;
       eventParameters->Fill();
     }
     eventParameters->Write();
@@ -451,7 +463,7 @@ void RunFile(TString sFile){
 
     if(rootinosOld->GetBranch("nParticles")){
       rootinosOld->SetBranchAddress("nParticles", &nParticles);
-      rootinos->Branch("nParticles", &nParticles, "nParticles/i");
+      rootinos->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(rootinosOld->GetBranch("particles.")){
 	rootinosOld->SetBranchAddress("particles.", &particles);
 	rootinos->Branch("particles", &particles, 32000, 0);
@@ -462,11 +474,11 @@ void RunFile(TString sFile){
       }
       if(rootinosOld->GetBranch("clusterSize")){
 	rootinosOld->SetBranchAddress("clusterSize", clusterSize);
-	rootinos->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+	rootinos->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(rootinosOld->GetBranch("Apparatus")){
 	rootinosOld->SetBranchAddress("Apparatus", apparatus);
-	rootinos->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+	rootinos->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(rootinosOld->GetBranch("d_E")){
 	rootinosOld->SetBranchAddress("d_E", vetoEnergy);
@@ -484,6 +496,11 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<rootinosOld->GetEntries(); i++){
       rootinosOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       rootinos->Fill();
     }
     rootinos->Write();
@@ -498,7 +515,7 @@ void RunFile(TString sFile){
 
     if(photonsOld->GetBranch("nParticles")){
       photonsOld->SetBranchAddress("nParticles", &nParticles);
-      photons->Branch("nParticles", &nParticles, "nParticles/I");
+      photons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(photonsOld->GetBranch("particles.")){
 	photonsOld->SetBranchAddress("particles.", &particles);
 	photons->Branch("particles", &particles, 32000, 0);
@@ -509,11 +526,11 @@ void RunFile(TString sFile){
       }
       if(photonsOld->GetBranch("clusterSize")){
 	photonsOld->SetBranchAddress("clusterSize", clusterSize);
-	photons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	photons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(photonsOld->GetBranch("Apparatus")){
 	photonsOld->SetBranchAddress("Apparatus", apparatus);
-	photons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	photons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(photonsOld->GetBranch("d_E")){
 	photonsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -531,6 +548,11 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<photonsOld->GetEntries(); i++){
       photonsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       photons->Fill();
     }
     photons->Write();
@@ -545,7 +567,7 @@ void RunFile(TString sFile){
 
     if(electronsOld->GetBranch("nParticles")){
       electronsOld->SetBranchAddress("nParticles", &nParticles);
-      electrons->Branch("nParticles", &nParticles, "nParticles/I");
+      electrons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(electronsOld->GetBranch("particles.")){
 	electronsOld->SetBranchAddress("particles.", &particles);
 	electrons->Branch("particles", &particles, 32000, 0);
@@ -556,11 +578,11 @@ void RunFile(TString sFile){
       }
       if(electronsOld->GetBranch("clusterSize")){
 	electronsOld->SetBranchAddress("clusterSize", clusterSize);
-	electrons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	electrons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(electronsOld->GetBranch("Apparatus")){
 	electronsOld->SetBranchAddress("Apparatus", apparatus);
-	electrons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	electrons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(electronsOld->GetBranch("d_E")){
 	electronsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -578,6 +600,11 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<electronsOld->GetEntries(); i++){
       electronsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       electrons->Fill();
     }
     electrons->Write();
@@ -592,7 +619,7 @@ void RunFile(TString sFile){
 
     if(chargedPionsOld->GetBranch("nParticles")){
       chargedPionsOld->SetBranchAddress("nParticles", &nParticles);
-      chargedPions->Branch("nParticles", &nParticles, "nParticles/I");
+      chargedPions->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(chargedPionsOld->GetBranch("particles.")){
 	chargedPionsOld->SetBranchAddress("particles.", &particles);
 	chargedPions->Branch("particles", &particles, 32000, 0);
@@ -603,11 +630,11 @@ void RunFile(TString sFile){
       }
       if(chargedPionsOld->GetBranch("clusterSize")){
 	chargedPionsOld->SetBranchAddress("clusterSize", clusterSize);
-	chargedPions->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	chargedPions->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(chargedPionsOld->GetBranch("Apparatus")){
 	chargedPionsOld->SetBranchAddress("Apparatus", apparatus);
-	chargedPions->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	chargedPions->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(chargedPionsOld->GetBranch("d_E")){
 	chargedPionsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -625,6 +652,11 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<chargedPionsOld->GetEntries(); i++){
       chargedPionsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       chargedPions->Fill();
     }
     chargedPions->Write();
@@ -639,7 +671,7 @@ void RunFile(TString sFile){
 
     if(protonsOld->GetBranch("nParticles")){
       protonsOld->SetBranchAddress("nParticles", &nParticles);
-      protons->Branch("nParticles", &nParticles, "nParticles/I");
+      protons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(protonsOld->GetBranch("particles.")){
 	protonsOld->SetBranchAddress("particles.", &particles);
 	protons->Branch("particles", &particles, 32000, 0);
@@ -650,11 +682,11 @@ void RunFile(TString sFile){
       }
       if(protonsOld->GetBranch("clusterSize")){
 	protonsOld->SetBranchAddress("clusterSize", clusterSize);
-	protons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	protons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(protonsOld->GetBranch("Apparatus")){
 	protonsOld->SetBranchAddress("Apparatus", apparatus);
-	protons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	protons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(protonsOld->GetBranch("d_E")){
 	protonsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -672,6 +704,11 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<protonsOld->GetEntries(); i++){
       protonsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       protons->Fill();
     }
     protons->Write();
@@ -686,7 +723,7 @@ void RunFile(TString sFile){
 
     if(neutronsOld->GetBranch("nParticles")){
       neutronsOld->SetBranchAddress("nParticles", &nParticles);
-      neutrons->Branch("nParticles", &nParticles, "nParticles/I");
+      neutrons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(neutronsOld->GetBranch("particles.")){
 	neutronsOld->SetBranchAddress("particles.", &particles);
 	neutrons->Branch("particles", &particles, 32000, 0);
@@ -697,11 +734,11 @@ void RunFile(TString sFile){
       }
       if(neutronsOld->GetBranch("clusterSize")){
 	neutronsOld->SetBranchAddress("clusterSize", clusterSize);
-	neutrons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	neutrons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(neutronsOld->GetBranch("Apparatus")){
 	neutronsOld->SetBranchAddress("Apparatus", apparatus);
-	neutrons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	neutrons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(neutronsOld->GetBranch("d_E")){
 	neutronsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -720,6 +757,11 @@ void RunFile(TString sFile){
     for(Int_t i=0; i<neutronsOld->GetEntries(); i++){
       neutronsOld->GetEvent(i);
       neutrons->Fill();
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
     }
     neutrons->Write();
 
@@ -735,6 +777,11 @@ void RunFile(TString sFile){
   TClonesArray *subPhotons      = new TClonesArray("TLorentzVector", 64);
   TClonesArray *subChargedPions = new TClonesArray("TLorentzVector", 64);
 
+  Int_t *nSubParticlesNew    = new Int_t[64];
+  Int_t *nSubRootinosNew     = new Int_t[64];
+  Int_t *nSubPhotonsNew      = new Int_t[64];
+  Int_t *nSubChargedPionsNew = new Int_t[64];
+
   if(neutralPionsOld){
     printf("         pi0 to neutralPions\n");
 
@@ -742,7 +789,7 @@ void RunFile(TString sFile){
 
     if(neutralPionsOld->GetBranch("nParticles")){
       neutralPionsOld->SetBranchAddress("nParticles", &nParticles);
-      neutralPions->Branch("nParticles", &nParticles, "nParticles/I");
+      neutralPions->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(neutralPionsOld->GetBranch("particles.")){
 	neutralPionsOld->SetBranchAddress("particles.", &particles);
 	neutralPions->Branch("particles", &particles, 32000, 0);
@@ -753,11 +800,11 @@ void RunFile(TString sFile){
       }
       if(neutralPionsOld->GetBranch("clusterSize")){
 	neutralPionsOld->SetBranchAddress("clusterSize", clusterSize);
-	neutralPions->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	neutralPions->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("Apparatus")){
 	neutralPionsOld->SetBranchAddress("Apparatus", apparatus);
-	neutralPions->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	neutralPions->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("d_E")){
 	neutralPionsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -773,19 +820,19 @@ void RunFile(TString sFile){
       }
       if(neutralPionsOld->GetBranch("nSubParticles")){
 	neutralPionsOld->SetBranchAddress("nSubParticles", nSubParticles);
-	neutralPions->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/I");
+	neutralPions->Branch("nSubParticles", nSubParticlesNew, "nSubParticles[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("nSubRootinos")){
 	neutralPionsOld->SetBranchAddress("nSubRootinos", nSubRootinos);
-	neutralPions->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/I");
+	neutralPions->Branch("nSubRootinos", nSubRootinosNew, "nSubRootinos[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("nSubPhotons")){
 	neutralPionsOld->SetBranchAddress("nSubPhotons", nSubPhotons);
-	neutralPions->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/I");
+	neutralPions->Branch("nSubPhotons", nSubPhotonsNew, "nSubPhotons[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("nSubChargedPi")){
 	neutralPionsOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
-	neutralPions->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/I");
+	neutralPions->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("subRootinos")){
 	neutralPionsOld->SetBranchAddress("subRootinos", &subRootinos);
@@ -803,6 +850,15 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<neutralPionsOld->GetEntries(); i++){
       neutralPionsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
+	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
+	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
+	nSubChargedPionsNew[j] = (Int_t)nSubChargedPions[j];
+      }
       neutralPions->Fill();
     }
     neutralPions->Write();
@@ -817,7 +873,7 @@ void RunFile(TString sFile){
 
     if(etasOld->GetBranch("nParticles")){
       etasOld->SetBranchAddress("nParticles", &nParticles);
-      etas->Branch("nParticles", &nParticles, "nParticles/I");
+      etas->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(etasOld->GetBranch("particles.")){
 	etasOld->SetBranchAddress("particles.", &particles);
 	etas->Branch("particles", &particles, 32000, 0);
@@ -828,11 +884,11 @@ void RunFile(TString sFile){
       }
       if(etasOld->GetBranch("clusterSize")){
 	etasOld->SetBranchAddress("clusterSize", clusterSize);
-	etas->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	etas->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(etasOld->GetBranch("Apparatus")){
 	etasOld->SetBranchAddress("Apparatus", apparatus);
-	etas->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	etas->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(etasOld->GetBranch("d_E")){
 	etasOld->SetBranchAddress("d_E", vetoEnergy);
@@ -848,19 +904,19 @@ void RunFile(TString sFile){
       }
       if(etasOld->GetBranch("nSubParticles")){
 	etasOld->SetBranchAddress("nSubParticles", nSubParticles);
-	etas->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/I");
+	etas->Branch("nSubParticles", nSubParticlesNew, "nSubParticles[nParticles]/I");
       }
       if(etasOld->GetBranch("nSubRootinos")){
 	etasOld->SetBranchAddress("nSubRootinos", nSubRootinos);
-	etas->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/I");
+	etas->Branch("nSubRootinos", nSubRootinosNew, "nSubRootinos[nParticles]/I");
       }
       if(etasOld->GetBranch("nSubPhotons")){
 	etasOld->SetBranchAddress("nSubPhotons", nSubPhotons);
-	etas->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/I");
+	etas->Branch("nSubPhotons", nSubPhotonsNew, "nSubPhotons[nParticles]/I");
       }
       if(etasOld->GetBranch("nSubChargedPi")){
 	etasOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
-	etas->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/I");
+	etas->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
       if(etasOld->GetBranch("subRootinos")){
 	etasOld->SetBranchAddress("subRootinos", &subRootinos);
@@ -878,6 +934,15 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<etasOld->GetEntries(); i++){
       etasOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
+	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
+	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
+	nSubChargedPionsNew[j] = (Int_t)nSubChargedPions[j];
+      }
       etas->Fill();
     }
     etas->Write();
@@ -892,7 +957,7 @@ void RunFile(TString sFile){
 
     if(etaPrimesOld->GetBranch("nParticles")){
       etaPrimesOld->SetBranchAddress("nParticles", &nParticles);
-      etaPrimes->Branch("nParticles", &nParticles, "nParticles/I");
+      etaPrimes->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(etaPrimesOld->GetBranch("particles.")){
 	etaPrimesOld->SetBranchAddress("particles.", &particles);
 	etaPrimes->Branch("particles", &particles, 32000, 0);
@@ -903,11 +968,11 @@ void RunFile(TString sFile){
       }
       if(etaPrimesOld->GetBranch("clusterSize")){
 	etaPrimesOld->SetBranchAddress("clusterSize", clusterSize);
-	etaPrimes->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	etaPrimes->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("Apparatus")){
 	etaPrimesOld->SetBranchAddress("Apparatus", apparatus);
-	etaPrimes->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	etaPrimes->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("d_E")){
 	etaPrimesOld->SetBranchAddress("d_E", vetoEnergy);
@@ -923,19 +988,19 @@ void RunFile(TString sFile){
       }
       if(etaPrimesOld->GetBranch("nSubParticles")){
 	etaPrimesOld->SetBranchAddress("nSubParticles", nSubParticles);
-	etaPrimes->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/I");
+	etaPrimes->Branch("nSubParticles", nSubParticlesNew, "nSubParticles[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("nSubRootinos")){
 	etaPrimesOld->SetBranchAddress("nSubRootinos", nSubRootinos);
-	etaPrimes->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/I");
+	etaPrimes->Branch("nSubRootinos", nSubRootinosNew, "nSubRootinos[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("nSubPhotons")){
 	etaPrimesOld->SetBranchAddress("nSubPhotons", nSubPhotons);
-	etaPrimes->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/I");
+	etaPrimes->Branch("nSubPhotons", nSubPhotonsNew, "nSubPhotons[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("nSubChargedPi")){
 	etaPrimesOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
-	etaPrimes->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/I");
+	etaPrimes->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("subRootinos")){
 	etaPrimesOld->SetBranchAddress("subRootinos", &subRootinos);
@@ -953,6 +1018,15 @@ void RunFile(TString sFile){
 
     for(Int_t i=0; i<etaPrimesOld->GetEntries(); i++){
       etaPrimesOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
+	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
+	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
+	nSubChargedPionsNew[j] = (Int_t)nSubChargedPions[j];
+      }
       etaPrimes->Fill();
     }
     etaPrimes->Write();
@@ -975,6 +1049,13 @@ void RunFile(TString sFile){
   delete subRootinos;
   delete subPhotons;
   delete subChargedPions;
+
+  delete clusterSizeNew;
+  delete apparatusNew;
+  delete nSubParticlesNew;
+  delete nSubRootinosNew;
+  delete nSubPhotonsNew;
+  delete nSubChargedPionsNew;
 
   if(fOld.GetListOfKeys()->Contains("CheckCB")){
     fNew.mkdir("CheckCB");
