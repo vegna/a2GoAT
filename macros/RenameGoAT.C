@@ -1,5 +1,37 @@
 void RenameGoAT(TString sFile){
+
+  if(sFile.EndsWith(".root")) RunFile(sFile);
+  else{
+    TString sDir = gSystem->ExpandPathName(sFile.Data());
+
+    Int_t iLength;
+    TSystemFile *sfFile;
+    const char* cFile;
+
+    gSystem->cd(sDir);
+    
+    TSystemDirectory *sdFile = new TSystemDirectory("files","./");
+    TList *lFile = sdFile->GetListOfFiles();
+    lFile->Sort();
+    TIter itFile(lFile);
+    
+    while((sfFile=(TSystemFile*)itFile())){
+      cFile = sfFile->GetName();
+      sFile = cFile;
+      iLength = strlen(cFile);
+      if((iLength >= 5) && (strcmp(&cFile[iLength-5],".root") == 0)){
+	RunFile(sFile);
+      }
+    }
+  }
+}
+
+void RunFile(TString sFile){
   
+  printf("Renaming %s\n",sFile.Data());
+  TStopwatch timer;
+  timer.Start();
+
   TFile fOld(sFile,"READ");
 
   // Acqu Trees
@@ -28,7 +60,7 @@ void RenameGoAT(TString sFile){
   TFile fNew(sFile,"RECREATE");
 
   if(taggerOld){
-    printf("Renaming treeTagger to tagger\n");
+    printf("         treeTagger to tagger\n");
 
     Int_t nTagged          = 0;
     Double_t *taggedEnergy = new Double_t[4096];
@@ -59,18 +91,24 @@ void RenameGoAT(TString sFile){
       tagger->Fill();
     }
     tagger->Write();
+
+    delete tagger;
+
+    delete taggedEnergy;
+    delete taggedChannel;
+    delete taggedTime;
   }
 
-  Int_t nParticles      = 0;
+  UInt_t nParticles      = 0;
   Double_t *time        = new Double_t[128];
-  Int_t *clusterSize    = new Int_t[128];
-  Int_t *apparatus      = new Int_t[128];
+  UChar_t *clusterSize    = new Int_t[128];
+  UChar_t *apparatus      = new Int_t[128];
   Double_t *vetoEnergy  = new Double_t[128];
   Double_t *MWPC0Energy = new Double_t[128];
   Double_t *MWPC1Energy = new Double_t[128];
 
   if(tracksOld){
-    printf("Renaming treeRawEvent to tracks\n");
+    printf("         treeRawEvent to tracks\n");
 
     Int_t nTracks           = 0;
     Double_t *clusterEnergy = new Double_t[128];
@@ -135,10 +173,18 @@ void RenameGoAT(TString sFile){
       tracks->Fill();
     }
     tracks->Write();
+
+    delete tracks;
+
+    delete clusterEnergy;
+    delete theta;
+    delete phi;
+    delete centralCrystal;
+    delete centralVeto;
   }
 
   if(detectorHitsOld){
-    printf("Renaming treeDetectorHits to detectorHits\n");
+    printf("         treeDetectorHits to detectorHits\n");
 
     Int_t nNaIHits          = 0;
     Int_t *NaIHits          = new Int_t[860];
@@ -209,10 +255,20 @@ void RenameGoAT(TString sFile){
       detectorHits->Fill();
     }
     detectorHits->Write();
+
+    delete detectorHits;
+
+    delete NaIHits;
+    delete NaICluster;
+    delete PIDHits;
+    delete MWPCHits;
+    delete BaF2Hits;
+    delete BaF2Cluster;
+    delete VetoHits;
   }
 
   if(linPolOld){
-    printf("Renaming treeLinPol to linPol\n");
+    printf("         treeLinPol to linPol\n");
 
     Int_t plane                 = 0;
     Double_t edge               = 0;
@@ -248,10 +304,15 @@ void RenameGoAT(TString sFile){
       linPol->Fill();
     }
     linPol->Write();
+
+    delete linPol;
+
+    delete polarizationTable;
+    delete enhancementTable;
   }
 
   if(triggerOld){
-    printf("Renaming treeTrigger to trigger\n");
+    printf("         treeTrigger to trigger\n");
 
     Double_t energySum      = 0;
     Int_t multiplicity      = 0;
@@ -308,12 +369,17 @@ void RenameGoAT(TString sFile){
       trigger->Fill();
     }
     trigger->Write();
+
+    delete trigger;
+
+    delete errorModuleID;
+    delete errorModuleIndex;
+    delete errorCode;
+    delete triggerPattern;
   }
 
-  Int_t eventNumber = 0;
-
   if(scalersOld){
-    printf("Renaming treeScaler to scalers\n");
+    printf("         treeScaler to scalers\n");
 
     TString sScaler = scalersOld->GetBranch("Scaler")->GetTitle();
     sScaler.Remove(0,sScaler.First("[")+1);
@@ -322,6 +388,7 @@ void RenameGoAT(TString sFile){
     Char_t str[256];
     sprintf(str, "scalers[%d]/i", nScaler);
 
+    Int_t eventNumber = 0;
     Int_t eventID = 0;
     UInt_t *scalerArray = new UInt_t[nScaler];
 
@@ -345,18 +412,23 @@ void RenameGoAT(TString sFile){
       scalers->Fill();
     }
     scalers->Write();
+
+    delete scalers;
+
+    delete scalerArray;
   }
 
   if(eventParametersOld){
-    printf("Renaming treeEventParameters to eventParameters\n");
+    printf("         treeEventParameters to eventParameters\n");
 
-    Int_t nReconstructed = 0;
+    UInt_t eventNumberU = 0;
+    UChar_t nReconstructed = 0;
 
     TTree *eventParameters = new TTree("eventParameters", "eventParameters");
 
     if(eventParametersOld->GetBranch("EventNumber")){
-      eventParametersOld->SetBranchAddress("EventNumber", &eventNumber);
-      eventParameters->Branch("eventNumber", &eventNumber, "eventNumber/I");
+      eventParametersOld->SetBranchAddress("EventNumber", &eventNumberU);
+      eventParameters->Branch("eventNumber", &eventNumberU, "eventNumber/I");
     }
     if(eventParametersOld->GetBranch("nReconstructed")){
       eventParametersOld->SetBranchAddress("nReconstructed", &nReconstructed);
@@ -368,10 +440,12 @@ void RenameGoAT(TString sFile){
       eventParameters->Fill();
     }
     eventParameters->Write();
+
+    delete eventParameters;
   }
 
   if(rootinosOld){
-    printf("Renaming rootino to rootinos\n");
+    printf("         rootino to rootinos\n");
 
     TTree *rootinos = new TTree("rootinos", "rootinos");
 
@@ -413,10 +487,12 @@ void RenameGoAT(TString sFile){
       rootinos->Fill();
     }
     rootinos->Write();
+
+    delete rootinos;
   }
 
   if(photonsOld){
-    printf("Renaming gamma to photons\n");
+    printf("         gamma to photons\n");
 
     TTree *photons = new TTree("photons", "photons");
 
@@ -458,10 +534,12 @@ void RenameGoAT(TString sFile){
       photons->Fill();
     }
     photons->Write();
+
+    delete photons;
   }
 
   if(electronsOld){
-    printf("Renaming e- to electrons\n");
+    printf("         e- to electrons\n");
 
     TTree *electrons = new TTree("electrons", "electrons");
 
@@ -503,10 +581,12 @@ void RenameGoAT(TString sFile){
       electrons->Fill();
     }
     electrons->Write();
+
+    delete electrons;
   }
 
   if(chargedPionsOld){
-    printf("Renaming pi+ to chargedPions\n");
+    printf("         pi+ to chargedPions\n");
 
     TTree *chargedPions = new TTree("chargedPions", "chargedPions");
 
@@ -548,10 +628,12 @@ void RenameGoAT(TString sFile){
       chargedPions->Fill();
     }
     chargedPions->Write();
+
+    delete chargedPions;
   }
 
   if(protonsOld){
-    printf("Renaming proton to protons\n");
+    printf("         proton to protons\n");
 
     TTree *protons = new TTree("protons", "protons");
 
@@ -593,10 +675,12 @@ void RenameGoAT(TString sFile){
       protons->Fill();
     }
     protons->Write();
+
+    delete protons;
   }
 
   if(neutronsOld){
-    printf("Renaming neutron to neutrons\n");
+    printf("         neutron to neutrons\n");
 
     TTree *neutrons = new TTree("neutrons", "neutrons");
 
@@ -638,6 +722,8 @@ void RenameGoAT(TString sFile){
       neutrons->Fill();
     }
     neutrons->Write();
+
+    delete neutrons;
   }
 
   UChar_t *nSubParticles    = new UChar_t[64];
@@ -650,7 +736,7 @@ void RenameGoAT(TString sFile){
   TClonesArray *subChargedPions = new TClonesArray("TLorentzVector", 64);
 
   if(neutralPionsOld){
-    printf("Renaming pi0 to neutralPions\n");
+    printf("         pi0 to neutralPions\n");
 
     TTree *neutralPions = new TTree("neutralPions", "neutralPions");
 
@@ -720,10 +806,12 @@ void RenameGoAT(TString sFile){
       neutralPions->Fill();
     }
     neutralPions->Write();
+
+    delete neutralPions;
   }
 
   if(etasOld){
-    printf("Renaming eta to etas\n");
+    printf("         eta to etas\n");
 
     TTree *etas = new TTree("etas", "etas");
 
@@ -793,10 +881,12 @@ void RenameGoAT(TString sFile){
       etas->Fill();
     }
     etas->Write();
+
+    delete etas;
   }
 
   if(etaPrimesOld){
-    printf("Renaming eta' to etaPrimes\n");
+    printf("         eta' to etaPrimes\n");
 
     TTree *etaPrimes = new TTree("etaPrimes", "etaPrimes");
 
@@ -866,7 +956,25 @@ void RenameGoAT(TString sFile){
       etaPrimes->Fill();
     }
     etaPrimes->Write();
+
+    delete etaPrimes;
   }
+
+  delete time;
+  delete clusterSize;
+  delete apparatus;
+  delete vetoEnergy;
+  delete MWPC0Energy;
+  delete MWPC1Energy;
+
+  delete nSubParticles;
+  delete nSubRootinos;
+  delete nSubPhotons;
+  delete nSubChargedPions;
+    
+  delete subRootinos;
+  delete subPhotons;
+  delete subChargedPions;
 
   if(fOld.GetListOfKeys()->Contains("CheckCB")){
     fNew.mkdir("CheckCB");
@@ -885,6 +993,13 @@ void RenameGoAT(TString sFile){
     TH2F *Check_CBPhiCorr_pi0 = (TH2F*)fOld.Get("CheckCB/Check_CBPhiCorr_pi0");	
     Check_CBPhiCorr_pi0->Write();
 
+    delete Check_CBdE_E;
+    delete Check_CBPhiCorr;
+    delete Check_CBdE_E_1PID;
+    delete Check_CBPhiCorr_1PID;
+    delete Check_CBdE_E_pi0;
+    delete Check_CBPhiCorr_pi0;
+
     fNew.cd();
   }
 
@@ -901,6 +1016,11 @@ void RenameGoAT(TString sFile){
     Check_TAPSdE_E_1Veto->Write();
     TH2F *Check_TAPSPhiCorr_1Veto = (TH2F*)fOld.Get("CheckTAPS/Check_TAPSPhiCorr_1Veto");
     Check_TAPSPhiCorr_1Veto->Write();
+
+    delete Check_TAPSdE_E;
+    delete Check_TAPSPhiCorr;
+    delete Check_TAPSdE_E_1Veto;
+    delete Check_TAPSPhiCorr_1Veto;
 
     fNew.cd();
   }
@@ -937,20 +1057,63 @@ void RenameGoAT(TString sFile){
     TH2F *Check_VetoTDCHits = (TH2F*)fOld.Get("CheckHitPatterns/Check_VetoTDCHits");
     Check_VetoTDCHits->Write();
 
+    delete Check_CBHits;
+    delete Check_CBADCHits;
+    delete Check_CBTDCHits;
+
+    delete Check_PIDHits;
+    delete Check_PIDADCHits;
+    delete Check_PIDTDCHits;
+
+    delete Check_TAPSHits;
+    delete Check_TAPSADCHits;
+    delete Check_TAPSTDCHits;
+
+    delete Check_VetoHits;
+    delete Check_VetoADCHits;
+    delete Check_VetoTDCHits;
+
     fNew.cd();
   }
 
   if(fOld.GetListOfKeys()->Contains("GoAT_File")){
     TNamed *GoAT_File = (TNamed*)fOld.Get("GoAT_File");
     GoAT_File->Write();
+    
+    delete GoAT_File;
   }
 
   if(fOld.GetListOfKeys()->Contains("CountScalerValid")){
     TH1I *CountScalerValid = (TH1I*)fOld.Get("CountScalerValid");
     CountScalerValid->Write();
+
+    delete CountScalerValid;
   }
+
+  delete taggerOld;
+  delete tracksOld;
+  delete detectorHitsOld;
+  delete linPolOld;
+  delete triggerOld;
+  delete scalersOld;
+
+  delete eventParametersOld;
+  delete rootinosOld;
+  delete photonsOld;
+  delete electronsOld;
+  delete chargedPionsOld;
+  delete protonsOld;
+  delete neutronsOld;
+  delete neutralPionsOld;
+  delete etasOld;
+  delete etaPrimesOld;
+
+  delete particles;
 
   fNew.Close();
   fOld.Close();
+
+  timer.Stop();
+  printf("Renaming took %.1f seconds.\n\n", timer.RealTime());
 
 }
