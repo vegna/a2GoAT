@@ -4,7 +4,7 @@
 
 #include <TClonesArray.h>
 #include <TLorentzVector.h>
-
+#include "Rtypes.h"
 #include "GTree.h"
 
 #define GTreeParticle_MAX 128
