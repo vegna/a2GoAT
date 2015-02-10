@@ -9,6 +9,9 @@
 
 #define GTreeTrack_MAX 128
 
+class   GTreeParticle;
+class   GTreeMeson;
+
 class  GTreeTrack : public GTree
 {
 public:
@@ -38,7 +41,7 @@ protected:
     virtual void    SetBranches();
 
 public:
-    GTreeTrack(GTreeManager *Manager);
+    GTreeTrack(GTreeManager *Manager, const TString& _Name);
     virtual ~GTreeTrack();
 
     virtual void    Clear()     {nTracks = 0;}
@@ -73,6 +76,9 @@ public:
     const	Double_t*       GetMWPC1Energy()                          const	{return MWPC1Energy;}
             Double_t        GetMWPC1Energy(const Int_t index)         const	{return MWPC1Energy[index];}
     virtual void            Print(const Bool_t All = kFALSE)    const;
+
+    friend  class GTreeParticle;
+    friend  class GTreeMeson;
 };
 
 TLorentzVector	GTreeTrack::GetVector(const Int_t index) const

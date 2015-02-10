@@ -98,7 +98,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     Int_t       countChargedPi	= 0;
 
 
-    TLorentzVector* daughter_list[maxSubs];
+    TLorentzVector  daughter_list[maxSubs];
     Int_t       	daughter_index[maxSubs];
     Int_t       	pdg_list[maxSubs];
 
@@ -138,7 +138,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 		
         is_meson[ndaughter] = kFALSE;
 
-        daughter_list[ ndaughter] = &GetRootinos()->Particle(i);
+        daughter_list[ ndaughter] = GetRootinos()->Particle(i);
         daughter_index[ndaughter] = i;
         pdg_list[ndaughter] 	  = PDG_ROOTINO;
 
@@ -161,7 +161,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 
         is_meson[ndaughter] = kFALSE;
 
-        daughter_list[ ndaughter] = &GetPhotons()->Particle(i);
+        daughter_list[ ndaughter] = GetPhotons()->Particle(i);
         daughter_index[ndaughter] = i;
         pdg_list[ndaughter] 	  = pdgDB->GetParticle("gamma")->PdgCode();;
 
@@ -185,7 +185,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 
         is_meson[ndaughter_full] = kFALSE;
 
-        daughter_list[ ndaughter_full] = &GetChargedPions()->Particle(i);
+        daughter_list[ ndaughter_full] = GetChargedPions()->Particle(i);
         daughter_index[ndaughter_full] = i;
         pdg_list[ndaughter_full] 	   = pdgDB->GetParticle("pi+")->PdgCode();;
 
@@ -203,9 +203,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     if ((diff_pi0 <= 1.0) && (diff_pi0 < diff_eta) && (diff_pi0 < diff_etap) && (ndaughter >= 2))
     {
 		// Add pi0 (charged pion list not included)
-        GetNeutralPions()->AddParticle(countRootinos, daughter_index, daughter_list,
-						countPhotons, &daughter_index[countRootinos], &daughter_list[countRootinos], 
-						0, &daughter_index[0], &daughter_list[0]);
+        GetNeutralPions()->AddParticle(countRootinos, countPhotons, 0, daughter_index, daughter_list);
 						
         // Remove GetRootinos() and GetPhotons() from original particle list
         GetRootinos()->RemoveParticles(countRootinos, daughter_index);
@@ -217,9 +215,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     else if ((diff_eta <= 1.0) && (diff_eta < diff_pi0) && (diff_eta < diff_etap) && (ndaughter_full >= 2))
     {
         // Add eta 
-        GetEtas()->AddParticle(countRootinos, daughter_index, daughter_list,
-						countPhotons, &daughter_index[countRootinos], &daughter_list[countRootinos], 
-						countChargedPi, &daughter_index[countRootinos+countPhotons], &daughter_list[countRootinos+countPhotons]);
+        GetEtas()->AddParticle(countRootinos, countPhotons, countChargedPi, daughter_index, daughter_list);
 
 		// Remove daughters from original particle list
         GetRootinos()->RemoveParticles(countRootinos, daughter_index);
@@ -232,9 +228,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     else if ((diff_etap <= 1.0) && (diff_etap < diff_pi0) && (diff_etap < diff_eta) && (ndaughter_full >= 2))
     {
         // Add eta prime
-        GetEtaPrimes()->AddParticle(countRootinos, daughter_index, daughter_list,
-						countPhotons, &daughter_index[countRootinos], &daughter_list[countRootinos], 
-						countChargedPi, &daughter_index[countRootinos+countPhotons], &daughter_list[countRootinos+countPhotons]);
+        GetEtaPrimes()->AddParticle(countRootinos, countPhotons, countChargedPi, daughter_index, daughter_list);
 
 		// Remove daughters from original particle list
         GetRootinos()->RemoveParticles(countRootinos, daughter_index);
@@ -256,15 +250,15 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     Int_t k = 0;
     for (Int_t i = 0; i < ndaughter; i++)
     {
-        if (daughter_list[i]->Theta() < mesonThetaMin) continue; // user rejected theta region
-        if (daughter_list[i]->Theta() > mesonThetaMax) continue; // user rejected theta region
+        if (daughter_list[i].Theta() < mesonThetaMin) continue; // user rejected theta region
+        if (daughter_list[i].Theta() > mesonThetaMax) continue; // user rejected theta region
 
         for (Int_t j = i+1; j < ndaughter; j++)
         {
-            if (daughter_list[j]->Theta() < mesonThetaMin) continue; // user rejected theta region
-            if (daughter_list[j]->Theta() > mesonThetaMax) continue; // user rejected theta region
+            if (daughter_list[j].Theta() < mesonThetaMin) continue; // user rejected theta region
+            if (daughter_list[j].Theta() > mesonThetaMax) continue; // user rejected theta region
 
-            TLorentzVector p4 = *daughter_list[i] + *daughter_list[j];
+            TLorentzVector p4 = daughter_list[i] + daughter_list[j];
 
             Double_t diff_pi0  = TMath::Abs( p4.M() - (pdgDB->GetParticle("pi0" )->Mass()*1000) )/widthNeutralPion;
             Double_t diff_eta  = TMath::Abs( p4.M() - (pdgDB->GetParticle("eta" )->Mass()*1000) )/widthEta;
@@ -319,7 +313,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         // Add to particle list
         if(tempID[sort_index[i]] == pdgDB->GetParticle("pi0")->PdgCode())
         {
-            GetNeutralPions()->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
+            GetNeutralPions()->AddParticle(daughter_index[index1[sort_index[i]]], daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
             if(index1[sort_index[i]] < countRootinos)
             {
                 index_rootino_delete[nIndex_rootino_delete] = daughter_index[index1[sort_index[i]]];
@@ -353,7 +347,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         }
         else if(tempID[sort_index[i]] == pdgDB->GetParticle("eta")->PdgCode())
         {
-            GetEtas()->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
+            GetEtas()->AddParticle(daughter_index[index1[sort_index[i]]], daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
             if(index1[sort_index[i]] < countRootinos)
             {
                 index_rootino_delete[nIndex_rootino_delete] = daughter_index[index1[sort_index[i]]];
@@ -387,7 +381,7 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
         }
         else if(tempID[sort_index[i]] == pdgDB->GetParticle("eta'")->PdgCode())
         {
-            GetEtaPrimes()->AddParticle(daughter_index[index1[sort_index[i]]], *daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], *daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
+            GetEtaPrimes()->AddParticle(daughter_index[index1[sort_index[i]]], daughter_list[index1[sort_index[i]]], pdg_list[index1[sort_index[i]]], daughter_index[index2[sort_index[i]]], daughter_list[index2[sort_index[i]]], pdg_list[index2[sort_index[i]]]);
             if(index1[sort_index[i]] < countRootinos)
             {
                 index_rootino_delete[nIndex_rootino_delete] = daughter_index[index1[sort_index[i]]];

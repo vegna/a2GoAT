@@ -1,7 +1,7 @@
 #include "GTreeTrack.h"
 
-GTreeTrack::GTreeTrack(GTreeManager *Manager)    :
-    GTree(Manager, TString("tracks")),
+GTreeTrack::GTreeTrack(GTreeManager *Manager, const TString& _Name)    :
+    GTree(Manager,_Name),
     nTracks(0)
 {
     for(Int_t i=0; i<GTreeTrack_MAX; i++)

@@ -59,7 +59,7 @@ GTreeManager::GTreeManager()    :
     setupParameters = new GTreeSetupParameters(this);
     eventParameters = new GTreeEventParameters(this);
     detectorHits = new GTreeDetectorHits(this);
-    tracks = new GTreeTrack(this);
+    tracks = new GTreeTrack(this, "tracks");
     tagger = new GTreeTagger(this);
     trigger = new GTreeTrigger(this);
     scalers = new GTreeScaler(this);
