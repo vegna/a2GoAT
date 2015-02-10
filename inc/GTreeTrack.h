@@ -17,9 +17,13 @@ class  GTreeTrack : public GTree
 public:
     enum
     {
-        APPARATUS_NONE  = 0,
-        APPARATUS_CB    = 1,
-        APPARATUS_TAPS  = 2
+        DETECTOR_NONE = 0,
+        DETECTOR_NaI = 1,
+        DETECTOR_PID = 2,
+        DETECTOR_MWPC = 4,
+        DETECTOR_BaF2 = 8,
+        DETECTOR_PbWO4 = 16,
+        DETECTOR_Veto = 32,
     };
 private:
     Int_t		nTracks;
@@ -30,7 +34,7 @@ private:
     Int_t       clusterSize[GTreeTrack_MAX];
     Int_t       centralCrystal[GTreeTrack_MAX];
     Int_t       centralVeto[GTreeTrack_MAX];
-    Int_t       apparatus[GTreeTrack_MAX];
+    Int_t       detectors[GTreeTrack_MAX];
     //Charged detector energies
     Double_t	vetoEnergy[GTreeTrack_MAX];
     Double_t	MWPC0Energy[GTreeTrack_MAX];
@@ -46,8 +50,8 @@ public:
 
     virtual void    Clear()     {nTracks = 0;}
 
-    const	Int_t*          GetApparatus()                      const	{return apparatus;}
-            Int_t           GetApparatus(const Int_t index)     const	{return apparatus[index];}
+    const	Int_t*          GetDetectors()                      const	{return detectors;}
+            Int_t           GetDetectors(const Int_t index)     const	{return detectors[index];}
     const	Int_t*          GetClusterSize()                    const	{return clusterSize;}
             Int_t           GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
     const	Int_t*          GetCentralCrystal()                   const	{return centralCrystal;}
@@ -58,9 +62,11 @@ public:
             Double_t        GetVetoEnergy(const Int_t index)    const	{return vetoEnergy[index];}
     const	Double_t*       GetClusterEnergy()                  const	{return clusterEnergy;}
             Double_t        GetClusterEnergy(const Int_t index) const	{return clusterEnergy[index];}
+            Int_t           GetNTracks()                        const	{return nTracks;}
     inline  Int_t           GetNCB()                            const;
-            Int_t           GetNTracks()                     const	{return nTracks;}
     inline  Int_t           GetNTAPS()                          const;
+    inline  Bool_t          HasCB(const Int_t index)            const;
+    inline  Bool_t          HasTAPS(const Int_t index)          const;
     const	Double_t*       GetPhi()                            const	{return phi;}
             Double_t        GetPhi(const Int_t index)           const	{return phi[index];}
             Double_t        GetPhiRad(const Int_t index)        const	{return phi[index] * TMath::DegToRad();}
@@ -112,17 +118,32 @@ Int_t		GTreeTrack::GetNCB()	const
     Int_t NCB = 0;
     for(Int_t i = 0; i < nTracks; i++)
     {
-        if (apparatus[i] == APPARATUS_CB) NCB++;
+        if (HasCB(i)) NCB++;
     }
     return NCB;
 }
+
 Int_t		GTreeTrack::GetNTAPS()	const
 {
     Int_t NTAPS = 0;
     for(Int_t i = 0; i < nTracks; i++)
     {
-        if (apparatus[i] == APPARATUS_TAPS) NTAPS++;
+        if (HasTAPS(i)) NTAPS++;
     }
     return NTAPS;
+}
+
+Bool_t      GTreeTrack::HasCB(const Int_t index) const
+{
+    if (detectors[index] & DETECTOR_NaI) return true;
+    if (detectors[index] & DETECTOR_PID) return true;
+    if (detectors[index] & DETECTOR_MWPC) return true;
+}
+
+Bool_t      GTreeTrack::HasTAPS(const Int_t index) const
+{
+    if (detectors[index] & DETECTOR_BaF2) return true;
+    if (detectors[index] & DETECTOR_PbWO4) return true;
+    if (detectors[index] & DETECTOR_Veto) return true;
 }
 #endif

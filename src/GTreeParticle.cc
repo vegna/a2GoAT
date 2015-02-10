@@ -32,7 +32,7 @@ void    GTreeParticle::SetBranchAdresses()
     inputTree->SetBranchAddress("clusterSize", clusterSize);
     inputTree->SetBranchAddress("centralCrystal", centralCrystal);
     inputTree->SetBranchAddress("centralVeto", centralVeto);
-    inputTree->SetBranchAddress("apparatus", apparatus);
+    inputTree->SetBranchAddress("detectors", detectors);
     inputTree->SetBranchAddress("vetoEnergy", vetoEnergy);
     inputTree->SetBranchAddress("MWPC0Energy", MWPC0Energy);
     inputTree->SetBranchAddress("MWPC1Energy", MWPC1Energy);
@@ -50,7 +50,7 @@ void    GTreeParticle::SetBranches()
     outputTree->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
     outputTree->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
     outputTree->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
-    outputTree->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+    outputTree->Branch("detectors", detectors, "detectors[nParticles]/I");
     outputTree->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
     outputTree->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
     outputTree->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
@@ -80,7 +80,7 @@ Bool_t	GTreeParticle::Write()
     return GTree::Write();
 }
 
-void    GTreeParticle::AddParticle(const Double_t _clusterEnergy, const Double_t _theta, const Double_t _phi, const Double_t _mass, const Double_t _time, const Int_t _clusterSize, const Int_t _centralCrystal, const Int_t _centralVeto, const Int_t _apparatus, const Double_t _vetoEnergy, const Double_t _MWPC0Energy, const Double_t _MWPC1Energy, const Int_t _trackIndex)
+void    GTreeParticle::AddParticle(const Double_t _clusterEnergy, const Double_t _theta, const Double_t _phi, const Double_t _mass, const Double_t _time, const Int_t _clusterSize, const Int_t _centralCrystal, const Int_t _centralVeto, const Int_t _detectors, const Double_t _vetoEnergy, const Double_t _MWPC0Energy, const Double_t _MWPC1Energy, const Int_t _trackIndex)
 {
     clusterEnergy[nParticles]  = _clusterEnergy;
     theta[nParticles]          = _theta;
@@ -90,7 +90,7 @@ void    GTreeParticle::AddParticle(const Double_t _clusterEnergy, const Double_t
     clusterSize[nParticles]    = _clusterSize;
     centralCrystal[nParticles] = _centralCrystal;
     centralVeto[nParticles]    = _centralVeto;
-    apparatus[nParticles]      = _apparatus;
+    detectors[nParticles]      = _detectors;
     vetoEnergy[nParticles]     = _vetoEnergy;
     MWPC0Energy[nParticles]    = _MWPC0Energy;
     MWPC1Energy[nParticles]    = _MWPC1Energy;
@@ -124,7 +124,7 @@ void    GTreeParticle::RemoveParticles(const Int_t nIndices, const Int_t* indice
             clusterSize[sort[i]]    = clusterSize[nParticles];
             centralCrystal[sort[i]] = centralCrystal[nParticles];
             centralVeto[sort[i]]    = centralVeto[nParticles];
-            apparatus[sort[i]]   = apparatus[nParticles];
+            detectors[sort[i]]   = detectors[nParticles];
             vetoEnergy[sort[i]]  = vetoEnergy[nParticles];
             MWPC0Energy[sort[i]] = MWPC0Energy[nParticles];
             MWPC1Energy[sort[i]] = MWPC1Energy[nParticles];
@@ -139,7 +139,7 @@ void    GTreeParticle::PrintParticle(const Int_t i) const
 {
     cout << "\tParticle " << i << ": " << endl;
     cout << "\tPx: " << Particle(i).Px() << "   Py: " << Particle(i).Py() << "   Pz: " << Particle(i).Pz() << "   E: " << Particle(i).E() << endl;
-    cout << "\tApparatus: " << apparatus[i] << "   clusterSize: " << clusterSize[i]  << endl;
+    cout << "\tDetectors: " << detectors[i] << "   clusterSize: " << clusterSize[i]  << endl;
     cout << "\tvetoEnergy: " << vetoEnergy[i] << "   MWPC0Energy: " << MWPC0Energy[i] << "   MWPC1Energy: " << MWPC1Energy[i]  << endl;
 }
 

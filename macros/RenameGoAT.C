@@ -109,7 +109,7 @@ void RunFile(TString sFile){
 
   Int_t nParticlesNew   = 0;
   Int_t *clusterSizeNew = new Int_t[128];
-  Int_t *apparatusNew   = new Int_t[128];
+  Int_t *detectors   = new Int_t[128];
 
   if(tracksOld){
     printf("         treeRawEvent to tracks\n");
@@ -156,7 +156,7 @@ void RunFile(TString sFile){
       }
       if(tracksOld->GetBranch("Apparatus")){
 	tracksOld->SetBranchAddress("Apparatus", apparatus);
-	tracks->Branch("apparatus", apparatusNew, "apparatus[nTracks]/I");
+	tracks->Branch("detectors", detectors, "detectors[nTracks]/I");
       }
       if(tracksOld->GetBranch("d_E")){
 	tracksOld->SetBranchAddress("d_E", vetoEnergy);
@@ -176,7 +176,16 @@ void RunFile(TString sFile){
       tracksOld->GetEvent(i);      
       for(Int_t j=0; j<nTracks; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
       }
       tracks->Fill();
     }
@@ -478,7 +487,7 @@ void RunFile(TString sFile){
       }
       if(rootinosOld->GetBranch("Apparatus")){
 	rootinosOld->SetBranchAddress("Apparatus", apparatus);
-	rootinos->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	rootinos->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(rootinosOld->GetBranch("d_E")){
 	rootinosOld->SetBranchAddress("d_E", vetoEnergy);
@@ -499,7 +508,16 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
       }
       rootinos->Fill();
     }
@@ -530,7 +548,7 @@ void RunFile(TString sFile){
       }
       if(photonsOld->GetBranch("Apparatus")){
 	photonsOld->SetBranchAddress("Apparatus", apparatus);
-	photons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	photons->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(photonsOld->GetBranch("d_E")){
 	photonsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -551,7 +569,16 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
       }
       photons->Fill();
     }
@@ -582,7 +609,7 @@ void RunFile(TString sFile){
       }
       if(electronsOld->GetBranch("Apparatus")){
 	electronsOld->SetBranchAddress("Apparatus", apparatus);
-	electrons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	electrons->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(electronsOld->GetBranch("d_E")){
 	electronsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -603,7 +630,16 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
       }
       electrons->Fill();
     }
@@ -634,7 +670,7 @@ void RunFile(TString sFile){
       }
       if(chargedPionsOld->GetBranch("Apparatus")){
 	chargedPionsOld->SetBranchAddress("Apparatus", apparatus);
-	chargedPions->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	chargedPions->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(chargedPionsOld->GetBranch("d_E")){
 	chargedPionsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -655,7 +691,16 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
       }
       chargedPions->Fill();
     }
@@ -686,7 +731,7 @@ void RunFile(TString sFile){
       }
       if(protonsOld->GetBranch("Apparatus")){
 	protonsOld->SetBranchAddress("Apparatus", apparatus);
-	protons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	protons->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(protonsOld->GetBranch("d_E")){
 	protonsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -707,7 +752,16 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
       }
       protons->Fill();
     }
@@ -738,7 +792,7 @@ void RunFile(TString sFile){
       }
       if(neutronsOld->GetBranch("Apparatus")){
 	neutronsOld->SetBranchAddress("Apparatus", apparatus);
-	neutrons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	neutrons->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(neutronsOld->GetBranch("d_E")){
 	neutronsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -760,7 +814,16 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
       }
     }
     neutrons->Write();
@@ -804,7 +867,7 @@ void RunFile(TString sFile){
       }
       if(neutralPionsOld->GetBranch("Apparatus")){
 	neutralPionsOld->SetBranchAddress("Apparatus", apparatus);
-	neutralPions->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	neutralPions->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("d_E")){
 	neutralPionsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -853,7 +916,21 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
+	else if(apparatus[j] == 3){
+	  if(clusterEnergy[j] > 0) detectors[j] += 9;
+	  if(vetoEnergy[j] > 0) detectors[j] += 34;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
 	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
 	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
 	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
@@ -888,7 +965,7 @@ void RunFile(TString sFile){
       }
       if(etasOld->GetBranch("Apparatus")){
 	etasOld->SetBranchAddress("Apparatus", apparatus);
-	etas->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	etas->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(etasOld->GetBranch("d_E")){
 	etasOld->SetBranchAddress("d_E", vetoEnergy);
@@ -937,7 +1014,21 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
+	else if(apparatus[j] == 3){
+	  if(clusterEnergy[j] > 0) detectors[j] += 9;
+	  if(vetoEnergy[j] > 0) detectors[j] += 34;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
 	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
 	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
 	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
@@ -972,7 +1063,7 @@ void RunFile(TString sFile){
       }
       if(etaPrimesOld->GetBranch("Apparatus")){
 	etaPrimesOld->SetBranchAddress("Apparatus", apparatus);
-	etaPrimes->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
+	etaPrimes->Branch("detectors", detectors, "detectors[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("d_E")){
 	etaPrimesOld->SetBranchAddress("d_E", vetoEnergy);
@@ -1021,7 +1112,21 @@ void RunFile(TString sFile){
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
-	apparatusNew[j] = (Int_t)apparatus[j];
+	detectors[j] = 0;
+	if(apparatus[j] == 1){
+	  if(clusterEnergy[j] > 0) detectors[j] += 1;
+	  if(vetoEnergy[j] > 0) detectors[j] += 2;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
+	else if(apparatus[j] == 2){
+	  if(clusterEnergy[j] > 0) detectors[j] += 8;
+	  if(vetoEnergy[j] > 0) detectors[j] += 32;
+	}
+	else if(apparatus[j] == 3){
+	  if(clusterEnergy[j] > 0) detectors[j] += 9;
+	  if(vetoEnergy[j] > 0) detectors[j] += 34;
+	  if(MWPC0Energy[j] > 0 || MWPC1Energy[j] > 0) detectors[j] += 4;
+	}
 	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
 	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
 	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
@@ -1051,7 +1156,7 @@ void RunFile(TString sFile){
   delete subChargedPions;
 
   delete clusterSizeNew;
-  delete apparatusNew;
+  delete detectors;
   delete nSubParticlesNew;
   delete nSubRootinosNew;
   delete nSubPhotonsNew;

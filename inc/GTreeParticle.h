@@ -26,7 +26,7 @@ public:
     GTreeParticle(GTreeManager *Manager, const TString& _Name);
     virtual ~GTreeParticle();
 
-            void            AddParticle(const Double_t _clusterEnergy = 0, const Double_t _theta = 0, const Double_t _phi = 0, const Double_t _mass = 0, const Double_t _time = 0, const Int_t _clusterSize = 0, const Int_t _centralCrystal = 0, const Int_t _centralVeto = 0, const Int_t _apparatus = 0, const Double_t _vetoEnergy = 0, const Double_t _MWPC0Energy = 0, const Double_t _MWPC1Energy = 0, const Int_t _trackIndex = -1);
+            void            AddParticle(const Double_t _clusterEnergy = 0, const Double_t _theta = 0, const Double_t _phi = 0, const Double_t _mass = 0, const Double_t _time = 0, const Int_t _clusterSize = 0, const Int_t _centralCrystal = 0, const Int_t _centralVeto = 0, const Int_t _detectors = 0, const Double_t _vetoEnergy = 0, const Double_t _MWPC0Energy = 0, const Double_t _MWPC1Energy = 0, const Int_t _trackIndex = -1);
     virtual void            Clear() {nParticles = 0;}
             Int_t           GetNParticles()                     const	{return nParticles;}
             Double_t        GetMass(const Int_t index)          const   {return mass[index];}
