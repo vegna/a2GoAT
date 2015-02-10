@@ -130,11 +130,11 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
 
     for (Int_t i = 0; i < GetRootinos()->GetNParticles(); i++)
     {
-        if (GetRootinos()->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
-        if (GetRootinos()->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
+        if (GetRootinos()->GetTheta(i) < mesonThetaMin) continue; // user rejected theta region
+        if (GetRootinos()->GetTheta(i) > mesonThetaMax) continue; // user rejected theta region
 		
 		// reject zero energy particles (no CB cluster involved)
-        if (GetRootinos()->Particle(i).T() == 0) continue;
+        if (GetRootinos()->GetClusterEnergy(i) == 0) continue;
 		
         is_meson[ndaughter] = kFALSE;
 
@@ -153,11 +153,11 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     }
     for (Int_t i = 0; i < GetPhotons()->GetNParticles(); i++)
     {
-        if (GetPhotons()->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
-        if (GetPhotons()->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
+        if (GetPhotons()->GetTheta(i) < mesonThetaMin) continue; // user rejected theta region
+        if (GetPhotons()->GetTheta(i) > mesonThetaMax) continue; // user rejected theta region
 
 		// reject zero energy particles (no CB cluster involved)
-        if (GetPhotons()->Particle(i).T() == 0) continue;
+        if (GetPhotons()->GetClusterEnergy(i) == 0) continue;
 
         is_meson[ndaughter] = kFALSE;
 
@@ -175,13 +175,13 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     }
     for (Int_t i = 0; i < GetChargedPions()->GetNParticles(); i++)
     {
-        if (GetChargedPions()->Particle(i).Theta() < mesonThetaMin) continue; // user rejected theta region
-        if (GetChargedPions()->Particle(i).Theta() > mesonThetaMax) continue; // user rejected theta region
+        if (GetChargedPions()->GetTheta(i) < mesonThetaMin) continue; // user rejected theta region
+        if (GetChargedPions()->GetTheta(i) > mesonThetaMax) continue; // user rejected theta region
 
 		// reject zero energy particles (no CB cluster involved)
 		// note, not currently possible for charged pions 
 		// included for completeness
-        if (GetChargedPions()->Particle(i).T() == 0) continue;
+        if (GetChargedPions()->GetClusterEnergy(i) == 0) continue;
 
         is_meson[ndaughter_full] = kFALSE;
 
@@ -250,14 +250,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     Int_t k = 0;
     for (Int_t i = 0; i < ndaughter; i++)
     {
-        if (daughter_list[i].Theta() < mesonThetaMin) continue; // user rejected theta region
-        if (daughter_list[i].Theta() > mesonThetaMax) continue; // user rejected theta region
-
         for (Int_t j = i+1; j < ndaughter; j++)
         {
-            if (daughter_list[j].Theta() < mesonThetaMin) continue; // user rejected theta region
-            if (daughter_list[j].Theta() > mesonThetaMax) continue; // user rejected theta region
-
             TLorentzVector p4 = daughter_list[i] + daughter_list[j];
 
             Double_t diff_pi0  = TMath::Abs( p4.M() - (pdgDB->GetParticle("pi0" )->Mass()*1000) )/widthNeutralPion;
