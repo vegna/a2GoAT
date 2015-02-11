@@ -11,8 +11,8 @@ GTreeTrack::GTreeTrack(GTreeManager *Manager, const TString& _Name)    :
         phi[i] = 0;
         time[i] = 0;
         clusterSize[i] = 0;
-        centralCrystal[i] = 0;
-        centralVeto[i] = 0;
+        centralCrystal[i] = -1;
+        centralVeto[i] = -1;
         detectors[i] = 0;
         //Charged detector energies
         vetoEnergy[i] = 0;

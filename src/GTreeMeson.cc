@@ -11,6 +11,7 @@ GTreeMeson::GTreeMeson(GTreeManager *Manager, const TString& _Name)    :
         nSubRootinos[i]   = 0;
         nSubPhotons[i]    = 0;
         nSubChargedPions[i]  = 0;
+        trackIndex[i]     = 0;
     }
 }
 
@@ -43,19 +44,13 @@ void    GTreeMeson::SetBranches()
 
 void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, const Int_t _NSubPhotons, const Int_t _NSubChargedPions, Int_t* subParticles_index, TLorentzVector* subParticles_list)
 {
-    detectors[nParticles]    = GTreeTrack::DETECTOR_NONE;
-    time[nParticles]         = 0;
-    clusterSize[nParticles]  = 0;
-    vetoEnergy[nParticles]   = 0;
-    MWPC0Energy[nParticles]  = 0;
-    MWPC1Energy[nParticles]  = 0;
-    trackIndex[nParticles]   = 0;
-
     nSubParticles[nParticles]  = _NSubRootinos + _NSubPhotons + _NSubChargedPions;
     nSubRootinos[nParticles]   = _NSubRootinos;
     nSubPhotons[nParticles]    = _NSubPhotons;
     nSubChargedPions[nParticles]  = _NSubChargedPions;
+
     TLorentzVector sum;
+
     for(Int_t i=0; i<_NSubRootinos; i++)
     {
         sum += subParticles_list[i];
@@ -89,6 +84,7 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, const Int_t _NSubPhot
         MWPC1Energy[nParticles]  += manager->chargedPions->GetMWPC1Energy(subParticles_index[i]);
         trackIndex[nParticles]   += 1<<(manager->chargedPions->GetTrackIndex(subParticles_index[i]));
     }
+
     clusterEnergy[nParticles] = sum.E()-sum.M();
     theta[nParticles] = sum.Theta()*TMath::RadToDeg();
     phi[nParticles] = sum.Phi()*TMath::RadToDeg();
@@ -105,6 +101,8 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
     nSubRootinos[nParticles]   = 0;
     nSubPhotons[nParticles]    = 0;
     nSubChargedPions[nParticles]  = 0;
+
+    TLorentzVector sum = subParticle0 + subParticle1;
 
     if(pdg0 == manager->pdgDB->GetParticle("gamma")->PdgCode())
     {
@@ -173,7 +171,7 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
         trackIndex[nParticles]   += 1<<(manager->rootinos->GetTrackIndex(subParticle_index1));
         nSubRootinos[nParticles]++;
     }
-    TLorentzVector sum = subParticle0 + subParticle1;
+
     clusterEnergy[nParticles] = sum.E()-sum.M();
     theta[nParticles] = sum.Theta()*TMath::RadToDeg();
     phi[nParticles] = sum.Phi()*TMath::RadToDeg();
