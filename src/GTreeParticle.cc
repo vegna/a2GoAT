@@ -10,7 +10,7 @@ GTreeParticle::GTreeParticle(GTreeManager *Manager, const TString& _Name)    :
     GTreeTrack(Manager,_Name),
     nParticles(0)
 {
-    for(Int_t i=0; i<GTreeParticle_MAX; i++)
+    for(Int_t i=0; i<GTreeTrack_MAX; i++)
     {
         mass[i]       = 0;
         trackIndex[i] = -1;

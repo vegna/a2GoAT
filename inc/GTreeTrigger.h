@@ -2,7 +2,9 @@
 #define __GTreeTrigger_h__
 
 
+#include "Rtypes.h"
 #include "GTree.h"
+
 
 #define GTreeTrigger_MAX 256
 

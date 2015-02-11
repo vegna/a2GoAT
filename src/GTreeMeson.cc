@@ -5,7 +5,7 @@
 GTreeMeson::GTreeMeson(GTreeManager *Manager, const TString& _Name)    :
     GTreeParticle(Manager, _Name)
 {
-    for(Int_t i=0; i<GTreeParticle_MAX; i++)
+    for(Int_t i=0; i<GTreeTrack_MAX; i++)
     {
         nSubParticles[i]  = 0;
         nSubRootinos[i]   = 0;
@@ -193,7 +193,7 @@ void    GTreeMeson::Print() const
     }
 }
 
-Int_t               nSubParticles[GTreeParticle_MAX];
-Int_t               nSubRootinos[GTreeParticle_MAX];
-Int_t               nSubPhotons[GTreeParticle_MAX];
-Int_t               nSubChargedPions[GTreeParticle_MAX];
+Int_t               nSubParticles[GTreeTrack_MAX];
+Int_t               nSubRootinos[GTreeTrack_MAX];
+Int_t               nSubPhotons[GTreeTrack_MAX];
+Int_t               nSubChargedPions[GTreeTrack_MAX];

@@ -2,9 +2,7 @@
 #define __GTreeMeson_h__
 
 
-#include <TClonesArray.h>
-#include <TLorentzVector.h>
-
+#include "Rtypes.h"
 #include "GTreeParticle.h"
 
 
@@ -19,10 +17,10 @@ using namespace std;
 class  GTreeMeson   : public GTreeParticle
 {
 private:
-    Int_t             nSubParticles[GTreeParticle_MAX];
-    Int_t             nSubRootinos[GTreeParticle_MAX];
-    Int_t             nSubPhotons[GTreeParticle_MAX];
-    Int_t             nSubChargedPions[GTreeParticle_MAX];
+    Int_t             nSubParticles[GTreeTrack_MAX];
+    Int_t             nSubRootinos[GTreeTrack_MAX];
+    Int_t             nSubPhotons[GTreeTrack_MAX];
+    Int_t             nSubChargedPions[GTreeTrack_MAX];
 
 protected:
     virtual void    SetBranchAdresses();

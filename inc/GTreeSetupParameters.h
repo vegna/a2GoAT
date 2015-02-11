@@ -2,6 +2,7 @@
 #define __GTreeSetupParameters_h__
 
 
+#include "Rtypes.h"
 #include "GTree.h"
 
 

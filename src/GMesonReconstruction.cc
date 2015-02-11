@@ -290,8 +290,8 @@ Bool_t  GMesonReconstruction::ProcessEventWithoutFilling()
     Int_t		nIndex_rootino_delete    = 0;
     Int_t		nIndex_photon_delete    = 0;
  //   Int_t		nIndex_chargedPion_delete = 0;
-    Int_t		index_rootino_delete[GTreeParticle_MAX];
-    Int_t		index_photon_delete[GTreeParticle_MAX];
+    Int_t		index_rootino_delete[GTreeTrack_MAX];
+    Int_t		index_photon_delete[GTreeTrack_MAX];
   //  Int_t		index_chargedPion_delete[GTreeParticle_MaxEntries];
 
     for (Int_t i = 0; i < k; i++)

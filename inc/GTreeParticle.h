@@ -5,7 +5,6 @@
 #include "Rtypes.h"
 #include "GTreeTrack.h"
 
-#define GTreeParticle_MAX 128
 
 class   GTreeMeson;
 
@@ -13,8 +12,8 @@ class  GTreeParticle    : public GTreeTrack
 {
 private:
     Int_t               nParticles;
-    Double_t            mass[GTreeParticle_MAX];
-    Int_t               trackIndex[GTreeParticle_MAX];  // index of the corresponding tack in the track list, -1 => No track
+    Double_t            mass[GTreeTrack_MAX];
+    Int_t               trackIndex[GTreeTrack_MAX];  // index of the corresponding tack in the track list, -1 => No track
 
 
 protected:
