@@ -99,13 +99,20 @@ void RunFile(TString sFile){
     delete taggedTime;
   }
 
-  UInt_t nParticles     = 0;
-  Double_t *time        = new Double_t[128];
-  UChar_t *clusterSize  = new UChar_t[128];
-  UChar_t *apparatus    = new UChar_t[128];
-  Double_t *vetoEnergy  = new Double_t[128];
-  Double_t *MWPC0Energy = new Double_t[128];
-  Double_t *MWPC1Energy = new Double_t[128];
+  UInt_t nParticles       = 0;
+  Double_t *clusterEnergy = new Double_t[128];
+  Double_t *theta         = new Double_t[128];
+  Double_t *phi           = new Double_t[128];
+  Double_t *mass          = new Double_t[128];
+  Double_t *time          = new Double_t[128];
+  UChar_t *clusterSize    = new UChar_t[128];
+  Int_t *centralCrystal   = new Int_t[128];
+  Int_t *centralVeto      = new Int_t[128];
+  UChar_t *apparatus      = new UChar_t[128];
+  Double_t *vetoEnergy    = new Double_t[128];
+  Double_t *MWPC0Energy   = new Double_t[128];
+  Double_t *MWPC1Energy   = new Double_t[128];
+  Int_t *trackIndex       = new Int_t[128];
 
   Int_t nParticlesNew   = 0;
   Int_t *clusterSizeNew = new Int_t[128];
@@ -115,11 +122,6 @@ void RunFile(TString sFile){
     printf("         treeRawEvent to tracks\n");
 
     Int_t nTracks           = 0;
-    Double_t *clusterEnergy = new Double_t[128];
-    Double_t *theta         = new Double_t[128];
-    Double_t *phi           = new Double_t[128];
-    Int_t *centralCrystal   = new Int_t[128];
-    Int_t *centralVeto      = new Int_t[128];
 
     TTree *tracks = new TTree("tracks", "tracks");
 
@@ -192,12 +194,6 @@ void RunFile(TString sFile){
     tracks->Write();
 
     delete tracks;
-
-    delete clusterEnergy;
-    delete theta;
-    delete phi;
-    delete centralCrystal;
-    delete centralVeto;
   }
 
   if(detectorHitsOld){
@@ -465,6 +461,14 @@ void RunFile(TString sFile){
     delete eventParameters;
   }
 
+  for(Int_t i=0; i<128; i++){
+    centralCrystal[i] = -1;
+    centralVeto[i] = -1;
+    trackIndex[i] = -1;
+  }
+
+  TLorentzVector *particle;
+
   if(rootinosOld){
     printf("         rootino to rootinos\n");
 
@@ -475,7 +479,10 @@ void RunFile(TString sFile){
       rootinos->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(rootinosOld->GetBranch("particles.")){
 	rootinosOld->SetBranchAddress("particles.", &particles);
-	rootinos->Branch("particles", &particles, 32000, 0);
+	rootinos->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	rootinos->Branch("theta", theta, "theta[nParticles]/D");
+	rootinos->Branch("phi", phi, "phi[nParticles]/D");
+	rootinos->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(rootinosOld->GetBranch("time")){
 	rootinosOld->SetBranchAddress("time", time);
@@ -485,6 +492,8 @@ void RunFile(TString sFile){
 	rootinosOld->SetBranchAddress("clusterSize", clusterSize);
 	rootinos->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      rootinos->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      rootinos->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(rootinosOld->GetBranch("Apparatus")){
 	rootinosOld->SetBranchAddress("Apparatus", apparatus);
 	rootinos->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -501,12 +510,18 @@ void RunFile(TString sFile){
 	rootinosOld->SetBranchAddress("WC1_E", MWPC1Energy);
 	rootinos->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
       }
+      rootinos->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<rootinosOld->GetEntries(); i++){
       rootinosOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -536,7 +551,10 @@ void RunFile(TString sFile){
       photons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(photonsOld->GetBranch("particles.")){
 	photonsOld->SetBranchAddress("particles.", &particles);
-	photons->Branch("particles", &particles, 32000, 0);
+	photons->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	photons->Branch("theta", theta, "theta[nParticles]/D");
+	photons->Branch("phi", phi, "phi[nParticles]/D");
+	photons->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(photonsOld->GetBranch("time")){
 	photonsOld->SetBranchAddress("time", time);
@@ -546,6 +564,8 @@ void RunFile(TString sFile){
 	photonsOld->SetBranchAddress("clusterSize", clusterSize);
 	photons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      photons->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      photons->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(photonsOld->GetBranch("Apparatus")){
 	photonsOld->SetBranchAddress("Apparatus", apparatus);
 	photons->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -562,12 +582,18 @@ void RunFile(TString sFile){
 	photonsOld->SetBranchAddress("WC1_E", MWPC1Energy);
 	photons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
       }
+      photons->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<photonsOld->GetEntries(); i++){
       photonsOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -597,7 +623,10 @@ void RunFile(TString sFile){
       electrons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(electronsOld->GetBranch("particles.")){
 	electronsOld->SetBranchAddress("particles.", &particles);
-	electrons->Branch("particles", &particles, 32000, 0);
+	electrons->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	electrons->Branch("theta", theta, "theta[nParticles]/D");
+	electrons->Branch("phi", phi, "phi[nParticles]/D");
+	electrons->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(electronsOld->GetBranch("time")){
 	electronsOld->SetBranchAddress("time", time);
@@ -607,6 +636,8 @@ void RunFile(TString sFile){
 	electronsOld->SetBranchAddress("clusterSize", clusterSize);
 	electrons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      electrons->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      electrons->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(electronsOld->GetBranch("Apparatus")){
 	electronsOld->SetBranchAddress("Apparatus", apparatus);
 	electrons->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -623,12 +654,18 @@ void RunFile(TString sFile){
 	electronsOld->SetBranchAddress("WC1_E", MWPC1Energy);
 	electrons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
       }
+      electrons->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<electronsOld->GetEntries(); i++){
       electronsOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -658,7 +695,10 @@ void RunFile(TString sFile){
       chargedPions->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(chargedPionsOld->GetBranch("particles.")){
 	chargedPionsOld->SetBranchAddress("particles.", &particles);
-	chargedPions->Branch("particles", &particles, 32000, 0);
+	chargedPions->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	chargedPions->Branch("theta", theta, "theta[nParticles]/D");
+	chargedPions->Branch("phi", phi, "phi[nParticles]/D");
+	chargedPions->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(chargedPionsOld->GetBranch("time")){
 	chargedPionsOld->SetBranchAddress("time", time);
@@ -668,6 +708,8 @@ void RunFile(TString sFile){
 	chargedPionsOld->SetBranchAddress("clusterSize", clusterSize);
 	chargedPions->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      chargedPions->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      chargedPions->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(chargedPionsOld->GetBranch("Apparatus")){
 	chargedPionsOld->SetBranchAddress("Apparatus", apparatus);
 	chargedPions->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -684,12 +726,18 @@ void RunFile(TString sFile){
 	chargedPionsOld->SetBranchAddress("WC1_E", MWPC1Energy);
 	chargedPions->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
       }
+      chargedPions->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<chargedPionsOld->GetEntries(); i++){
       chargedPionsOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -719,7 +767,10 @@ void RunFile(TString sFile){
       protons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(protonsOld->GetBranch("particles.")){
 	protonsOld->SetBranchAddress("particles.", &particles);
-	protons->Branch("particles", &particles, 32000, 0);
+	protons->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	protons->Branch("theta", theta, "theta[nParticles]/D");
+	protons->Branch("phi", phi, "phi[nParticles]/D");
+	protons->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(protonsOld->GetBranch("time")){
 	protonsOld->SetBranchAddress("time", time);
@@ -729,6 +780,8 @@ void RunFile(TString sFile){
 	protonsOld->SetBranchAddress("clusterSize", clusterSize);
 	protons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      protons->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      protons->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(protonsOld->GetBranch("Apparatus")){
 	protonsOld->SetBranchAddress("Apparatus", apparatus);
 	protons->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -745,12 +798,18 @@ void RunFile(TString sFile){
 	protonsOld->SetBranchAddress("WC1_E", MWPC1Energy);
 	protons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
       }
+      protons->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<protonsOld->GetEntries(); i++){
       protonsOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -780,7 +839,10 @@ void RunFile(TString sFile){
       neutrons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(neutronsOld->GetBranch("particles.")){
 	neutronsOld->SetBranchAddress("particles.", &particles);
-	neutrons->Branch("particles", &particles, 32000, 0);
+	neutrons->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	neutrons->Branch("theta", theta, "theta[nParticles]/D");
+	neutrons->Branch("phi", phi, "phi[nParticles]/D");
+	neutrons->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(neutronsOld->GetBranch("time")){
 	neutronsOld->SetBranchAddress("time", time);
@@ -790,6 +852,8 @@ void RunFile(TString sFile){
 	neutronsOld->SetBranchAddress("clusterSize", clusterSize);
 	neutrons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      neutrons->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      neutrons->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(neutronsOld->GetBranch("Apparatus")){
 	neutronsOld->SetBranchAddress("Apparatus", apparatus);
 	neutrons->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -806,6 +870,7 @@ void RunFile(TString sFile){
 	neutronsOld->SetBranchAddress("WC1_E", MWPC1Energy);
 	neutrons->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
       }
+      neutrons->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<neutronsOld->GetEntries(); i++){
@@ -813,6 +878,11 @@ void RunFile(TString sFile){
       neutrons->Fill();
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -831,14 +901,12 @@ void RunFile(TString sFile){
     delete neutrons;
   }
 
+  for(Int_t i=0; i<128; i++) trackIndex[i] = 0;
+
   UChar_t *nSubParticles    = new UChar_t[64];
   UChar_t *nSubRootinos     = new UChar_t[64];
   UChar_t *nSubPhotons      = new UChar_t[64];
   UChar_t *nSubChargedPions = new UChar_t[64];
-    
-  TClonesArray *subRootinos     = new TClonesArray("TLorentzVector", 64);
-  TClonesArray *subPhotons      = new TClonesArray("TLorentzVector", 64);
-  TClonesArray *subChargedPions = new TClonesArray("TLorentzVector", 64);
 
   Int_t *nSubParticlesNew    = new Int_t[64];
   Int_t *nSubRootinosNew     = new Int_t[64];
@@ -855,7 +923,10 @@ void RunFile(TString sFile){
       neutralPions->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(neutralPionsOld->GetBranch("particles.")){
 	neutralPionsOld->SetBranchAddress("particles.", &particles);
-	neutralPions->Branch("particles", &particles, 32000, 0);
+	neutralPions->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	neutralPions->Branch("theta", theta, "theta[nParticles]/D");
+	neutralPions->Branch("phi", phi, "phi[nParticles]/D");
+	neutralPions->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(neutralPionsOld->GetBranch("time")){
 	neutralPionsOld->SetBranchAddress("time", time);
@@ -865,6 +936,8 @@ void RunFile(TString sFile){
 	neutralPionsOld->SetBranchAddress("clusterSize", clusterSize);
 	neutralPions->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      neutralPions->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      neutralPions->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(neutralPionsOld->GetBranch("Apparatus")){
 	neutralPionsOld->SetBranchAddress("Apparatus", apparatus);
 	neutralPions->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -897,24 +970,18 @@ void RunFile(TString sFile){
 	neutralPionsOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
 	neutralPions->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
-      if(neutralPionsOld->GetBranch("subRootinos")){
-	neutralPionsOld->SetBranchAddress("subRootinos", &subRootinos);
-	neutralPions->Branch("subRootinos", &subRootinos, 32, 0);
-      }
-      if(neutralPionsOld->GetBranch("subPhotons")){
-	neutralPionsOld->SetBranchAddress("subPhotons", &subPhotons);
-	neutralPions->Branch("subPhotons", &subPhotons, 32, 0);
-      }
-      if(neutralPionsOld->GetBranch("subChargedPi")){
-	neutralPionsOld->SetBranchAddress("subChargedPi", &subChargedPions);
-	neutralPions->Branch("subChargedPions", &subChargedPions, 32, 0);
-      }
+      neutralPions->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<neutralPionsOld->GetEntries(); i++){
       neutralPionsOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -953,7 +1020,10 @@ void RunFile(TString sFile){
       etas->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(etasOld->GetBranch("particles.")){
 	etasOld->SetBranchAddress("particles.", &particles);
-	etas->Branch("particles", &particles, 32000, 0);
+	etas->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	etas->Branch("theta", theta, "theta[nParticles]/D");
+	etas->Branch("phi", phi, "phi[nParticles]/D");
+	etas->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(etasOld->GetBranch("time")){
 	etasOld->SetBranchAddress("time", time);
@@ -963,6 +1033,8 @@ void RunFile(TString sFile){
 	etasOld->SetBranchAddress("clusterSize", clusterSize);
 	etas->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      etas->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      etas->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(etasOld->GetBranch("Apparatus")){
 	etasOld->SetBranchAddress("Apparatus", apparatus);
 	etas->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -995,24 +1067,18 @@ void RunFile(TString sFile){
 	etasOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
 	etas->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
-      if(etasOld->GetBranch("subRootinos")){
-	etasOld->SetBranchAddress("subRootinos", &subRootinos);
-	etas->Branch("subRootinos", &subRootinos, 32, 0);
-      }
-      if(etasOld->GetBranch("subPhotons")){
-	etasOld->SetBranchAddress("subPhotons", &subPhotons);
-	etas->Branch("subPhotons", &subPhotons, 32, 0);
-      }
-      if(etasOld->GetBranch("subChargedPi")){
-	etasOld->SetBranchAddress("subChargedPi", &subChargedPions);
-	etas->Branch("subChargedPions", &subChargedPions, 32, 0);
-      }
+      etas->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<etasOld->GetEntries(); i++){
       etasOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -1051,7 +1117,10 @@ void RunFile(TString sFile){
       etaPrimes->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(etaPrimesOld->GetBranch("particles.")){
 	etaPrimesOld->SetBranchAddress("particles.", &particles);
-	etaPrimes->Branch("particles", &particles, 32000, 0);
+	etaPrimes->Branch("clusterEnergy", clusterEnergy, "clusterEnergy[nParticles]/D");
+	etaPrimes->Branch("theta", theta, "theta[nParticles]/D");
+	etaPrimes->Branch("phi", phi, "phi[nParticles]/D");
+	etaPrimes->Branch("mass", mass, "mass[nParticles]/D");
       }
       if(etaPrimesOld->GetBranch("time")){
 	etaPrimesOld->SetBranchAddress("time", time);
@@ -1061,6 +1130,8 @@ void RunFile(TString sFile){
 	etaPrimesOld->SetBranchAddress("clusterSize", clusterSize);
 	etaPrimes->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
+      etaPrimes->Branch("centralCrystal", centralCrystal, "centralCrystal[nParticles]/I");
+      etaPrimes->Branch("centralVeto", centralVeto, "centralVeto[nParticles]/I");
       if(etaPrimesOld->GetBranch("Apparatus")){
 	etaPrimesOld->SetBranchAddress("Apparatus", apparatus);
 	etaPrimes->Branch("detectors", detectors, "detectors[nParticles]/I");
@@ -1093,24 +1164,18 @@ void RunFile(TString sFile){
 	etaPrimesOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
 	etaPrimes->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
-      if(etaPrimesOld->GetBranch("subRootinos")){
-	etaPrimesOld->SetBranchAddress("subRootinos", &subRootinos);
-	etaPrimes->Branch("subRootinos", &subRootinos, 32, 0);
-      }
-      if(etaPrimesOld->GetBranch("subPhotons")){
-	etaPrimesOld->SetBranchAddress("subPhotons", &subPhotons);
-	etaPrimes->Branch("subPhotons", &subPhotons, 32, 0);
-      }
-      if(etaPrimesOld->GetBranch("subChargedPi")){
-	etaPrimesOld->SetBranchAddress("subChargedPi", &subChargedPions);
-	etaPrimes->Branch("subChargedPions", &subChargedPions, 32, 0);
-      }
+      etaPrimes->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
     }
 
     for(Int_t i=0; i<etaPrimesOld->GetEntries(); i++){
       etaPrimesOld->GetEvent(i);
       nParticlesNew = (Int_t)nParticles;
       for(Int_t j=0; j<nParticlesNew; j++){
+	particle = (TLorentzVector*)particles->At(j);
+	clusterEnergy[j] = (particle->E()-particle->M());
+	theta[j] = (TMath::RadToDeg()*particle->Theta());
+	phi[j] = (TMath::RadToDeg()*particle->Phi());
+	mass[j] = particle->M();
 	clusterSizeNew[j] = (Int_t)clusterSize[j];
 	detectors[j] = 0;
 	if(apparatus[j] == 1){
@@ -1139,24 +1204,27 @@ void RunFile(TString sFile){
     delete etaPrimes;
   }
 
+  delete clusterEnergy;
+  delete theta;
+  delete phi;
+  delete mass;
   delete time;
   delete clusterSize;
+  delete clusterSizeNew;
+  delete centralCrystal;
+  delete centralVeto;
   delete apparatus;
+  delete detectors;
   delete vetoEnergy;
   delete MWPC0Energy;
   delete MWPC1Energy;
+  delete trackIndex;
 
   delete nSubParticles;
   delete nSubRootinos;
   delete nSubPhotons;
   delete nSubChargedPions;
-    
-  delete subRootinos;
-  delete subPhotons;
-  delete subChargedPions;
 
-  delete clusterSizeNew;
-  delete detectors;
   delete nSubParticlesNew;
   delete nSubRootinosNew;
   delete nSubPhotonsNew;
