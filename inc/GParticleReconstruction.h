@@ -6,64 +6,59 @@
 
 #include "GDataChecks.h"
 
-#define	pdg_rootino 0
+#define	PDG_ROOTINO 0
 
 class	GParticleReconstruction : public GDataChecks
 {
 public:
-    enum ReconType
+    enum ReconstructType
     {
-        Recon_None         = 0,
-        Recon_dE_Proton    = 1,
-        Recon_dE_Pion      = 2,
-        Recon_dE_Electron  = 4,
-        Recon_TOF          = 8,
-        Recon_ClustSize    = 16,
-        Recon_AllPhotons   = 32,
-        Recon_AllProtons   = 64
+        ReconstructNone         = 0,
+        ReconstructCutProton    = 1,
+        ReconstructCutPion      = 2,
+        ReconstructCutElectron  = 4,
+        ReconstructTimeOfFlight = 8,
+        ReconstructClusterSize  = 16,
+        ReconstructAllPhotons   = 32,
+        ReconstructAllProtons   = 64
     };
 
 private:
 	std::string config;
 
-    ReconType   CB_type;
-    ReconType   TAPS_type;
+    ReconstructType   typeCB;
+    ReconstructType   typeTAPS;
 
-    char 		cutfilename[256];
-    char 		cutname[256];
+    TCutG* 		cutProtonCB;
+    TCutG* 		cutPionCB;
+    TCutG*		cutElectronCB;
+    TCutG* 		cutProtonTAPS;
+    TCutG* 		cutPionTAPS;
+    TCutG*		cutElectronTAPS;
 
-    TFile* 		CutFile;
-    TCutG* 		Cut;
-    TCutG* 		Cut_CB_proton;
-    TCutG* 		Cut_CB_pion;
-    TCutG*		Cut_CB_electron;
-    TCutG* 		Cut_TAPS_proton;
-    TCutG* 		Cut_TAPS_pion;
-    TCutG*		Cut_TAPS_electron;
+    TCutG* 		cutTimeOfFlightCB;
+    TCutG* 		cutClusterSizeCB;
+    TCutG* 		cutTimeOfFlightTAPS;
+    TCutG* 		cutClusterSizeTAPS;
 
-    TCutG* 		Cut_CB_TOF;
-    TCutG* 		Cut_CB_ClustSize;
-    TCutG* 		Cut_TAPS_TOF;
-    TCutG* 		Cut_TAPS_ClustSize;
+    Double_t	chargedThetaMin;
+    Double_t	chargedThetaMax;
 
-    Double_t	charged_theta_min;
-    Double_t	charged_theta_max;
+    Int_t* 		identified;
+    Int_t* 		charge;
+    Int_t* 		hadron;
 
-    Int_t* 		Identified;
-    Int_t* 		Charge;
-    Int_t* 		Hadron;
+    Bool_t 		chargeIgnorePID;
+    Bool_t 		chargeIgnoreMWPC0;
+    Bool_t 		chargeIgnoreMWPC1;
+    Bool_t 		chargeIgnoreVETO;
 
-    Bool_t 		charge_ignore_PID;
-    Bool_t 		charge_ignore_WC0;
-    Bool_t 		charge_ignore_WC1;
-    Bool_t 		charge_ignore_VETO;    
+    Double_t    timeCutCB[2];
+    Double_t    timeCutTAPS[2];
 
-    Double_t    CBTimeCut[2];
-    Double_t    TAPSTimeCut[2];
-
-    Bool_t      DoScalerCorrection;
-    Bool_t      DoTrigger;
-    Double_t    E_Sum;
+    Bool_t      doScalerCorrection;
+    Bool_t      doTrigger;
+    Double_t    energySum;
     Int_t       multiplicity;
 
     TCutG*	OpenCutFile(Char_t* filename, Char_t* cutname);
@@ -79,11 +74,11 @@ public:
     virtual ~GParticleReconstruction();
 
     Bool_t	Init();
-    void    SetCBTimeCut(const Double_t min, const Double_t max)    {CBTimeCut[0]=min; CBTimeCut[1]=max;}
-    void    SetTAPSTimeCut(const Double_t min, const Double_t max)  {TAPSTimeCut[0]=min; TAPSTimeCut[1]=max;}
-    void    SetScalerCorrection(const Bool_t value)                 {DoScalerCorrection = value;}
-    void    SetTrigger(const Double_t esum, const Int_t mult)       {DoTrigger = kTRUE; E_Sum = esum; multiplicity = mult;}
-    void    SetThetaRangeChargedParticles(const Double_t min, const Double_t max)  {charged_theta_min = min; charged_theta_max = max;}
+    void    SetCBTimeCut(const Double_t min, const Double_t max)    {timeCutCB[0]=min; timeCutCB[1]=max;}
+    void    SetTAPSTimeCut(const Double_t min, const Double_t max)  {timeCutTAPS[0]=min; timeCutTAPS[1]=max;}
+    void    SetScalerCorrection(const Bool_t value)                 {doScalerCorrection = value;}
+    void    SetTrigger(const Double_t esum, const Int_t mult)       {doTrigger = kTRUE; energySum = esum; multiplicity = mult;}
+    void    SetThetaRangeChargedParticles(const Double_t min, const Double_t max)  {chargedThetaMin = min; chargedThetaMax = max;}
 };
 
 #endif

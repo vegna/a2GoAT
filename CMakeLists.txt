@@ -32,7 +32,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 set(GOAT_BASE
    inc/GTree.h
-   inc/GTreeRawEvent.h
+   inc/GTreeTrack.h
    inc/GTreeDetectorHits.h
    inc/GTreeTagger.h
    inc/GTreeLinPol.h
@@ -40,12 +40,14 @@ set(GOAT_BASE
    inc/GTreeParticle.h
    inc/GTreeMeson.h
    inc/GTreeTrigger.h
+   inc/GTreeSetupParameters.h
    inc/GTreeEventParameters.h
+   inc/GTreeA2Geant.h
    inc/GHistManager.h
    inc/GTreeManager.h
-   inc/GConfigFile.h
+   inc/GConfigFile.h   
    src/GTree.cc
-   src/GTreeRawEvent.cc
+   src/GTreeTrack.cc
    src/GTreeDetectorHits.cc
    src/GTreeTagger.cc
    src/GTreeLinPol.cc
@@ -53,17 +55,12 @@ set(GOAT_BASE
    src/GTreeParticle.cc
    src/GTreeMeson.cc
    src/GTreeTrigger.cc
+   src/GTreeSetupParameters.cc
    src/GTreeEventParameters.cc
+   src/GTreeA2Geant.cc
    src/GHistManager.cc
    src/GTreeManager.cc
    src/GConfigFile.cc
-   src/GDataChecks.cc
-   src/GParticleReconstruction.cc
-   src/GMesonReconstruction.cc
-   src/GSort.cc
-   src/GoAT.cc
-   inc/GTreeA2Geant.h
-   src/GTreeA2Geant.cc
 )
 
 set(GOAT_GHIST

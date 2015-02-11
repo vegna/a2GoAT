@@ -76,7 +76,7 @@ void	GHistScaCor2::SetBins(Int_t nx, Double_t xmin, Double_t xmax, Int_t ny, Dou
     buffer->SetBins(nx, xmin, xmax, ny, ymin, ymax);
     accumulated->SetBins(nx, xmin, xmax, ny, ymin, ymax);
     accumulatedCorrected->SetBins(nx, xmin, xmax, ny, ymin, ymax);
-    for(int i=0; i<singleScalerReads.GetEntriesFast(); i++)
+    for(Int_t i=0; i<singleScalerReads.GetEntriesFast(); i++)
     {
         ((TH1D*)singleScalerReads.At(i))->SetBins(nx, xmin, xmax, ny, ymin, ymax);
         ((TH1D*)singleScalerReadsCorrected.At(i))->SetBins(nx, xmin, xmax, ny, ymin, ymax);
