@@ -40,11 +40,25 @@ public:
             Int_t          GetNSubRootinos(const Int_t meson)      const	{return nSubRootinos[meson];}
             Int_t          GetNSubPhotons(const Int_t meson)       const	{return nSubPhotons[meson];}
             Int_t          GetNSubChargedPi(const Int_t meson)     const	{return nSubChargedPions[meson];}
+    inline  const   std::vector<Int_t> GetTrackIndexList(const Int_t meson)    const;
+            Bool_t         HasTrack(const Int_t meson, const Int_t track) const {return (trackIndex[meson] & 1<<track);}
             TLorentzVector Meson(const Int_t meson)             {return Particle(meson);}
     const   TLorentzVector Meson(const Int_t meson) const       {return Particle(meson);}
     virtual void            Print() const;
 };
 
+const std::vector<Int_t> GTreeMeson::GetTrackIndexList(const Int_t meson) const
+{
+    std::vector<Int_t> trackIndexList;
+    Int_t i=0;
 
+    for(Int_t j=0; j<nSubParticles[meson]; j++)
+    {
+        while((trackIndex[meson] & 1<<i) == 0) i++;
+        trackIndexList.push_back(i++);
+    }
+
+    return trackIndexList;
+}
 
 #endif

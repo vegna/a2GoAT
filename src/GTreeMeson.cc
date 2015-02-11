@@ -46,9 +46,10 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, const Int_t _NSubPhot
     detectors[nParticles]    = GTreeTrack::DETECTOR_NONE;
     time[nParticles]         = 0;
     clusterSize[nParticles]  = 0;
-    vetoEnergy[nParticles]          = 0;
-    MWPC0Energy[nParticles]        = 0;
-    MWPC1Energy[nParticles]        = 0;
+    vetoEnergy[nParticles]   = 0;
+    MWPC0Energy[nParticles]  = 0;
+    MWPC1Energy[nParticles]  = 0;
+    trackIndex[nParticles]   = 0;
 
     nSubParticles[nParticles]  = _NSubRootinos + _NSubPhotons + _NSubChargedPions;
     nSubRootinos[nParticles]   = _NSubRootinos;
@@ -61,9 +62,10 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, const Int_t _NSubPhot
         detectors[nParticles]    = detectors[nParticles] | manager->rootinos->GetDetectors(subParticles_index[i]);
         time[nParticles]         += manager->rootinos->GetTime(subParticles_index[i]);
         clusterSize[nParticles]  += manager->rootinos->GetClusterSize(subParticles_index[i]);
-        vetoEnergy[nParticles]          += manager->rootinos->GetVetoEnergy(subParticles_index[i]);
-        MWPC0Energy[nParticles]        += manager->rootinos->GetMWPC0Energy(subParticles_index[i]);
-        MWPC1Energy[nParticles]        += manager->rootinos->GetMWPC1Energy(subParticles_index[i]);
+        vetoEnergy[nParticles]   += manager->rootinos->GetVetoEnergy(subParticles_index[i]);
+        MWPC0Energy[nParticles]  += manager->rootinos->GetMWPC0Energy(subParticles_index[i]);
+        MWPC1Energy[nParticles]  += manager->rootinos->GetMWPC1Energy(subParticles_index[i]);
+        trackIndex[nParticles]   += 1<<(manager->rootinos->GetTrackIndex(subParticles_index[i]));
     }
     for(Int_t i=_NSubRootinos; i<_NSubRootinos+_NSubPhotons; i++)
     {
@@ -71,9 +73,10 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, const Int_t _NSubPhot
         detectors[nParticles]    = detectors[nParticles] | manager->photons->GetDetectors(subParticles_index[i]);
         time[nParticles]         += manager->photons->GetTime(subParticles_index[i]);
         clusterSize[nParticles]  += manager->photons->GetClusterSize(subParticles_index[i]);
-        vetoEnergy[nParticles]          += manager->photons->GetVetoEnergy(subParticles_index[i]);
-        MWPC0Energy[nParticles]        += manager->photons->GetMWPC0Energy(subParticles_index[i]);
-        MWPC1Energy[nParticles]        += manager->photons->GetMWPC1Energy(subParticles_index[i]);
+        vetoEnergy[nParticles]   += manager->photons->GetVetoEnergy(subParticles_index[i]);
+        MWPC0Energy[nParticles]  += manager->photons->GetMWPC0Energy(subParticles_index[i]);
+        MWPC1Energy[nParticles]  += manager->photons->GetMWPC1Energy(subParticles_index[i]);
+        trackIndex[nParticles]   += 1<<(manager->photons->GetTrackIndex(subParticles_index[i]));
     }
     for(Int_t i=_NSubRootinos+_NSubPhotons; i<_NSubRootinos+_NSubPhotons+_NSubChargedPions; i++)
     {
@@ -81,9 +84,10 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, const Int_t _NSubPhot
         detectors[nParticles]    = detectors[nParticles] | manager->chargedPions->GetDetectors(subParticles_index[i]);
         time[nParticles]         += manager->chargedPions->GetTime(subParticles_index[i]);
         clusterSize[nParticles]  += manager->chargedPions->GetClusterSize(subParticles_index[i]);
-        vetoEnergy[nParticles]          += manager->chargedPions->GetVetoEnergy(subParticles_index[i]);
-        MWPC0Energy[nParticles]        += manager->chargedPions->GetMWPC0Energy(subParticles_index[i]);
-        MWPC1Energy[nParticles]        += manager->chargedPions->GetMWPC1Energy(subParticles_index[i]);
+        vetoEnergy[nParticles]   += manager->chargedPions->GetVetoEnergy(subParticles_index[i]);
+        MWPC0Energy[nParticles]  += manager->chargedPions->GetMWPC0Energy(subParticles_index[i]);
+        MWPC1Energy[nParticles]  += manager->chargedPions->GetMWPC1Energy(subParticles_index[i]);
+        trackIndex[nParticles]   += 1<<(manager->chargedPions->GetTrackIndex(subParticles_index[i]));
     }
     clusterEnergy[nParticles] = sum.E()-sum.M();
     theta[nParticles] = sum.Theta()*TMath::RadToDeg();
@@ -107,9 +111,10 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
         detectors[nParticles]    = manager->photons->GetDetectors(subParticle_index0);
         time[nParticles]         = manager->photons->GetTime(subParticle_index0);
         clusterSize[nParticles]  = manager->photons->GetClusterSize(subParticle_index0);
-        vetoEnergy[nParticles]          = manager->photons->GetVetoEnergy(subParticle_index0);
-        MWPC0Energy[nParticles]        = manager->photons->GetMWPC0Energy(subParticle_index0);
-        MWPC1Energy[nParticles]        = manager->photons->GetMWPC1Energy(subParticle_index0);
+        vetoEnergy[nParticles]   = manager->photons->GetVetoEnergy(subParticle_index0);
+        MWPC0Energy[nParticles]  = manager->photons->GetMWPC0Energy(subParticle_index0);
+        MWPC1Energy[nParticles]  = manager->photons->GetMWPC1Energy(subParticle_index0);
+        trackIndex[nParticles]   = 1<<(manager->photons->GetTrackIndex(subParticle_index0));
         nSubPhotons[nParticles]++;
     }
     else if(pdg0 == manager->pdgDB->GetParticle("pi+")->PdgCode())
@@ -117,9 +122,10 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
         detectors[nParticles]    = manager->chargedPions->GetDetectors(subParticle_index0);
         time[nParticles]         = manager->chargedPions->GetTime(subParticle_index0);
         clusterSize[nParticles]  = manager->chargedPions->GetClusterSize(subParticle_index0);
-        vetoEnergy[nParticles]          = manager->chargedPions->GetVetoEnergy(subParticle_index0);
-        MWPC0Energy[nParticles]        = manager->chargedPions->GetMWPC0Energy(subParticle_index0);
-        MWPC1Energy[nParticles]        = manager->chargedPions->GetMWPC1Energy(subParticle_index0);
+        vetoEnergy[nParticles]   = manager->chargedPions->GetVetoEnergy(subParticle_index0);
+        MWPC0Energy[nParticles]  = manager->chargedPions->GetMWPC0Energy(subParticle_index0);
+        MWPC1Energy[nParticles]  = manager->chargedPions->GetMWPC1Energy(subParticle_index0);
+        trackIndex[nParticles]   = 1<<(manager->chargedPions->GetTrackIndex(subParticle_index0));
         nSubChargedPions[nParticles]++;
     }
     else
@@ -127,9 +133,10 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
         detectors[nParticles]    = manager->rootinos->GetDetectors(subParticle_index0);
         time[nParticles]         = manager->rootinos->GetTime(subParticle_index0);
         clusterSize[nParticles]  = manager->rootinos->GetClusterSize(subParticle_index0);
-        vetoEnergy[nParticles]          = manager->rootinos->GetVetoEnergy(subParticle_index0);
-        MWPC0Energy[nParticles]        = manager->rootinos->GetMWPC0Energy(subParticle_index0);
-        MWPC1Energy[nParticles]        = manager->rootinos->GetMWPC1Energy(subParticle_index0);
+        vetoEnergy[nParticles]   = manager->rootinos->GetVetoEnergy(subParticle_index0);
+        MWPC0Energy[nParticles]  = manager->rootinos->GetMWPC0Energy(subParticle_index0);
+        MWPC1Energy[nParticles]  = manager->rootinos->GetMWPC1Energy(subParticle_index0);
+        trackIndex[nParticles]   = 1<<(manager->rootinos->GetTrackIndex(subParticle_index0));
         nSubRootinos[nParticles]++;
     }
     
@@ -138,9 +145,10 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
         detectors[nParticles]    = detectors[nParticles] | manager->photons->GetDetectors(subParticle_index1);
         time[nParticles]         += manager->photons->GetTime(subParticle_index1);
         clusterSize[nParticles]  += manager->photons->GetClusterSize(subParticle_index1);
-        vetoEnergy[nParticles]          += manager->photons->GetVetoEnergy(subParticle_index1);
-        MWPC0Energy[nParticles]        += manager->photons->GetMWPC0Energy(subParticle_index1);
-        MWPC1Energy[nParticles]        += manager->photons->GetMWPC1Energy(subParticle_index1);
+        vetoEnergy[nParticles]   += manager->photons->GetVetoEnergy(subParticle_index1);
+        MWPC0Energy[nParticles]  += manager->photons->GetMWPC0Energy(subParticle_index1);
+        MWPC1Energy[nParticles]  += manager->photons->GetMWPC1Energy(subParticle_index1);
+        trackIndex[nParticles]   += 1<<(manager->photons->GetTrackIndex(subParticle_index1));
         nSubPhotons[nParticles]++;
     }
     else if(pdg1 == manager->pdgDB->GetParticle("pi+")->PdgCode())
@@ -148,9 +156,10 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
         detectors[nParticles]    = detectors[nParticles] | manager->chargedPions->GetDetectors(subParticle_index1);
         time[nParticles]         += manager->chargedPions->GetTime(subParticle_index1);
         clusterSize[nParticles]  += manager->chargedPions->GetClusterSize(subParticle_index1);
-        vetoEnergy[nParticles]          += manager->chargedPions->GetVetoEnergy(subParticle_index1);
-        MWPC0Energy[nParticles]        += manager->chargedPions->GetMWPC0Energy(subParticle_index1);
-        MWPC1Energy[nParticles]        += manager->chargedPions->GetMWPC1Energy(subParticle_index1);
+        vetoEnergy[nParticles]   += manager->chargedPions->GetVetoEnergy(subParticle_index1);
+        MWPC0Energy[nParticles]  += manager->chargedPions->GetMWPC0Energy(subParticle_index1);
+        MWPC1Energy[nParticles]  += manager->chargedPions->GetMWPC1Energy(subParticle_index1);
+        trackIndex[nParticles]   += 1<<(manager->chargedPions->GetTrackIndex(subParticle_index1));
         nSubChargedPions[nParticles]++;
     }
     else
@@ -158,9 +167,10 @@ void    GTreeMeson::AddParticle(const Int_t subParticle_index0, const TLorentzVe
         detectors[nParticles]    = detectors[nParticles] | manager->rootinos->GetDetectors(subParticle_index1);
         time[nParticles]         += manager->rootinos->GetTime(subParticle_index1);
         clusterSize[nParticles]  += manager->rootinos->GetClusterSize(subParticle_index1);
-        vetoEnergy[nParticles]          += manager->rootinos->GetVetoEnergy(subParticle_index1);
-        MWPC0Energy[nParticles]        += manager->rootinos->GetMWPC0Energy(subParticle_index1);
-        MWPC1Energy[nParticles]        += manager->rootinos->GetMWPC1Energy(subParticle_index1);
+        vetoEnergy[nParticles]   += manager->rootinos->GetVetoEnergy(subParticle_index1);
+        MWPC0Energy[nParticles]  += manager->rootinos->GetMWPC0Energy(subParticle_index1);
+        MWPC1Energy[nParticles]  += manager->rootinos->GetMWPC1Energy(subParticle_index1);
+        trackIndex[nParticles]   += 1<<(manager->rootinos->GetTrackIndex(subParticle_index1));
         nSubRootinos[nParticles]++;
     }
     TLorentzVector sum = subParticle0 + subParticle1;
