@@ -208,6 +208,14 @@ Bool_t  GTreeManager::Write()
     for(Int_t l=0; l<writeList.GetEntries(); l++)
         ((GTree*)writeList[l])->Write();
 
+    TIter objectIterator(gROOT->GetList());
+    TObject *object;
+    while((object=(TObject*)objectIterator()))
+    {
+        object->Write();
+        std::cout << "object " << object->GetName() << " has been written to disk." << std::endl;
+    }
+
     WriteLinkedHistograms(outputFile);
 
     isWritten   = kTRUE;
