@@ -112,6 +112,9 @@ void RunFile(TString sFile){
   Double_t *vetoEnergy    = new Double_t[128];
   Double_t *MWPC0Energy   = new Double_t[128];
   Double_t *MWPC1Energy   = new Double_t[128];
+  Double_t *pseudoVertexX = new Double_t[128];
+  Double_t *pseudoVertexY = new Double_t[128];
+  Double_t *pseudoVertexZ = new Double_t[128];
   Int_t *trackIndex       = new Int_t[128];
 
   Int_t nParticlesNew   = 0;
@@ -171,6 +174,18 @@ void RunFile(TString sFile){
       if(tracksOld->GetBranch("WC1_E")){
 	tracksOld->SetBranchAddress("WC1_E", MWPC1Energy);
 	tracks->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nTracks]/D");
+      }
+      if(tracksOld->GetBranch("WC_Vertex_X")){
+	tracksOld->SetBranchAddress("WC_Vertex_X", pseudoVertexX);
+	tracks->Branch("pseudoVertexX", pseudoVertexX, "pseudoVertexX[nTracks]/D");
+      }
+      if(tracksOld->GetBranch("WC_Vertex_Y")){
+	tracksOld->SetBranchAddress("WC_Vertex_Y", pseudoVertexY);
+	tracks->Branch("pseudoVertexY", pseudoVertexY, "pseudoVertexY[nTracks]/D");
+      }
+      if(tracksOld->GetBranch("WC_Vertex_Z")){
+	tracksOld->SetBranchAddress("WC_Vertex_Z", pseudoVertexZ);
+	tracks->Branch("pseudoVertexZ", pseudoVertexZ, "pseudoVertexZ[nTracks]/D");
       }
     }
 
