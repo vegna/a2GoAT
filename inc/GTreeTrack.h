@@ -39,6 +39,10 @@ private:
     Double_t	vetoEnergy[GTreeTrack_MAX];
     Double_t	MWPC0Energy[GTreeTrack_MAX];
     Double_t	MWPC1Energy[GTreeTrack_MAX];
+    //Pseudo vertex information
+    Double_t    pseudoVertexX[GTreeTrack_MAX];
+    Double_t    pseudoVertexY[GTreeTrack_MAX];
+    Double_t    pseudoVertexZ[GTreeTrack_MAX];
 
 protected:
     virtual void    SetBranchAdresses();
@@ -81,6 +85,12 @@ public:
             Double_t        GetMWPC0Energy(const Int_t index)         const	{return MWPC0Energy[index];}
     const	Double_t*       GetMWPC1Energy()                          const	{return MWPC1Energy;}
             Double_t        GetMWPC1Energy(const Int_t index)         const	{return MWPC1Energy[index];}
+    const	Double_t*       GetPseudoVertexX()                        const	{return pseudoVertexX;}
+            Double_t        GetPseudoVertexX(const Int_t index)       const	{return pseudoVertexX[index];}
+    const	Double_t*       GetPseudoVertexY()                        const	{return pseudoVertexY;}
+            Double_t        GetPseudoVertexY(const Int_t index)       const	{return pseudoVertexY[index];}
+    const	Double_t*       GetPseudoVertexZ()                        const	{return pseudoVertexZ;}
+            Double_t        GetPseudoVertexZ(const Int_t index)       const	{return pseudoVertexZ[index];}
     virtual void            Print(const Bool_t All = kFALSE)    const;
 
     friend  class GTreeParticle;

@@ -40,6 +40,9 @@ void    GTreeTrack::SetBranchAdresses()
     inputTree->SetBranchAddress("vetoEnergy", vetoEnergy);
     inputTree->SetBranchAddress("MWPC0Energy", MWPC0Energy);
     inputTree->SetBranchAddress("MWPC1Energy", MWPC1Energy);
+    inputTree->SetBranchAddress("pseudoVertexX", pseudoVertexX);
+    inputTree->SetBranchAddress("pseudoVertexY", pseudoVertexY);
+    inputTree->SetBranchAddress("pseudoVertexZ", pseudoVertexZ);
 }
 
 void    GTreeTrack::SetBranches()
@@ -56,6 +59,9 @@ void    GTreeTrack::SetBranches()
     outputTree->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nTracks]/D");
     outputTree->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nTracks]/D");
     outputTree->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nTracks]/D");
+    outputTree->Branch("pseudoVertexX", pseudoVertexX, "pseudoVertexX[nTracks]/D");
+    outputTree->Branch("pseudoVertexY", pseudoVertexY, "pseudoVertexY[nTracks]/D");
+    outputTree->Branch("pseudoVertexZ", pseudoVertexZ, "pseudoVertexZ[nTracks]/D");
 }
 
 void    GTreeTrack::Print(const Bool_t All) const
