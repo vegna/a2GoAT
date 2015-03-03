@@ -157,7 +157,6 @@ Bool_t	GSort::Init()
             else// if(pdgDB->GetParticle(particleName) != 0x0) // Check for particle in pdg database
             {
                 Int_t     i       =0;
-                Bool_t    found   =false;
                 while(i<GetTreeList().GetEntries())
                 {
                     if(strcmp(GetTreeList()[i]->GetName(),particleName) == 0)

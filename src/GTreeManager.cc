@@ -12,7 +12,6 @@ GTreeManager::GTreeManager()    :
     GHistManager(),
     GConfigFile(),
     inputFile(0),
-    outputFile(0),
     treeList(),
     treeCorreleatedToScalerReadList(),
     readList(),
@@ -21,10 +20,12 @@ GTreeManager::GTreeManager()    :
     countReconstructed(0),
     tracks(0),
     tagger(0),
+    linpol(0),
     trigger(0),
     scalers(0),
-    detectorHits(0),
     setupParameters(0),
+    eventParameters(0),
+    detectorHits(0),
     rootinos(0),
     photons(0),
     electrons(0),
@@ -35,12 +36,10 @@ GTreeManager::GTreeManager()    :
     etas(0),
     etaPrimes(0),
 #ifdef hasPluto
-    linpol(0),
     pluto(NULL),
-#else
-    linpol(0),
 #endif
-    geant(NULL)
+    geant(NULL),
+    outputFile(0)
 
 {
     pdgDB = TDatabasePDG::Instance();
@@ -278,16 +277,16 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
     Int_t shift;
     {
         Double_t shiftMean = 0;
-        for(Int_t l=1; l<scalers->GetNEntries(); l++)
+        for(UInt_t l=1; l<scalers->GetNEntries(); l++)
         {
             scalers->GetEntryFast(l);
             shiftMean    += scalers->GetEventNumber() - scalers->GetEventID();
         }
         shiftMean   /= scalers->GetNEntries()-1;
-        Int_t bestIndex = 0;
+        UInt_t bestIndex = 0;
         scalers->GetEntryFast(0);
         Double_t smallestDifference = shiftMean - (scalers->GetEventNumber() - scalers->GetEventID());
-        for(Int_t l=1; l<scalers->GetNEntries(); l++)
+        for(UInt_t l=1; l<scalers->GetNEntries(); l++)
         {
             scalers->GetEntryFast(l);
             if((shiftMean - (scalers->GetEventNumber() - scalers->GetEventID())) < smallestDifference)
@@ -310,7 +309,7 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
     cout << "Checking scaler reads! Valid events from " << scalers->GetEventNumber() << " to " << start << endl;
     start = scalers->GetEventNumber();
 
-    for(Int_t i=1; i<GetNScalerEntries(); i++)
+    for(UInt_t i=1; i<GetNScalerEntries(); i++)
     {
         for(Int_t l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
             ((GTree*)readCorreleatedToScalerReadList[l])->GetEntry(i);
@@ -365,7 +364,7 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
 
     cout << GetNScalerEntries() << " scaler reads. " << maxEvent << " events." << endl;
 
-    for(Int_t i=0; i<GetNScalerEntries(); i++)
+    for(UInt_t i=0; i<GetNScalerEntries(); i++)
     {
         for(Int_t l=0; l<readCorreleatedToScalerReadList.GetEntriesFast(); l++)
             ((GTree*)readCorreleatedToScalerReadList[l])->GetEntry(i);
@@ -388,6 +387,8 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
         ProcessScalerRead();
     }
     cout << "\t" << GetNScalerEntries() << " Scaler reads processed. Events from " << start << " to " << event << "." << endl;
+
+    return true;
 }
 
 UInt_t  GTreeManager::GetNEntries()       const

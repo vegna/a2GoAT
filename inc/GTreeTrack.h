@@ -148,6 +148,7 @@ Bool_t      GTreeTrack::HasCB(const Int_t index) const
     if (detectors[index] & DETECTOR_NaI) return true;
     if (detectors[index] & DETECTOR_PID) return true;
     if (detectors[index] & DETECTOR_MWPC) return true;
+    return false;
 }
 
 Bool_t      GTreeTrack::HasTAPS(const Int_t index) const
@@ -155,5 +156,6 @@ Bool_t      GTreeTrack::HasTAPS(const Int_t index) const
     if (detectors[index] & DETECTOR_BaF2) return true;
     if (detectors[index] & DETECTOR_PbWO4) return true;
     if (detectors[index] & DETECTOR_Veto) return true;
+    return false;
 }
 #endif

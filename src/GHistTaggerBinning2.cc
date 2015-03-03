@@ -63,5 +63,6 @@ Int_t   GHistTaggerBinning2::Fill(const Double_t x, const Double_t y, const GTre
         else
             Fill(x, y);
     }
+    return tagger.GetNTagged();
 }
 

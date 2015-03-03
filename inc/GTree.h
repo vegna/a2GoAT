@@ -70,6 +70,7 @@ Bool_t  GTree::GetEntry(const UInt_t index)
     if(index > inputTree->GetEntries())
         return kFALSE;
     inputTree->GetEntry(index);
+    return kTRUE;
 }
 
 
