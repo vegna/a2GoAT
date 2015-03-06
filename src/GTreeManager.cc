@@ -213,6 +213,7 @@ Bool_t  GTreeManager::Write()
     {
         object->Write();
         std::cout << "object " << object->GetName() << " has been written to disk." << std::endl;
+        if(object->InheritsFrom("TH1")) ((TH1*)object)->Reset();
     }
 
     WriteLinkedHistograms(outputFile);
