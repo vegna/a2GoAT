@@ -49,6 +49,13 @@ void    GTreeMeson::AddParticle(const Int_t _NSubRootinos, const Int_t _NSubPhot
     nSubPhotons[nParticles]    = _NSubPhotons;
     nSubChargedPions[nParticles]  = _NSubChargedPions;
 
+    time[nParticles]         = 0;
+    clusterSize[nParticles]  = 0;
+    vetoEnergy[nParticles]   = 0;
+    MWPC0Energy[nParticles]  = 0;
+    MWPC1Energy[nParticles]  = 0;
+    trackIndex[nParticles]   = 0;
+
     TLorentzVector sum;
 
     for(Int_t i=0; i<_NSubRootinos; i++)
