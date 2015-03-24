@@ -33,6 +33,10 @@ GHistScaCor::GHistScaCor() :
     accumulated->SetDirectory(0);
     accumulatedCorrected->SetDirectory(0);
 
+    buffer->Sumw2();
+    accumulated->Sumw2();
+    accumulatedCorrected->Sumw2();
+
     singleScalerReads.SetOwner();
     singleScalerReadsCorrected.SetOwner();
 }
@@ -54,6 +58,10 @@ GHistScaCor::GHistScaCor(const char* name, const char* title, const Int_t nbinsx
     buffer->SetDirectory(0);
     accumulated->SetDirectory(0);
     accumulatedCorrected->SetDirectory(0);
+
+    buffer->Sumw2();
+    accumulated->Sumw2();
+    accumulatedCorrected->Sumw2();
 
     singleScalerReads.SetOwner();
     singleScalerReadsCorrected.SetOwner();

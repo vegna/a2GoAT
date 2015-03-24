@@ -18,6 +18,10 @@ GHistScaCor2::GHistScaCor2() :
     buffer->SetDirectory(0);
     accumulated->SetDirectory(0);
     accumulatedCorrected->SetDirectory(0);
+
+    buffer->Sumw2();
+    accumulated->Sumw2();
+    accumulatedCorrected->Sumw2();
 }
 
 GHistScaCor2::GHistScaCor2(const char* name, const char* title, const Int_t nbinsx, const Double_t xlow, const Double_t xup, const Int_t nbinsy, const Double_t ylow, const Double_t yup, const Bool_t linkHistogram) :
@@ -34,6 +38,10 @@ GHistScaCor2::GHistScaCor2(const char* name, const char* title, const Int_t nbin
     buffer->SetDirectory(0);
     accumulated->SetDirectory(0);
     accumulatedCorrected->SetDirectory(0);
+
+    buffer->Sumw2();
+    accumulated->Sumw2();
+    accumulatedCorrected->Sumw2();
 }
 
 GHistScaCor2::~GHistScaCor2()
