@@ -20,8 +20,14 @@
 /doc/
 
 # some files usually ignored
-/CMakeLists.txt.user
+/CMakeLists.txt.user*
 *.root
 
 # Ignore jobs directory for farming
 jobs
+
+
+# Temp files
+*.swp
+*~
+*.autosave
