@@ -472,9 +472,13 @@ Bool_t 	PPhysics::InitTaggerScalers()
 Bool_t 	PPhysics::RejectTagged(Int_t tagger_index)
 {
     Bool_t reject = false;
+
     // Is tagger channel rejected by user?
     if(GetTagger()->GetTaggedChannel(tagger_index) < TC_cut_min) reject = true;
     if(GetTagger()->GetTaggedChannel(tagger_index) > TC_cut_max) reject = true;
+
+    // Is tagger hit a decoded double?
+    if(GetTagger()->GetTaggedDouble(tagger_index)) reject = true;
 
     return reject;
 }
