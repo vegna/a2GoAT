@@ -19,6 +19,11 @@ private:
     Double_t        taggedEnergy[GTreeTagger_MAX];
     Int_t           taggedOrder[GTreeTagger_MAX];
     Bool_t          taggedDouble[GTreeTagger_MAX];
+    Int_t           pairInd1[GTreeTagger_MAX];
+    Int_t           pairInd2[GTreeTagger_MAX];
+    Double_t        pairTime[GTreeTagger_MAX];
+    Double_t        pairDiff[GTreeTagger_MAX];
+    Int_t           pairOrder[GTreeTagger_MAX];
     Int_t           nDouble;
     Int_t           nChain;
     Double_t        doubleTime[GTreeTagger_MAX];
@@ -53,7 +58,7 @@ public:
             Double_t        GetDoubleTime(const Int_t index)    const	{return doubleTime[index];}
     const	Double_t*       GetDoubleEnergy()                   const	{return doubleEnergy;}
             Double_t        GetDoubleEnergy(const Int_t index)  const	{return doubleEnergy[index];}
-            void            DecodeDoubles(const Double_t timingRes = 5.0);
+            void            DecodeDoubles(const Double_t timingRes = 3.0, const Bool_t decodeChain = false);
             Bool_t          HasEnergy()                         const   {return hasEnergy;}
             void            SetCalibration(const Int_t nChan, const Double_t *energy);
     TLorentzVector          GetVector(const Int_t index)        const   {return TLorentzVector(0, 0, taggedEnergy[index], taggedEnergy[index]);}

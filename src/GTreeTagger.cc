@@ -15,6 +15,11 @@ GTreeTagger::GTreeTagger(GTreeManager *Manager)    :
         taggedEnergy[i]  = 0;
         taggedOrder[i]   = 0;
         taggedDouble[i]  = 0;
+        pairInd1[i]      = 0;
+        pairInd2[i]      = 0;
+        pairTime[i]      = 0;
+        pairDiff[i]      = 0;
+        pairOrder[i]     = 0;
         doubleTime[i]    = 0;
         doubleEnergy[i]  = 0;
     }
@@ -47,7 +52,7 @@ void    GTreeTagger::SetBranches()
     if(hasEnergy) outputTree->Branch("taggedEnergy",  taggedEnergy,  "taggedEnergy[nTagged]/D");
 }
 
-void    GTreeTagger::DecodeDoubles(const Double_t timingRes)
+void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decodeChain)
 {
     // Reset variables for this event
     nDouble = 0;
@@ -56,14 +61,16 @@ void    GTreeTagger::DecodeDoubles(const Double_t timingRes)
     {
         taggedOrder[i] = 0;
         taggedDouble[i] = false;
+        pairInd1[i] = 0;
+        pairInd2[i] = 0;
+        pairTime[i] = 0;
+        pairDiff[i] = 0;
+        pairOrder[i] = 0;
     }
 
     // Local variables for search
-    Int_t nNeighbors;
-    Int_t lastChan;
+    Int_t nPairs = 0;
     Double_t timeDiff;
-    Double_t timeAvg;
-    Double_t energyAvg;
 
     // Sort channel list into ascending order to make the search easier
     TMath::Sort(nTagged, taggedChannel, taggedOrder, false);
@@ -71,51 +78,91 @@ void    GTreeTagger::DecodeDoubles(const Double_t timingRes)
     // Loop over new ordered list
     for(Int_t i=0; i<nTagged; i++)
     {
-        // Skip if already counted as a double
-        if(taggedDouble[taggedOrder[i]]) continue;
-
-        nNeighbors = 0;
-        lastChan = taggedChannel[taggedOrder[i]];
-
-        timeDiff = 0;
-        timeAvg = taggedTime[taggedOrder[i]];
-        energyAvg = GetTaggedEnergy(taggedOrder[i]);
-
-        for(Int_t j=i; j<nTagged; j++)
+        for(Int_t j=i+1; j<nTagged; j++)
         {
-            // Skip if already counted as a double
-            if(taggedDouble[taggedOrder[j]]) continue;
-
             // Skip if multi-hit of same channel
             if(taggedChannel[taggedOrder[j]] == taggedChannel[taggedOrder[i]]) continue;
 
-            // Break if beyond string of channels
-            if(taggedChannel[taggedOrder[j]] > (lastChan + 1)) break;
+            // Break if beyond neighbor
+            if(taggedChannel[taggedOrder[j]] > (taggedChannel[taggedOrder[i]] + 1)) break;
 
             // Check if neighboring channel is within timing resolution
             timeDiff = (TMath::Abs(taggedTime[taggedOrder[j]]-taggedTime[taggedOrder[i]]));
             if(timeDiff < timingRes)
             {
-                nNeighbors++;
-                lastChan = taggedChannel[taggedOrder[j]];
-                timeAvg += taggedTime[taggedOrder[j]];
-                energyAvg += GetTaggedEnergy(taggedOrder[j]);
-
-                // Denote both as being parts of a double
-                taggedDouble[taggedOrder[i]] = true;
-                taggedDouble[taggedOrder[j]] = true;
+                pairInd1[nPairs] = taggedOrder[i];
+                pairInd2[nPairs] = taggedOrder[j];
+                pairTime[nPairs] = ((taggedTime[taggedOrder[i]]+taggedTime[taggedOrder[j]])/2.0);
+                pairDiff[nPairs] = timeDiff;
+                nPairs++;
             }
         }
+    }
 
-        // For actual double (two neighboring channels in coincidence) add to double list
-        if(nNeighbors == 1)
+    // Look for neighboring pairs to form chain
+    if(decodeChain)
+    {
+        // Loop over pairs, looking for multiples that represent a chain
+        for(Int_t i=0; i<nPairs; i++)
         {
-            doubleTime[nDouble] = (timeAvg/(nNeighbors+1));
-            doubleEnergy[nDouble] = (energyAvg/(nNeighbors+1));
+            for(Int_t j=i+1; j<nPairs; j++)
+            {
+                // Skip if multi-hit of same channel
+                if(taggedChannel[pairInd1[j]] == taggedChannel[pairInd1[i]]) continue;
+
+                // Break if beyond neighbor
+                if(taggedChannel[pairInd1[j]] != taggedChannel[pairInd2[i]]) break;
+
+                // Check if neighboring pair is within timing resolution
+                timeDiff = (TMath::Abs(pairTime[j]-pairTime[i]));
+                if(timeDiff < timingRes)
+                {
+                    // Increment number of chains if first pair not already part of a chain
+                    if(!taggedDouble[pairInd1[i]] && !taggedDouble[pairInd2[i]]) nChain++;
+
+                    // Denote both pairs as belonging to a chain
+                    taggedDouble[pairInd1[i]] = true;
+                    taggedDouble[pairInd2[i]] = true;
+
+                    taggedDouble[pairInd1[j]] = true;
+                    taggedDouble[pairInd2[j]] = true;
+                }
+            }
+
+            // Skip if already part of a chain
+            if(taggedDouble[pairInd1[i]]) continue;
+            if(taggedDouble[pairInd2[i]]) continue;
+
+            // Otherwise call this pair a double
+            taggedDouble[pairInd1[i]] = true;
+            taggedDouble[pairInd2[i]] = true;
+
+            doubleTime[nDouble] = pairTime[i];
+            doubleEnergy[nDouble] = ((GetTaggedEnergy(pairInd1[i])+GetTaggedEnergy(pairInd2[i]))/2.0);
             nDouble++;
         }
-        // For chain of hits, ignore for now
-        else if(nNeighbors > 1) nChain++;
+    }
+    // Otherwise choose best pairs
+    else
+    {
+        // Reorder pairs by timing difference
+        TMath::Sort(nPairs, pairDiff, pairOrder, false);
+
+        // Loop over pairs, removing from list as we go
+        for(Int_t i=0; i<nPairs; i++)
+        {
+            // Skip if already paired as a double
+            if(taggedDouble[pairInd1[pairOrder[i]]]) continue;
+            if(taggedDouble[pairInd2[pairOrder[i]]]) continue;
+
+            // Otherwise call this pair a double
+            taggedDouble[pairInd1[pairOrder[i]]] = true;
+            taggedDouble[pairInd2[pairOrder[i]]] = true;
+
+            doubleTime[nDouble] = pairTime[pairOrder[i]];
+            doubleEnergy[nDouble] = ((GetTaggedEnergy(pairInd1[pairOrder[i]])+GetTaggedEnergy(pairInd2[pairOrder[i]]))/2.0);
+            nDouble++;
+        }
     }
     /*
     cout << "New Event - nDouble = " << nDouble << " - nChain = " << nChain << endl << endl;
