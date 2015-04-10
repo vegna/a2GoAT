@@ -13,13 +13,8 @@ GTreeTagger::GTreeTagger(GTreeManager *Manager)    :
         taggedChannel[i] = 0;
         taggedTime[i]    = 0;
         taggedEnergy[i]  = 0;
-        taggedOrder[i]   = 0;
         taggedDouble[i]  = 0;
-        pairInd1[i]      = 0;
-        pairInd2[i]      = 0;
-        pairTime[i]      = 0;
-        pairDiff[i]      = 0;
-        pairOrder[i]     = 0;
+        doubleChannel[i] = 0;
         doubleTime[i]    = 0;
         doubleEnergy[i]  = 0;
     }
@@ -54,23 +49,21 @@ void    GTreeTagger::SetBranches()
 
 void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decodeChain)
 {
-    // Reset variables for this event
-    nDouble = 0;
-    nChain = 0;
-    for(Int_t i=0; i<nTagged; i++)
-    {
-        taggedOrder[i] = 0;
-        taggedDouble[i] = false;
-        pairInd1[i] = 0;
-        pairInd2[i] = 0;
-        pairTime[i] = 0;
-        pairDiff[i] = 0;
-        pairOrder[i] = 0;
-    }
-
     // Local variables for search
     Int_t nPairs = 0;
-    Double_t timeDiff;
+    Double_t timeDiff = 0;
+
+    Int_t taggedOrder[GTreeTagger_MAX] = {0};
+    Int_t pairInd1[GTreeTagger_MAX]    = {0};
+    Int_t pairInd2[GTreeTagger_MAX]    = {0};
+    Double_t pairTime[GTreeTagger_MAX] = {0};
+    Double_t pairDiff[GTreeTagger_MAX] = {0};
+    Int_t pairOrder[GTreeTagger_MAX]   = {0};
+
+    // Reset global variables for this event
+    nDouble = 0;
+    nChain = 0;
+    for(Int_t i=0; i<nTagged; i++) taggedDouble[i] = false;
 
     // Sort channel list into ascending order to make the search easier
     TMath::Sort(nTagged, taggedChannel, taggedOrder, false);
@@ -95,6 +88,13 @@ void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decode
                 pairTime[nPairs] = ((taggedTime[taggedOrder[i]]+taggedTime[taggedOrder[j]])/2.0);
                 pairDiff[nPairs] = timeDiff;
                 nPairs++;
+            }
+
+            // Ensure we don't run over the lists
+            if(nPairs == GTreeTagger_MAX)
+            {
+                cout << "Reached maximum (" << nPairs << ") number of tagger pairs" << endl << "     Skipping double decoding for this event!" << endl;
+                return;
             }
         }
     }
@@ -137,6 +137,7 @@ void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decode
             taggedDouble[pairInd1[i]] = true;
             taggedDouble[pairInd2[i]] = true;
 
+            doubleChannel[nDouble] = taggedChannel[pairInd1[i]];
             doubleTime[nDouble] = pairTime[i];
             doubleEnergy[nDouble] = ((GetTaggedEnergy(pairInd1[i])+GetTaggedEnergy(pairInd2[i]))/2.0);
             nDouble++;
@@ -159,18 +160,21 @@ void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decode
             taggedDouble[pairInd1[pairOrder[i]]] = true;
             taggedDouble[pairInd2[pairOrder[i]]] = true;
 
+            doubleChannel[nDouble] = taggedChannel[pairInd1[pairOrder[i]]];
             doubleTime[nDouble] = pairTime[pairOrder[i]];
             doubleEnergy[nDouble] = ((GetTaggedEnergy(pairInd1[pairOrder[i]])+GetTaggedEnergy(pairInd2[pairOrder[i]]))/2.0);
             nDouble++;
         }
     }
     /*
-    cout << "New Event - nDouble = " << nDouble << " - nChain = " << nChain << endl << endl;
-    for(Int_t i=0; i<nTagged; i++)
-    {
-        cout << i << "\t" << taggedChannel[i] << "\t" << taggedTime[i] << "   \t" << taggedOrder[i] << "\t" << taggedChannel[taggedOrder[i]] << "\t" << taggedTime[taggedOrder[i]] << "   \t" << taggedDouble[taggedOrder[i]] << endl;
+    if((inputTree->GetReadEntry()) < 100){
+        cout << "Event " << manager->GetEventNumber() << " - nDouble = " << nDouble << " - nChain = " << nChain << endl << endl;
+        for(Int_t i=0; i<nTagged; i++)
+        {
+            cout << i << "\t" << taggedChannel[i] << "\t" << taggedTime[i] << "   \t" << taggedOrder[i] << "\t" << taggedChannel[taggedOrder[i]] << "\t" << taggedTime[taggedOrder[i]] << "   \t" << taggedDouble[taggedOrder[i]] << endl;
+        }
+        cout << endl;
     }
-    cout << endl;
     */
 }
 
