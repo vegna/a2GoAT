@@ -53,7 +53,8 @@ public:
     virtual Bool_t	Add(const GHistScaCor *h, Double_t c = 1);
     virtual Bool_t	Add(const TH1* _buffer, const TH1* _accumulated, const TH1* _accumulatedCorrected, const Bool_t CorrectedInput, const Double_t c = 1);
     virtual void 	CalcResult()    {}
-    virtual Int_t	Fill(Double_t x)    {return buffer->Fill(x);}
+    virtual Int_t	Fill(const Double_t x)    {return buffer->Fill(x);}
+    virtual Int_t   FillWeighted(const Double_t x, const Double_t weight)   {return buffer->Fill(x, weight);}
     const   TH1*    GetAccumulated()            const   {return accumulated;}
     const   TH1*    GetAccumulatedCorrected()   const   {return accumulatedCorrected;}
     const   char*   GetName()                   const   {return accumulatedCorrected->GetName();}

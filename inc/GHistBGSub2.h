@@ -25,9 +25,12 @@ public:
     virtual ~GHistBGSub2();
 
     virtual Int_t   Fill(const Double_t x);
-    virtual Int_t   Fill(const Double_t x, const Double_t y)                            {return ((GHistScaCor2*)result)->Fill(x, y);}
+    virtual Int_t   Fill(const Double_t x, const Double_t y)                            {return ((GHistBGSub2*)result)->Fill(x, y);}
     virtual Int_t   Fill(const Double_t x, const Double_t y, const Double_t taggerTime);
     virtual Int_t   Fill(const Double_t x, const Double_t y, const GTreeTagger& tagger);
+    virtual Int_t   FillWeighted(const Double_t x, const Double_t y, const Double_t weight)                                                                      {return ((GHistBGSub2*)result)->FillWeighted(x, y, weight);}
+    virtual Int_t   FillWeighted(const Double_t x, const Double_t y, const Double_t weight, const Double_t taggerTime);
+    virtual Int_t   FillWeighted(const Double_t x, const Double_t y, const Double_t weight, const GTreeTagger& tagger);
 
     virtual GHistBGSub*    ProjectionX(const char* name = "_px", Int_t firstybin = 0, Int_t lastybin = -1, Option_t* option = "");
     virtual GHistBGSub*    ProjectionY(const char* name = "_px", Int_t firstxbin = 0, Int_t lastxbin = -1, Option_t* option = "");
