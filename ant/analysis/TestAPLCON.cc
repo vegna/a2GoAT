@@ -68,7 +68,6 @@ ant::analysis::TestAPLCON::TestAPLCON(const mev_t energy_scale) :
     const BinSettings veto_bins(1000,0,10.0);
     const BinSettings particle_bins(10,0,10);
     const BinSettings particlecount_bins(16,0,16);
-    const BinSettings pull_bins(50,-3,3);
     const BinSettings chisqare_bins(100,0,30);
     const BinSettings probability_bins(100,0,1);
     const BinSettings iterations_bins(15,0,15);
@@ -205,20 +204,7 @@ ant::analysis::TestAPLCON::TestAPLCON(const mev_t energy_scale) :
     probability = HistFac.makeTH1D("Probability","Probability","#",probability_bins,"probability");
     iterations = HistFac.makeTH1D("Number of iterations","Iterations","#",iterations_bins,"iterations");
 
-
-
-    for(const auto& varname : fitter.VariableNames()) {
-        string title(varname);
-        size_t pos = title.find("[");
-        if (pos != string::npos) {
-            const string prop = " " + component.at(atoi(&varname.at(pos+1)));
-            title.replace(pos, 3, prop);
-        }
-        pulls[varname] = HistFac.makeTH1D("Pull "+title,
-                                   "Pull", "#",
-                                   pull_bins,
-                                   "pull_"+varname);
-    }
+    // pull histograms are created on the fly
 
     stringstream ng;
     ng << nPhotons << "g";
@@ -302,7 +288,23 @@ void ant::analysis::TestAPLCON::ProcessEvent(const ant::Event &event)
         for(const auto& it_map : result.Variables) {
             const string& varname = it_map.first;
             const APLCON::Result_Variable_t& var = it_map.second;
-            pulls.at(varname)->Fill(var.Pull);
+            auto it_pull = pulls.find(varname);
+            TH1D* h_pull;
+            if(it_pull == pulls.end()) {
+                // not found so far, create the histogram on-the-fly
+                const BinSettings pull_bins(50,-3,3);
+                stringstream title;
+                title << "Pull " << var.PristineName << " " << component.at(var.Index);
+                h_pull = HistFac.makeTH1D(title.str(),
+                                           "Pull", "#",
+                                           pull_bins,
+                                           "pull_"+varname);
+                pulls[varname] = h_pull;
+            }
+            else {
+                h_pull = it_pull->second;
+            }
+            h_pull->Fill(var.Pull);
         }
         chisquare->Fill(result.ChiSquare);
         probability->Fill(result.Probability);
