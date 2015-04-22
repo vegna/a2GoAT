@@ -45,6 +45,7 @@ public:
     virtual void            Reset(Option_t* option = "")                    {sum->Reset(option); array->Reset(option);}
     virtual void        	Scale(Double_t c1 = 1, Option_t* option = "")   {sum->Scale(c1, option); array->Scale(c1, option);}
     virtual void            ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
+    virtual void            Sumw2(Bool_t flag = kTRUE)                      {sum->Sumw2(flag); array->Sumw2(flag);}
     virtual Int_t           WriteWithoutCalcResult(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
 };
 
