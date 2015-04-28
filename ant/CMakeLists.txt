@@ -79,8 +79,7 @@ foreach(f ${GOAT_BASE} ${GOAT_EXTRA})
     list(APPEND ANT_GOAT_BASE ../${f})
 endforeach()
 
-add_library(goatlib STATIC ${ANT_GOAT_BASE})
-add_library(antlib STATIC ${ANT_BASE} ${ANT_PHYSICS})
+add_library(antlib SHARED ${ANT_BASE} ${ANT_PHYSICS})
 
 include_directories(.)
 include_directories(${APLCON_INCLUDE_DIR})
@@ -97,7 +96,7 @@ foreach(PROG_SRC ${ANT_PROGS})
     target_link_libraries(${name}
     	antlib
     	${APLCON_LIBRARIES}
-        goatlib
+        goatbase
         ${LIBS}
     	${ROOT_LIBRARIES}
     )
