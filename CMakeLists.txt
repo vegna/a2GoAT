@@ -107,8 +107,8 @@ else()
     message(STATUS "Pluto disabled")
 endif()
 
-add_library(goatbase STATIC ${GOAT_BASE})
-add_library(ghist STATIC ${GOAT_GHIST})
+add_library(goatbase SHARED ${GOAT_BASE})
+add_library(ghist SHARED ${GOAT_GHIST})
 
 add_executable(goat
    inc/GDataChecks.h
