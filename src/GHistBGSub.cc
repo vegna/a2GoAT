@@ -233,13 +233,13 @@ void    GHistBGSub::ScalerReadCorrection(const Double_t CorrectionFactor, const 
     prompt->ScalerReadCorrection(CorrectionFactor, CreateHistogramsForSingleScalerReads);
 }
 
-void	GHistBGSub::Sumw2(Bool_t flag)
+void	GHistBGSub::Sumw2()
 {
-    result->Sumw2(flag);
+    result->Sumw2();
     for(Int_t i=0; i<rand.GetEntriesFast(); i++)
-        ((GHistScaCor*)rand.At(i))->Sumw2(flag);
-    randSum->Sumw2(flag);
-    prompt->Sumw2(flag);
+        ((GHistScaCor*)rand.At(i))->Sumw2();
+    randSum->Sumw2();
+    prompt->Sumw2();
 }
 void    GHistBGSub::PrepareWriteList(GHistWriteList* arr, const char *name)
 {
