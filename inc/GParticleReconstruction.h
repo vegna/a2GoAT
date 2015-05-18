@@ -70,6 +70,8 @@ private:
 protected:
             Bool_t  ProcessEventWithoutFilling();
     virtual void    ProcessEvent();
+            Bool_t  SimpleEventWithoutFilling();
+    virtual void    SimpleEvent();
     virtual Bool_t  Start();
 
 public:

@@ -54,8 +54,6 @@ Bool_t GParticleReconstruction::Start()
 
 Bool_t	GParticleReconstruction::Init()
 {		
-    GDataChecks::Init();
-
 	cout << endl << "Particle Reconstruction turned ON" << endl;
 
     char cutFile[256];
@@ -573,6 +571,35 @@ void	GParticleReconstruction::ProcessEvent()
     GetChargedPions()->Fill();
     GetProtons()->Fill();
     GetNeutrons()->Fill();
+    FillReadList();
+}
+
+Bool_t	GParticleReconstruction::SimpleEventWithoutFilling()
+{
+    if(doTrigger)
+    {
+        if(!Trigger())
+            return kFALSE;
+    }
+
+    GetRootinos()->Clear();
+
+    for(Int_t i=0; i<GetTracks()->GetNTracks(); i++)
+    {
+        GetRootinos()->AddParticle(GetTracks()->GetClusterEnergy(i), GetTracks()->GetTheta(i), GetTracks()->GetPhi(i), 0, GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i), GetTracks()->GetCentralCrystal(i), GetTracks()->GetCentralVeto(i), GetTracks()->GetDetectors(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), i);
+    }
+
+    return kTRUE;
+}
+
+void	GParticleReconstruction::SimpleEvent()
+{
+    if(!SimpleEventWithoutFilling())   return;
+
+    GetEventParameters()->SetNReconstructed(GetNReconstructed());
+    GetEventParameters()->Fill();
+
+    GetRootinos()->Fill();
     FillReadList();
 }
 

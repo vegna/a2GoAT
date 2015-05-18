@@ -93,40 +93,42 @@ void	GoAT::ProcessEvent()
     {
         if(useParticleReconstruction)
         {
+            if(!GParticleReconstruction::ProcessEventWithoutFilling())  return;
             if(useMesonReconstruction)
             {
-                if(!GParticleReconstruction::ProcessEventWithoutFilling())  return;
                 if(!GMesonReconstruction::ProcessEventWithoutFilling())  return;
                 if(!SortFillEvent())    return;
-                GetElectrons()->Fill();
-                GetProtons()->Fill();
-                GetNeutrons()->Fill();
                 GetNeutralPions()->Fill();
                 GetEtas()->Fill();
                 GetEtaPrimes()->Fill();
             }
             else
             {
-                if(!GParticleReconstruction::ProcessEventWithoutFilling())  return;
                 if(!SortFillEvent())    return;
-                GetElectrons()->Fill();
-                GetProtons()->Fill();
-                GetNeutrons()->Fill();
             }
+            GetPhotons()->Fill();
+            GetChargedPions()->Fill();
+            GetElectrons()->Fill();
+            GetProtons()->Fill();
+            GetNeutrons()->Fill();
         }
         else if(useMesonReconstruction)
         {
-            GMesonReconstruction::ProcessEventWithoutFilling();
+            if(!GParticleReconstruction::SimpleEventWithoutFilling())  return;
+            if(!GMesonReconstruction::ProcessEventWithoutFilling())  return;
             if(!SortFillEvent())    return;
             GetNeutralPions()->Fill();
             GetEtas()->Fill();
             GetEtaPrimes()->Fill();
         }
+        else
+        {
+            if(!GParticleReconstruction::SimpleEventWithoutFilling())  return;
+            if(!SortFillEvent())    return;
+        }
+        GetRootinos()->Fill();
         GetEventParameters()->SetNReconstructed(GetNReconstructed());
         GetEventParameters()->Fill();
-        GetRootinos()->Fill();
-        GetPhotons()->Fill();
-        GetChargedPions()->Fill();
         FillReadList();
         nEventsWritten++;
     }
@@ -141,11 +143,11 @@ Bool_t	GoAT::Start()
     }
     SetAsGoATFile();
 
+    GetRootinos()->CloseForInput();
     if(useParticleReconstruction)
     {
         if(useMesonReconstruction)
         {
-            GetRootinos()->CloseForInput();
             GetPhotons()->CloseForInput();
             GetElectrons()->CloseForInput();
             GetChargedPions()->CloseForInput();
@@ -157,7 +159,6 @@ Bool_t	GoAT::Start()
         }
         else
         {
-            GetRootinos()->CloseForInput();
             GetPhotons()->CloseForInput();
             GetElectrons()->CloseForInput();
             GetChargedPions()->CloseForInput();
