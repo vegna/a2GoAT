@@ -1,0 +1,11 @@
+#=======================================================================
+# Config file for a TaggEff Analysis of GoAT-Trees
+#=======================================================================
+#
+# Set prompt and random windows (standard library and GH1 library)
+Set-Prompt-Cut: -6 6
+Add-Random-Cut: -500 -10
+Add-Random-Cut: 10 500
+
+# where are the tagger scalers?
+Tagger-Scalers: 12 363
