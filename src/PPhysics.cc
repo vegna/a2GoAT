@@ -65,7 +65,28 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 
 	// Add to accumulated
 	hist->Add(hist_current_SR);
-}	
+}
+
+void PPhysics::GoosyScalers(TH1* hist)
+{
+    Int_t nBins = hist->GetNbinsX();
+
+    TH1* temp = (TH1D*) hist->Clone("temp");
+
+    Int_t bin;
+    for (Int_t i = 1; i <= nBins; i++)
+    {
+        if(i <= 24)
+        {
+            if(TMath::Even(i)) bin = (i/2);
+            else bin = (13 + (i/2));
+        }
+        else bin = i;
+
+        hist->SetBinContent(i,temp->GetBinContent(bin));
+    }
+    delete temp;
+}
 
 void PPhysics::FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom)
 {
