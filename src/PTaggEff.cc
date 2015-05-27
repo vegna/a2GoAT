@@ -51,9 +51,16 @@ Bool_t	PTaggEff::Start()
     TaggEffDoubles->Sumw2();
     TaggEffDoubles->Divide(TaggerDoubles,TaggerAccScal);
 
-    LiveTimeScal->GetXaxis()->SetBinLabel(1,"Clock");
-    LiveTimeScal->GetXaxis()->SetBinLabel(2,"Inhibited");
-
+    if(GetLT_scaler_clock() < GetLT_scaler_inhib())
+    {
+        LiveTimeScal->GetXaxis()->SetBinLabel(1,"Clock");
+        LiveTimeScal->GetXaxis()->SetBinLabel(2,"Inhibited");
+    }
+    else
+    {
+        LiveTimeScal->GetXaxis()->SetBinLabel(1,"Inhibited");
+        LiveTimeScal->GetXaxis()->SetBinLabel(2,"Clock");
+    }
     return kTRUE;
 }
 
@@ -79,7 +86,8 @@ void	PTaggEff::ProcessScalerRead()
 	// Fill Tagger Scalers
 	FillScalers(GetTC_scaler_min(),GetTC_scaler_max(),TaggerAccScal);
     // Fill Live Time Scalers
-    FillScalers(GetLT_scaler_clock(),GetLT_scaler_inhib(),LiveTimeScal);
+    if(GetLT_scaler_clock() < GetLT_scaler_inhib()) FillScalers(GetLT_scaler_clock(),GetLT_scaler_inhib(),LiveTimeScal);
+    else FillScalers(GetLT_scaler_inhib(),GetLT_scaler_clock(),LiveTimeScal);
 }
 
 Bool_t	PTaggEff::Write()
