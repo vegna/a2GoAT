@@ -1,7 +1,10 @@
 #=======================================================================
 # Config file for a TaggEff Analysis of GoAT-Trees
 #=======================================================================
-#
+
+# Decode double hits in tagger?
+Decode-Doubles: 1
+
 # Set prompt and random windows (standard library and GH1 library)
 Set-Prompt-Cut: -6 6
 Add-Random-Cut: -500 -10
@@ -9,3 +12,6 @@ Add-Random-Cut: 10 500
 
 # where are the tagger scalers?
 Tagger-Scalers: 12 363
+
+# where are the live time scalers? (first is clock, second is inhibited)
+Live-Time-Scalers: 4 5

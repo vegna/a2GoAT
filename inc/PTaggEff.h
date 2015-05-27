@@ -12,8 +12,11 @@
 class	PTaggEff  : public PPhysics
 {
 private:
-    TH1*	TaggerHits;
+    TH1*	TaggerAllHits;
+    TH1*	TaggerSingles;
+    TH1*	TaggerDoubles;
     TH1*	TaggerAccScal;
+    TH1*	LiveTimeScal;
 
 protected:
     virtual Bool_t  Start();
