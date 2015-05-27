@@ -6,6 +6,10 @@ PPhysics::PPhysics()
 {
 	TC_cut_min = 0;
 	TC_cut_max = 352;
+    TC_scaler_min = 400;
+    TC_scaler_max = 751;
+    LT_scaler_clock = 0;
+    LT_scaler_inhib = 1;
 }
 
 PPhysics::~PPhysics()
@@ -404,12 +408,12 @@ Bool_t 	PPhysics::InitTargetMass()
 	}
 	else if(sscanf( config.c_str(), "%lf\n", &mass) == 1)
 	{
-		cout << "Setting Target mass: " << mass << " MeV" << endl;
+        cout << "Setting target mass: " << mass << " MeV" << endl;
 		SetTarget(mass);		
 	}
 	else 
 	{
-		cout << "Target Mass not set correctly" << endl; 
+        cout << "Target mass not set correctly" << endl;
 		return kFALSE;
 	}
 
@@ -426,21 +430,21 @@ Bool_t 	PPhysics::InitTaggerChannelCuts()
 	{
 		if ((tc1 < 0) || (tc1 > 352))
 		{
-           cout << "Invalid tagger channel cut: " << tc1 << endl;
+           cout << "Invalid Tagger channel cut: " << tc1 << endl;
 		   return kFALSE;
 		}
 		else if ((tc2 < 0) || (tc2 > 352))
 		{
-           cout << "Invalid tagger channel cut: " << tc2 << endl;
+           cout << "Invalid Tagger channel cut: " << tc2 << endl;
 		   return kFALSE;
 		}
 		
-        cout << "Setting cut on tagger channels: " << tc1 << " to " << tc2 << endl;
+        cout << "Setting cut on Tagger channels: " << tc1 << " to " << tc2 << endl;
 		SetTC_cut(tc1,tc2);
 	}
 	else if(strcmp(config.c_str(), "nokey") != 0)
 	{
-		cout << "Tagger Channel cut not set correctly" << endl; 
+        cout << "Tagger channel cut not set correctly" << endl;
 		return kFALSE;
 	}
 
@@ -460,12 +464,32 @@ Bool_t 	PPhysics::InitTaggerScalers()
 	}
 	else if(strcmp(config.c_str(), "nokey") != 0)
 	{
-        cout << "Tagger Channel GetScalers() not set correctly" << endl;
+        cout << "Tagger scaler channels not set correctly" << endl;
 		return kFALSE;
 	}
 
 	cout << endl;
 	return kTRUE;
+
+}
+
+Bool_t 	PPhysics::InitLiveTimeScalers()
+{
+    Int_t sc1, sc2;
+    string config = ReadConfig("Live-Time-Scalers");
+    if(sscanf( config.c_str(), "%d %d\n", &sc1, &sc2) == 2)
+    {
+        cout << "Setting live time scaler channels: clock is " << sc1 << " and inhibited is " << sc2 << endl;
+        SetLT_scalers(sc1,sc2);
+    }
+    else if(strcmp(config.c_str(), "nokey") != 0)
+    {
+        cout << "Live time scaler channels not set correctly" << endl;
+        return kFALSE;
+    }
+
+    cout << endl;
+    return kTRUE;
 
 }
 

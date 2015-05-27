@@ -39,6 +39,9 @@ private:
 
 	Int_t TC_scaler_min;
 	Int_t TC_scaler_max;
+
+    Int_t LT_scaler_clock;
+    Int_t LT_scaler_inhib;
 	
 	
 protected:
@@ -83,6 +86,10 @@ public:
 	Int_t 	GetTC_scaler_min() { return TC_scaler_min;}
     Int_t 	GetTC_scaler_max() { return TC_scaler_max;}
 
+    void 	SetLT_scalers(Int_t clock, Int_t inhib) { LT_scaler_clock = clock; LT_scaler_inhib = inhib; }
+    Int_t 	GetLT_scaler_clock() { return LT_scaler_clock;}
+    Int_t 	GetLT_scaler_inhib() { return LT_scaler_inhib;}
+
 	// TH1 routines
 	void FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom);
 	void FillMissingMass(const GTreeParticle& tree, Int_t particle_index, TH1* Hprompt, TH1* Hrandom);
@@ -107,6 +114,7 @@ public:
 	Bool_t InitTargetMass();
 	Bool_t InitTaggerChannelCuts();
 	Bool_t InitTaggerScalers();
+    Bool_t InitLiveTimeScalers();
 
     Bool_t  RejectTagged(Int_t tagger_index);
 };
