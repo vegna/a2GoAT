@@ -32,7 +32,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 {
 	Int_t nFillScalers = high_scaler_number - low_scaler_number + 1;
 
-	if( nFillScalers < hist->GetNbinsX())
+    if( nFillScalers > hist->GetNbinsX())
 	{
 	    cout << "Error: FillScalers - histogram has insufficient bins for range" << endl;
 	    return;
@@ -47,19 +47,19 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 	if (low_scaler_number  < 0)
 	{
 		cout << "FillScalers given scaler number outside range: " << low_scaler_number << endl;
-		cout << "Setting lower limit to zero and continuing" << endl;
-		low_scaler_number = 0;
+        low_scaler_number = 0;
+        cout << "Setting lower limit to " << low_scaler_number << " and continuing" << endl;
 	}
-    if (high_scaler_number > GetScalers()->GetNScalers())
+    if (high_scaler_number >= GetScalers()->GetNScalers())
 	{
 		cout << "FillScalers given scaler number outside range: " << high_scaler_number << endl;
-		cout << "Setting upper limit to "<< high_scaler_number << " and continuing" << endl;	
-        high_scaler_number = GetScalers()->GetNScalers();
+        high_scaler_number = ((GetScalers()->GetNScalers()) - 1);
+        cout << "Setting upper limit to " << high_scaler_number << " and continuing" << endl;
 	}
 
     for (Int_t i = low_scaler_number; i <= high_scaler_number; i++)
 	{
-		Int_t bin = i - low_scaler_number;
+        Int_t bin = (i - low_scaler_number + 1);
         hist_current_SR->SetBinContent(bin,GetScalers()->GetScaler(i));
 	}
 
@@ -71,10 +71,10 @@ void PPhysics::FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hra
 {
     for (Int_t i = 0; i < tree.GetNParticles(); i++)
     {
-    for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
-	{
-        	FillMissingMass(tree, i, j, Hprompt, Hrandom);
-	}
+        for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
+        {
+                FillMissingMass(tree, i, j, Hprompt, Hrandom);
+        }
     }
 }
 
