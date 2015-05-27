@@ -2,11 +2,14 @@
 
 PTaggEff::PTaggEff()
 { 
-    TaggerAllHits = new TH1D("TaggerAllHits","TaggerAllHits",352,0,352);
-    TaggerSingles = new TH1D("TaggerSingles","TaggerSingles",352,0,352);
-    TaggerDoubles = new TH1D("TaggerDoubles","TaggerDoubles",352,0,352);
-    TaggerAccScal = new TH1D("TaggerAccScal","TaggerAccScal",352,0,352);
-    LiveTimeScal  = new TH1D("LiveTimeScal","LiveTimeScal",2,0,2);
+    TaggerAllHits = new TH1D("TaggerAllHits","Tagger - All Hits",352,0,352);
+    TaggerSingles = new TH1D("TaggerSingles","Tagger - Single Hits",352,0,352);
+    TaggerDoubles = new TH1D("TaggerDoubles","Tagger - Double Hits",352,0,352);
+    TaggerAccScal = new TH1D("TaggerAccScal","Tagger - Accumulated Scalers",352,0,352);
+    TaggEffAllHits = new TH1D("TaggEffAllHits","Tagging Efficiency - All Hits",352,0,352);
+    TaggEffSingles = new TH1D("TaggEffSingles","Tagging Efficiency - Single Hits",352,0,352);
+    TaggEffDoubles = new TH1D("TaggEffDoubles","Tagging Efficiency - Double Hits",352,0,352);
+    LiveTimeScal  = new TH1D("LiveTimeScal","Live Time Scalers",2,0,2);
 }
 
 PTaggEff::~PTaggEff()
@@ -37,6 +40,20 @@ Bool_t	PTaggEff::Start()
 
     TraverseValidEvents();
 
+    GoosyScalers(TaggerAccScal);
+
+    TaggEffAllHits->Sumw2();
+    TaggEffAllHits->Divide(TaggerAllHits,TaggerAccScal);
+
+    TaggEffSingles->Sumw2();
+    TaggEffSingles->Divide(TaggerSingles,TaggerAccScal);
+
+    TaggEffDoubles->Sumw2();
+    TaggEffDoubles->Divide(TaggerDoubles,TaggerAccScal);
+
+    LiveTimeScal->GetXaxis()->SetBinLabel(1,"Clock");
+    LiveTimeScal->GetXaxis()->SetBinLabel(2,"Inhibited");
+
     return kTRUE;
 }
 
@@ -49,10 +66,11 @@ void	PTaggEff::ProcessEvent()
         TaggerAllHits->Fill(GetTagger()->GetTaggedChannel(i));
         if(RejectTagged(i)) continue;
         TaggerSingles->Fill(GetTagger()->GetTaggedChannel(i));
+        TaggerDoubles->Fill(GetTagger()->GetTaggedChannel(i));
     }
     for (Int_t i = 0; i < GetTagger()->GetNDouble(); i++)
     {
-        TaggerDoubles->Fill(GetTagger()->GetDoubleChannel(i));
+        TaggerDoubles->Fill(GetTagger()->GetDoubleRandom(i));
     }
 }
 

@@ -16,6 +16,9 @@ private:
     TH1*	TaggerSingles;
     TH1*	TaggerDoubles;
     TH1*	TaggerAccScal;
+    TH1*	TaggEffAllHits;
+    TH1*	TaggEffSingles;
+    TH1*	TaggEffDoubles;
     TH1*	LiveTimeScal;
 
 protected:
