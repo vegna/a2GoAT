@@ -5,6 +5,7 @@
 #include <TLorentzVector.h>
 #include "Rtypes.h"
 #include "GTree.h"
+#include "TRandom3.h"
 
 
 #define GTreeTagger_MAX 4096
@@ -49,6 +50,7 @@ public:
             Int_t           GetNChain()                         const	{return nChain;}
     const	Int_t*          GetDoubleChannel()                  const	{return doubleChannel;}
             Int_t           GetDoubleChannel(const Int_t index) const	{return doubleChannel[index];}
+            Int_t           GetDoubleRandom(const Int_t index)  const	{return (doubleChannel[index]+TMath::Nint(gRandom->Rndm()));}
     const	Double_t*       GetDoubleTime()                     const	{return doubleTime;}
             Double_t        GetDoubleTime(const Int_t index)    const	{return doubleTime[index];}
     const	Double_t*       GetDoubleEnergy()                   const	{return doubleEnergy;}
