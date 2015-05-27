@@ -493,6 +493,26 @@ Bool_t 	PPhysics::InitLiveTimeScalers()
 
 }
 
+Bool_t 	PPhysics::InitDecodeDoubles()
+{
+    Int_t dd;
+    string config = ReadConfig("Decode-Doubles");
+    if(sscanf( config.c_str(), "%d\n", &dd) == 1)
+    {
+        cout << "Setting decoding of doubles: " << dd << endl;
+        SetDecodeDoubles(dd);
+    }
+    else if(strcmp(config.c_str(), "nokey") != 0)
+    {
+        cout << "Decoding of doubles not set correctly" << endl;
+        return kFALSE;
+    }
+
+    cout << endl;
+    return kTRUE;
+
+}
+
 Bool_t 	PPhysics::RejectTagged(Int_t tagger_index)
 {
     Bool_t reject = false;

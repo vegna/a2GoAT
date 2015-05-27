@@ -42,7 +42,8 @@ private:
 
     Int_t LT_scaler_clock;
     Int_t LT_scaler_inhib;
-	
+
+    Bool_t IsDecodeDoubles;
 	
 protected:
 
@@ -90,6 +91,9 @@ public:
     Int_t 	GetLT_scaler_clock() { return LT_scaler_clock;}
     Int_t 	GetLT_scaler_inhib() { return LT_scaler_inhib;}
 
+    void 	SetDecodeDoubles(Int_t decode) { IsDecodeDoubles = (Bool_t)decode; }
+    Bool_t 	GetDecodeDoubles() { return IsDecodeDoubles;}
+
 	// TH1 routines
 	void FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom);
 	void FillMissingMass(const GTreeParticle& tree, Int_t particle_index, TH1* Hprompt, TH1* Hrandom);
@@ -115,6 +119,7 @@ public:
 	Bool_t InitTaggerChannelCuts();
 	Bool_t InitTaggerScalers();
     Bool_t InitLiveTimeScalers();
+    Bool_t InitDecodeDoubles();
 
     Bool_t  RejectTagged(Int_t tagger_index);
 };
