@@ -46,6 +46,10 @@ private:
     Double_t    pseudoVertexY[GTreeTrack_MAX];
     Double_t    pseudoVertexZ[GTreeTrack_MAX];
 
+    Double_t    targetShift;
+    Double_t    TAPSDistance;
+    Double_t    CBDistance;
+
 protected:
     virtual void    SetBranchAdresses();
     virtual void    SetBranches();
@@ -77,8 +81,8 @@ public:
             Double_t        GetPhi(const Int_t index)           const	{return phi[index];}
             Double_t        GetPhiRad(const Int_t index)        const	{return phi[index] * TMath::DegToRad();}
     const	Double_t*       GetTheta()                          const	{return theta;}
-            Double_t        GetTheta(const Int_t index)         const	{return theta[index];}
-            Double_t        GetThetaRad(const Int_t index)      const	{return theta[index] * TMath::DegToRad();}
+    inline  Double_t        GetTheta(const Int_t index)         const;
+    inline  Double_t        GetThetaRad(const Int_t index)      const;
     const	Double_t*       GetTime()                           const	{return time;}
             Double_t        GetTime(const Int_t index)          const	{return time[index];}
     inline  TLorentzVector	GetVector(const Int_t index)        const;
@@ -97,16 +101,63 @@ public:
             Double_t        GetPseudoVertexY(const Int_t index)       const	{return pseudoVertexY[index];}
     const	Double_t*       GetPseudoVertexZ()                        const	{return pseudoVertexZ;}
             Double_t        GetPseudoVertexZ(const Int_t index)       const	{return pseudoVertexZ[index];}
+            Double_t        GetTargetShift()   const   {return targetShift;}
+            Double_t        GetTAPSDistance()  const   {return TAPSDistance;}
+            void            SetTargetShift(const Double_t shift) {targetShift = shift;}
+            void            SetTAPSDistance(const Double_t tapsd) {TAPSDistance = tapsd;}
     virtual void            Print(const Bool_t All = kFALSE)    const;
 
     friend  class GTreeParticle;
     friend  class GTreeMeson;
 };
 
-TLorentzVector	GTreeTrack::GetVector(const Int_t index) const
+Double_t GTreeTrack::GetTheta(const Int_t index) const
+{
+    if(targetShift == 0)
+    {
+        return theta[index];
+    }
+    else if(HasCB(index) && !HasTAPS(index))
+    {
+        return (TMath::RadToDeg()*TMath::ATan2((CBDistance*TMath::Sin(theta[index]*TMath::DegToRad())),((CBDistance*TMath::Cos(theta[index]*TMath::DegToRad()))-targetShift)));
+    }
+    else if(!HasCB(index) && HasTAPS(index))
+    {
+        return (TMath::RadToDeg()*TMath::ATan2((TAPSDistance*TMath::Tan(theta[index]*TMath::DegToRad())),(TAPSDistance-targetShift)));
+    }
+    else
+    {
+        std::cout << "How did I get here?" << std::endl;
+        return 0;
+    }
+}
+
+Double_t GTreeTrack::GetThetaRad(const Int_t index) const
 {
     Double_t th = theta[index] * TMath::DegToRad();
-    Double_t ph = phi[index]   * TMath::DegToRad();
+    if(targetShift == 0)
+    {
+        return th;
+    }
+    else if(HasCB(index) && !HasTAPS(index))
+    {
+        return (TMath::ATan2((CBDistance*TMath::Sin(th)),((CBDistance*TMath::Cos(th))-targetShift)));
+    }
+    else if(!HasCB(index) && HasTAPS(index))
+    {
+        return (TMath::ATan2((TAPSDistance*TMath::Tan(th)),(TAPSDistance-targetShift)));
+    }
+    else
+    {
+        std::cout << "How did I get here?" << std::endl;
+        return 0;
+    }
+}
+
+TLorentzVector	GTreeTrack::GetVector(const Int_t index) const
+{
+    Double_t th = GetThetaRad(index);
+    Double_t ph = GetPhiRad(index);
 
     Double_t Px = clusterEnergy[index]* sin(th)*cos(ph);
     Double_t Py = clusterEnergy[index]* sin(th)*sin(ph);
@@ -117,8 +168,8 @@ TLorentzVector	GTreeTrack::GetVector(const Int_t index) const
 
 TLorentzVector	GTreeTrack::GetVector(const Int_t index, const Double_t mass) const
 {
-    Double_t th = theta[index] * TMath::DegToRad();
-    Double_t ph = phi[index]   * TMath::DegToRad();
+    Double_t th = GetThetaRad(index);
+    Double_t ph = GetPhiRad(index);
 
     Double_t E 	= clusterEnergy[index] + mass;
     Double_t P 	= TMath::Sqrt(E*E - mass*mass);

@@ -73,6 +73,27 @@ Bool_t	GoAT::Init()
         }
     }
 
+    config = ReadConfig("TARGET-SHIFT");
+    if (strcmp(config.c_str(), "nokey") != 0)
+    {
+        Double_t shift=0;
+        Double_t tapsd=0;
+        Int_t npars = sscanf( config.c_str(), "%lf %lf\n", &shift, &tapsd);
+        if(npars == 1) GetTracks()->SetTargetShift(shift);
+        else if(npars == 2)
+        {
+            GetTracks()->SetTargetShift(shift);
+            GetTracks()->SetTAPSDistance(tapsd);
+            cout << "Applying target shift of " << shift << " cm, with TAPS set at " << tapsd << " cm" << endl;
+        }
+        else
+        {
+            cout << "Target shift not set correctly" << endl;
+            return kFALSE;
+        }
+
+    }
+
 	cout << endl;	
 
 	cout << "Initialisation complete." << endl;

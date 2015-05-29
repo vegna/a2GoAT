@@ -2,7 +2,10 @@
 
 GTreeTrack::GTreeTrack(GTreeManager *Manager, const TString& _Name)    :
     GTree(Manager,_Name),
-    nTracks(0)
+    nTracks(0),
+    targetShift(0),
+    TAPSDistance(0),
+    CBDistance(45.411)
 {
     for(Int_t i=0; i<GTreeTrack_MAX; i++)
     {

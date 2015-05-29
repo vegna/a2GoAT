@@ -251,6 +251,16 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
         ((GTree*)readSingleReadList[l])->GetEntryFast(0);
         ((GTree*)readSingleReadList[l])->Fill();
         if(!tagger->HasEnergy()) tagger->SetCalibration(setupParameters->GetNTagger(),setupParameters->GetTaggerPhotonEnergy());
+        if((tracks->GetTargetShift() != 0) && (tracks->GetTAPSDistance() == 0))
+        {
+            if(setupParameters->GetBaF2Distance() == 0)
+            {
+                cout << endl << "Target shift not set correctly" << endl << endl;
+                return kFALSE;
+            }
+            tracks->SetTAPSDistance(setupParameters->GetBaF2Distance());
+            cout << endl << "Applying target shift of " << tracks->GetTargetShift() << " cm, with TAPS set at " << tracks->GetTAPSDistance() << " cm" << endl << endl;
+        }
     }
 
     if(!scalers->IsOpenForInput())
