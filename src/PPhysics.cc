@@ -28,9 +28,9 @@ void	PPhysics::Reconstruct()
 // ----------------------------------------------------------------------------------------
 // TH1 routines
 // ----------------------------------------------------------------------------------------
-void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist)
+void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist, Int_t first_bin)
 {
-	Int_t nFillScalers = high_scaler_number - low_scaler_number + 1;
+    Int_t nFillScalers = high_scaler_number - low_scaler_number + first_bin;
 
     if( nFillScalers > hist->GetNbinsX())
 	{
@@ -59,7 +59,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 
     for (Int_t i = low_scaler_number; i <= high_scaler_number; i++)
 	{
-        Int_t bin = (i - low_scaler_number + 1);
+        Int_t bin = (i - low_scaler_number + first_bin);
         hist_current_SR->SetBinContent(bin,GetScalers()->GetScaler(i));
 	}
 

@@ -112,7 +112,7 @@ public:
 
 	Double_t CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_index1, const GTreeParticle& tree2, Int_t particle_index2);
 
-	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
+    void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist, Int_t first_bin=1);
     void GoosyScalers(TH1* hist);
 
 	Bool_t InitBackgroundCuts();
