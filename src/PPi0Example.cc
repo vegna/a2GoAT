@@ -30,6 +30,9 @@ Bool_t	PPi0Example::Init()
 	if(!InitTargetMass()) return kFALSE;
 	if(!InitTaggerChannelCuts()) return kFALSE;
 	if(!InitTaggerScalers()) return kFALSE;
+
+    if(!PPhysics::Init()) return kFALSE;
+
 	cout << "--------------------------------------------------" << endl;
 	return kTRUE;
 }
@@ -88,6 +91,8 @@ void	PPi0Example::ProcessScalerRead()
 {
 	// Fill Tagger Scalers
 	FillScalers(GetTC_scaler_min(),GetTC_scaler_max(),TaggerAccScal);
+
+    PPhysics::ProcessScalerRead();
 }
 
 Bool_t	PPi0Example::Write()

@@ -25,6 +25,9 @@ Bool_t	PTaggEff::Init()
     if(!InitBackgroundCuts()) return kFALSE;
 	if(!InitTaggerScalers()) return kFALSE;
     if(!InitLiveTimeScalers()) return kFALSE;
+
+    if(!PPhysics::Init()) return kFALSE;
+
     cout << "--------------------------------------------------" << endl;
 	return kTRUE;
 }
@@ -81,6 +84,8 @@ void	PTaggEff::ProcessScalerRead()
     // Fill Live Time Scalers
     FillScalers(GetLT_scaler_clock(),GetLT_scaler_clock(),LiveTimeScal,1);
     FillScalers(GetLT_scaler_inhib(),GetLT_scaler_inhib(),LiveTimeScal,2);
+
+    PPhysics::ProcessScalerRead();
 }
 
 Bool_t	PTaggEff::Write()

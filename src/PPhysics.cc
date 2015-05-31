@@ -10,6 +10,8 @@ PPhysics::PPhysics()
     TC_scaler_max = 751;
     LT_scaler_clock = 0;
     LT_scaler_inhib = 1;
+    scalerHists = new TObjArray();
+    nScalerHists = 0;
 }
 
 PPhysics::~PPhysics()
@@ -18,6 +20,7 @@ PPhysics::~PPhysics()
 
 Bool_t	PPhysics::Init()
 {
+    if(!InitDisplayScalers()) return kFALSE;
 	return kTRUE;
 }
 
@@ -371,7 +374,7 @@ void PPhysics::FillMass(const GTreeParticle& tree, Int_t particle_index, GH1* gH
 
 Bool_t 	PPhysics::Write()
 {
-	return kTRUE;
+    return kTRUE;
 }
 
 // Some common initialisation stuff
@@ -514,6 +517,49 @@ Bool_t 	PPhysics::InitLiveTimeScalers()
 
 }
 
+Bool_t  PPhysics::InitDisplayScalers()
+{
+    string config;
+    Int_t instance = 0;
+    char name[256];
+    Int_t lo, hi;
+    TH1D *h1;
+
+    do
+    {
+        config = ReadConfig("Display-Scalers",instance);
+
+        if(sscanf( config.c_str(), "%s %d %d\n", name, &lo, &hi) == 3)
+        {
+            if(nScalerHists && strcmp(name,scalerHists->At(nScalerHists-1)->GetName())==0)
+            {
+                cout << "    Appending to: " << name << " with scalers " << lo << " to " << hi << endl;
+                h1 = (TH1D*)scalerHists->At(nScalerHists-1);
+                h1->SetBins((h1->GetNbinsX()+(hi-lo+1)),0,(h1->GetNbinsX()+(hi-lo+1)));
+                nScalerSets.at(nScalerHists-1) += 1;
+            }
+            else
+            {
+                cout << "Adding histogram: " << name << " with scalers " << lo << " to " << hi << endl;
+                h1 = new TH1D(name,name,(hi-lo+1),0,(hi-lo+1));
+                scalerHists->Add(h1);
+                nScalerSets.push_back(1);
+                nScalerHists++;
+            }
+            scalerChanL.push_back(lo);
+            scalerChanH.push_back(hi);
+            instance++;
+        }
+        else if(strcmp(config.c_str(), "nokey") != 0)
+        {
+            cout << "Display scalers not set correctly" << endl;
+            return kFALSE;
+        }
+    } while (strcmp(config.c_str(), "nokey") != 0);
+
+    return kTRUE;
+}
+
 Bool_t 	PPhysics::InitDecodeDoubles()
 {
     Int_t dd;
@@ -546,6 +592,22 @@ Bool_t 	PPhysics::RejectTagged(Int_t tagger_index)
     if(GetTagger()->GetTaggedDouble(tagger_index)) reject = true;
 
     return reject;
+}
+
+void	PPhysics::ProcessScalerRead()
+{
+    // Fill Scaler Histograms
+    Int_t i = 0;
+    for(Int_t j=0; j<nScalerHists; j++)
+    {
+        Int_t firstBin = 1;
+        for(Int_t k=0; k<nScalerSets.at(j); k++)
+        {
+            FillScalers(scalerChanL.at(i),scalerChanH.at(i),(TH1*)scalerHists->At(j),firstBin);
+            firstBin += (scalerChanH.at(i)-scalerChanL.at(i)+1);
+            i++;
+        }
+    }
 }
 
 #endif

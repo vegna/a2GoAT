@@ -43,6 +43,12 @@ private:
     Int_t LT_scaler_clock;
     Int_t LT_scaler_inhib;
 
+    TObjArray *scalerHists;
+    std::vector<Int_t> nScalerSets;
+    std::vector<Int_t> scalerChanL;
+    std::vector<Int_t> scalerChanH;
+    Int_t nScalerHists;
+
     Bool_t IsDecodeDoubles;
 	
 protected:
@@ -55,6 +61,7 @@ public:
     virtual Bool_t	Init();
 	virtual void	Analyse() {;}
 	virtual void	Reconstruct();
+    virtual void	ProcessScalerRead();
     virtual Bool_t	Write();
 
 	void	FillMissingMass(const GTreeParticle& tree, GH1* gHist, Bool_t TaggerBinning = kFALSE);
@@ -120,6 +127,7 @@ public:
 	Bool_t InitTaggerChannelCuts();
 	Bool_t InitTaggerScalers();
     Bool_t InitLiveTimeScalers();
+    Bool_t InitDisplayScalers();
     Bool_t InitDecodeDoubles();
 
     Bool_t  RejectTagged(Int_t tagger_index);
