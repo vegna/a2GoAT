@@ -5,11 +5,9 @@ PTaggEff::PTaggEff()
     TaggerAllHits = new TH1D("TaggerAllHits","Tagger - All Hits",352,0,352);
     TaggerSingles = new TH1D("TaggerSingles","Tagger - Single Hits",352,0,352);
     TaggerDoubles = new TH1D("TaggerDoubles","Tagger - Double Hits",352,0,352);
-    TaggerAccScal = new TH1D("TaggerAccScal","Tagger - Accumulated Scalers",352,0,352);
     TaggEffAllHits = new TH1D("TaggEffAllHits","Tagging Efficiency - All Hits",352,0,352);
     TaggEffSingles = new TH1D("TaggEffSingles","Tagging Efficiency - Single Hits",352,0,352);
     TaggEffDoubles = new TH1D("TaggEffDoubles","Tagging Efficiency - Double Hits",352,0,352);
-    LiveTimeScal  = new TH1D("LiveTimeScal","Live Time Scalers",2,0,2);
 }
 
 PTaggEff::~PTaggEff()
@@ -21,12 +19,16 @@ Bool_t	PTaggEff::Init()
     cout << "Initialising tagging efficiency analysis..." << endl;
 	cout << "--------------------------------------------------" << endl << endl;
 
-    if(!InitDecodeDoubles()) return kFALSE;
     if(!InitBackgroundCuts()) return kFALSE;
-	if(!InitTaggerScalers()) return kFALSE;
-    if(!InitLiveTimeScalers()) return kFALSE;
 
     if(!PPhysics::Init()) return kFALSE;
+
+    TaggerAccScal = GetScalerHist("TaggerAccScal");
+    if(!TaggerAccScal)
+    {
+        cout << "No tagger scaler histogram available" << endl;
+        return kFALSE;
+    }
 
     cout << "--------------------------------------------------" << endl;
 	return kTRUE;
@@ -54,9 +56,6 @@ Bool_t	PTaggEff::Start()
     TaggEffDoubles->Sumw2();
     TaggEffDoubles->Divide(TaggerDoubles,TaggerAccScal);
 
-    LiveTimeScal->GetXaxis()->SetBinLabel(1,"Clock");
-    LiveTimeScal->GetXaxis()->SetBinLabel(2,"Inhibited");
-
     return kTRUE;
 }
 
@@ -79,12 +78,6 @@ void	PTaggEff::ProcessEvent()
 
 void	PTaggEff::ProcessScalerRead()
 {
-	// Fill Tagger Scalers
-	FillScalers(GetTC_scaler_min(),GetTC_scaler_max(),TaggerAccScal);
-    // Fill Live Time Scalers
-    FillScalers(GetLT_scaler_clock(),GetLT_scaler_clock(),LiveTimeScal,1);
-    FillScalers(GetLT_scaler_inhib(),GetLT_scaler_inhib(),LiveTimeScal,2);
-
     PPhysics::ProcessScalerRead();
 }
 

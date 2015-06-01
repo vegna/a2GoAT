@@ -120,8 +120,12 @@ public:
 	Double_t CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_index1, const GTreeParticle& tree2, Int_t particle_index2);
 
     void AddScalerHist(const char* name, Int_t lo, Int_t hi);
+    void AddScalerHist(const char* name, Int_t scal, const char* label);
     void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist, Int_t first_bin=1);
     void GoosyScalers(TH1* hist);
+
+    TH1D* GetScalerHist(Int_t index) {return (TH1D*)scalerHists->At(index);}
+    TH1D* GetScalerHist(const char* name) {return (TH1D*)scalerHists->At(scalerHists->IndexOf(scalerHists->FindObject(name)));}
 
 	Bool_t InitBackgroundCuts();
 	Bool_t InitTargetMass();

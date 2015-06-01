@@ -20,6 +20,10 @@ PPhysics::~PPhysics()
 
 Bool_t	PPhysics::Init()
 {
+    if(!InitDecodeDoubles()) return kFALSE;
+    if(!InitTaggerChannelCuts()) return kFALSE;
+    if(!InitTaggerScalers()) return kFALSE;
+    if(!InitLiveTimeScalers()) return kFALSE;
     if(!InitDisplayScalers()) return kFALSE;
 	return kTRUE;
 }
@@ -70,7 +74,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 	hist->Add(hist_current_SR);
 }
 
-void PPhysics::AddScalerHist(const char *name, Int_t lo, Int_t hi)
+void PPhysics::AddScalerHist(const char* name, Int_t lo, Int_t hi)
 {
     TH1D *h1;
 
@@ -92,6 +96,32 @@ void PPhysics::AddScalerHist(const char *name, Int_t lo, Int_t hi)
 
     scalerChanL.push_back(lo);
     scalerChanH.push_back(hi);
+}
+
+void PPhysics::AddScalerHist(const char* name, Int_t scal, const char* label)
+{
+    TH1D *h1;
+
+    if(nScalerHists && strcmp(name,scalerHists->At(nScalerHists-1)->GetName())==0)
+    {
+        cout << "    Appending to: " << name << " with scaler " << scal << " named " << label << endl;
+        h1 = (TH1D*)scalerHists->At(nScalerHists-1);
+        h1->SetBins((h1->GetNbinsX()+1),0,(h1->GetNbinsX()+1));
+        h1->GetXaxis()->SetBinLabel(h1->GetNbinsX(),label);
+        nScalerSets.at(nScalerHists-1) += 1;
+    }
+    else
+    {
+        cout << "Adding histogram: " << name << " with scaler " << scal << " named " << label << endl;
+        h1 = new TH1D(name,name,1,0,1);
+        h1->GetXaxis()->SetBinLabel(1,label);
+        scalerHists->Add(h1);
+        nScalerSets.push_back(1);
+        nScalerHists++;
+    }
+
+    scalerChanL.push_back(scal);
+    scalerChanH.push_back(scal);
 }
 
 void PPhysics::GoosyScalers(TH1* hist)
@@ -452,20 +482,19 @@ Bool_t 	PPhysics::InitTargetMass()
 	string config = ReadConfig("Target-Mass");
 	if(strcmp(config.c_str(), "nokey") == 0)
 	{
-		cout << "Target mass unknown!" << endl;
+        cout << "Target mass unknown!" << endl << endl;
 	}
 	else if(sscanf( config.c_str(), "%lf\n", &mass) == 1)
 	{
-        cout << "Setting target mass: " << mass << " MeV" << endl;
+        cout << "Setting target mass: " << mass << " MeV" << endl << endl;
 		SetTarget(mass);		
 	}
 	else 
 	{
-        cout << "Target mass not set correctly" << endl;
+        cout << "Target mass not set correctly" << endl << endl;
 		return kFALSE;
 	}
 
-	cout << endl;
 	return kTRUE;
 
 }
@@ -478,25 +507,24 @@ Bool_t 	PPhysics::InitTaggerChannelCuts()
 	{
 		if ((tc1 < 0) || (tc1 > 352))
 		{
-           cout << "Invalid Tagger channel cut: " << tc1 << endl;
+           cout << "Invalid Tagger channel cut: " << tc1 << endl << endl;
 		   return kFALSE;
 		}
 		else if ((tc2 < 0) || (tc2 > 352))
 		{
-           cout << "Invalid Tagger channel cut: " << tc2 << endl;
+           cout << "Invalid Tagger channel cut: " << tc2 << endl << endl;
 		   return kFALSE;
 		}
 		
-        cout << "Setting cut on Tagger channels: " << tc1 << " to " << tc2 << endl;
+        cout << "Setting cut on Tagger channels: " << tc1 << " to " << tc2 << endl << endl;
 		SetTC_cut(tc1,tc2);
 	}
 	else if(strcmp(config.c_str(), "nokey") != 0)
 	{
-        cout << "Tagger channel cut not set correctly" << endl;
+        cout << "Tagger channel cut not set correctly" << endl << endl;
 		return kFALSE;
 	}
 
-	cout << endl;
 	return kTRUE;
 
 }
@@ -509,14 +537,15 @@ Bool_t 	PPhysics::InitTaggerScalers()
 	{
 		cout << "Setting Tagger scaler channels: " << sc1 << " to " << sc2 << endl;
         SetTC_scalers(sc1,sc2);
-	}
+        AddScalerHist("TaggerAccScal",sc1,sc2);
+        cout << endl;
+    }
 	else if(strcmp(config.c_str(), "nokey") != 0)
 	{
-        cout << "Tagger scaler channels not set correctly" << endl;
+        cout << "Tagger scaler channels not set correctly" << endl << endl;
 		return kFALSE;
 	}
 
-	cout << endl;
 	return kTRUE;
 
 }
@@ -529,14 +558,16 @@ Bool_t 	PPhysics::InitLiveTimeScalers()
     {
         cout << "Setting live time scaler channels: clock is " << sc1 << " and inhibited is " << sc2 << endl;
         SetLT_scalers(sc1,sc2);
+        AddScalerHist("LiveTimeScal",sc1,"Clock");
+        AddScalerHist("LiveTimeScal",sc2,"Inhibited");
+        cout << endl;
     }
     else if(strcmp(config.c_str(), "nokey") != 0)
     {
-        cout << "Live time scaler channels not set correctly" << endl;
+        cout << "Live time scaler channels not set correctly" << endl << endl;
         return kFALSE;
     }
 
-    cout << endl;
     return kTRUE;
 
 }
@@ -564,6 +595,8 @@ Bool_t  PPhysics::InitDisplayScalers()
         }
     } while (strcmp(config.c_str(), "nokey") != 0);
 
+    if(instance) cout << endl;
+
     return kTRUE;
 }
 
@@ -575,16 +608,15 @@ Bool_t 	PPhysics::InitDecodeDoubles()
     string config = ReadConfig("Decode-Doubles");
     if(sscanf( config.c_str(), "%d\n", &dd) == 1)
     {
-        cout << "Setting decoding of doubles: " << dd << endl;
+        cout << "Setting decoding of doubles: " << dd << endl << endl;
         SetDecodeDoubles(dd);
     }
     else if(strcmp(config.c_str(), "nokey") != 0)
     {
-        cout << "Decoding of doubles not set correctly" << endl;
+        cout << "Decoding of doubles not set correctly" << endl << endl;
         return kFALSE;
     }
 
-    cout << endl;
     return kTRUE;
 
 }

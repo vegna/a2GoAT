@@ -19,7 +19,6 @@ private:
     TH1*	TaggEffAllHits;
     TH1*	TaggEffSingles;
     TH1*	TaggEffDoubles;
-    TH1*	LiveTimeScal;
 
 protected:
     virtual Bool_t  Start();

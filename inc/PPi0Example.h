@@ -23,8 +23,6 @@ private:
     GH1*	MM;
     GH1*	MM_2g;
 
-    TH1*	TaggerAccScal;
-
 protected:
     virtual Bool_t  Start();
     virtual void    ProcessEvent();

@@ -13,8 +13,6 @@ PPi0Example::PPi0Example()
   
     MM		= new GH1("MM", 	"MM", 	 	400,   800, 1200);     
     MM_2g	= new GH1("MM_2g", 	"MM_2g", 	400,   800, 1200);
-
-    TaggerAccScal = new TH1D("TaggerAccScal","TaggerAccScal",352,0,352);
 }
 
 PPi0Example::~PPi0Example()
@@ -27,13 +25,11 @@ Bool_t	PPi0Example::Init()
 	cout << "--------------------------------------------------" << endl << endl;
 
 	if(!InitBackgroundCuts()) return kFALSE;
-	if(!InitTargetMass()) return kFALSE;
-	if(!InitTaggerChannelCuts()) return kFALSE;
-	if(!InitTaggerScalers()) return kFALSE;
+    if(!InitTargetMass()) return kFALSE;
 
     if(!PPhysics::Init()) return kFALSE;
 
-	cout << "--------------------------------------------------" << endl;
+    cout << "--------------------------------------------------" << endl;
 	return kTRUE;
 }
 
@@ -89,9 +85,6 @@ void	PPi0Example::ProcessEvent()
 
 void	PPi0Example::ProcessScalerRead()
 {
-	// Fill Tagger Scalers
-	FillScalers(GetTC_scaler_min(),GetTC_scaler_max(),TaggerAccScal);
-
     PPhysics::ProcessScalerRead();
 }
 
