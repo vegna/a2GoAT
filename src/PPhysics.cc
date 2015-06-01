@@ -70,6 +70,30 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 	hist->Add(hist_current_SR);
 }
 
+void PPhysics::AddScalerHist(const char *name, Int_t lo, Int_t hi)
+{
+    TH1D *h1;
+
+    if(nScalerHists && strcmp(name,scalerHists->At(nScalerHists-1)->GetName())==0)
+    {
+        cout << "    Appending to: " << name << " with scalers " << lo << " to " << hi << endl;
+        h1 = (TH1D*)scalerHists->At(nScalerHists-1);
+        h1->SetBins((h1->GetNbinsX()+(hi-lo+1)),0,(h1->GetNbinsX()+(hi-lo+1)));
+        nScalerSets.at(nScalerHists-1) += 1;
+    }
+    else
+    {
+        cout << "Adding histogram: " << name << " with scalers " << lo << " to " << hi << endl;
+        h1 = new TH1D(name,name,(hi-lo+1),0,(hi-lo+1));
+        scalerHists->Add(h1);
+        nScalerSets.push_back(1);
+        nScalerHists++;
+    }
+
+    scalerChanL.push_back(lo);
+    scalerChanH.push_back(hi);
+}
+
 void PPhysics::GoosyScalers(TH1* hist)
 {
     Int_t nBins = hist->GetNbinsX();
@@ -523,7 +547,6 @@ Bool_t  PPhysics::InitDisplayScalers()
     Int_t instance = 0;
     char name[256];
     Int_t lo, hi;
-    TH1D *h1;
 
     do
     {
@@ -531,23 +554,7 @@ Bool_t  PPhysics::InitDisplayScalers()
 
         if(sscanf( config.c_str(), "%s %d %d\n", name, &lo, &hi) == 3)
         {
-            if(nScalerHists && strcmp(name,scalerHists->At(nScalerHists-1)->GetName())==0)
-            {
-                cout << "    Appending to: " << name << " with scalers " << lo << " to " << hi << endl;
-                h1 = (TH1D*)scalerHists->At(nScalerHists-1);
-                h1->SetBins((h1->GetNbinsX()+(hi-lo+1)),0,(h1->GetNbinsX()+(hi-lo+1)));
-                nScalerSets.at(nScalerHists-1) += 1;
-            }
-            else
-            {
-                cout << "Adding histogram: " << name << " with scalers " << lo << " to " << hi << endl;
-                h1 = new TH1D(name,name,(hi-lo+1),0,(hi-lo+1));
-                scalerHists->Add(h1);
-                nScalerSets.push_back(1);
-                nScalerHists++;
-            }
-            scalerChanL.push_back(lo);
-            scalerChanH.push_back(hi);
+            AddScalerHist(name,lo,hi);
             instance++;
         }
         else if(strcmp(config.c_str(), "nokey") != 0)
@@ -559,6 +566,8 @@ Bool_t  PPhysics::InitDisplayScalers()
 
     return kTRUE;
 }
+
+
 
 Bool_t 	PPhysics::InitDecodeDoubles()
 {
