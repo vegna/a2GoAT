@@ -136,5 +136,6 @@ public:
     Bool_t InitDecodeDoubles();
 
     Bool_t  RejectTagged(Int_t tagger_index);
+    Bool_t  RejectDouble(Int_t tagger_index);
 };
 #endif

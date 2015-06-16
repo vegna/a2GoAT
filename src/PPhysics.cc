@@ -635,6 +635,17 @@ Bool_t 	PPhysics::RejectTagged(Int_t tagger_index)
     return reject;
 }
 
+Bool_t 	PPhysics::RejectDouble(Int_t tagger_index)
+{
+    Bool_t reject = false;
+
+    // Is tagger channel rejected by user?
+    if(GetTagger()->GetDoubleRandom(tagger_index) < TC_cut_min) reject = true;
+    if(GetTagger()->GetDoubleRandom(tagger_index) > TC_cut_max) reject = true;
+
+    return reject;
+}
+
 void	PPhysics::ProcessScalerRead()
 {
     // Fill Scaler Histograms
