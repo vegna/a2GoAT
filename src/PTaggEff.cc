@@ -72,6 +72,7 @@ void	PTaggEff::ProcessEvent()
     }
     for (Int_t i = 0; i < GetTagger()->GetNDouble(); i++)
     {
+        if(RejectDouble(i)) continue;
         TaggerDoubles->Fill(GetTagger()->GetDoubleRandom(i));
     }
 }
