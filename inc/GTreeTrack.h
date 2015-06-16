@@ -101,6 +101,8 @@ public:
             Double_t        GetPseudoVertexY(const Int_t index)       const	{return pseudoVertexY[index];}
     const	Double_t*       GetPseudoVertexZ()                        const	{return pseudoVertexZ;}
             Double_t        GetPseudoVertexZ(const Int_t index)       const	{return pseudoVertexZ[index];}
+    inline  Bool_t          IsNeutral(const Int_t index)              const;
+    inline  Bool_t          IsCharged(const Int_t index)              const;
             Double_t        GetTargetShift()   const   {return targetShift;}
             Double_t        GetTAPSDistance()  const   {return TAPSDistance;}
             void            SetTargetShift(const Double_t shift) {targetShift = shift;}
@@ -213,6 +215,22 @@ Bool_t      GTreeTrack::HasTAPS(const Int_t index) const
     if (detectors[index] & DETECTOR_BaF2) return true;
     if (detectors[index] & DETECTOR_PbWO4) return true;
     if (detectors[index] & DETECTOR_Veto) return true;
+    return false;
+}
+
+Bool_t      GTreeTrack::IsNeutral(const Int_t index) const
+{
+    if (vetoEnergy[index] > 0) return false;
+    if (MWPC0Energy[index] > 0) return false;
+    if (MWPC1Energy[index] > 0) return false;
+    return true;
+}
+
+Bool_t      GTreeTrack::IsCharged(const Int_t index) const
+{
+    if (vetoEnergy[index] > 0) return true;
+    if (MWPC0Energy[index] > 0) return true;
+    if (MWPC1Energy[index] > 0) return true;
     return false;
 }
 #endif
