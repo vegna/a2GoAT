@@ -15,6 +15,7 @@ GTreeTagger::GTreeTagger(GTreeManager *Manager)    :
         taggedEnergy[i]  = 0;
         taggedDouble[i]  = 0;
         doubleChannel[i] = 0;
+        doubleRandom[i]  = 0;
         doubleTime[i]    = 0;
         doubleEnergy[i]  = 0;
     }
@@ -138,6 +139,7 @@ void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decode
             taggedDouble[pairInd2[i]] = true;
 
             doubleChannel[nDouble] = taggedChannel[pairInd1[i]];
+            doubleRandom[nDouble] = doubleChannel[nDouble]+TMath::Nint(gRandom->Rndm());
             doubleTime[nDouble] = pairTime[i];
             doubleEnergy[nDouble] = ((GetTaggedEnergy(pairInd1[i])+GetTaggedEnergy(pairInd2[i]))/2.0);
             nDouble++;
@@ -161,6 +163,7 @@ void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decode
             taggedDouble[pairInd2[pairOrder[i]]] = true;
 
             doubleChannel[nDouble] = taggedChannel[pairInd1[pairOrder[i]]];
+            doubleRandom[nDouble] = doubleChannel[nDouble]+TMath::Nint(gRandom->Rndm());
             doubleTime[nDouble] = pairTime[pairOrder[i]];
             doubleEnergy[nDouble] = ((GetTaggedEnergy(pairInd1[pairOrder[i]])+GetTaggedEnergy(pairInd2[pairOrder[i]]))/2.0);
             nDouble++;

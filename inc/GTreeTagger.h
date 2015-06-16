@@ -22,6 +22,7 @@ private:
     Int_t           nDouble;
     Int_t           nChain;
     Int_t           doubleChannel[GTreeTagger_MAX];
+    Int_t           doubleRandom[GTreeTagger_MAX];
     Double_t        doubleTime[GTreeTagger_MAX];
     Double_t        doubleEnergy[GTreeTagger_MAX];
     Bool_t          hasEnergy;
@@ -50,7 +51,7 @@ public:
             Int_t           GetNChain()                         const	{return nChain;}
     const	Int_t*          GetDoubleChannel()                  const	{return doubleChannel;}
             Int_t           GetDoubleChannel(const Int_t index) const	{return doubleChannel[index];}
-            Int_t           GetDoubleRandom(const Int_t index)  const	{return (doubleChannel[index]+TMath::Nint(gRandom->Rndm()));}
+            Int_t           GetDoubleRandom(const Int_t index)  const	{return doubleRandom[index];}
     const	Double_t*       GetDoubleTime()                     const	{return doubleTime;}
             Double_t        GetDoubleTime(const Int_t index)    const	{return doubleTime[index];}
     const	Double_t*       GetDoubleEnergy()                   const	{return doubleEnergy;}
