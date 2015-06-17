@@ -124,7 +124,7 @@ void PPhysics::AddScalerHist(const char* name, Int_t scal, const char* label)
     scalerChanH.push_back(scal);
 }
 
-void PPhysics::GoosyScalers(TH1* hist)
+void PPhysics::GoosyTagger(TH1* hist)
 {
     Int_t nBins = hist->GetNbinsX();
 
@@ -138,6 +138,24 @@ void PPhysics::GoosyScalers(TH1* hist)
             if(TMath::Even(i)) bin = (i/2);
             else bin = (13 + (i/2));
         }
+        else bin = i;
+
+        hist->SetBinContent(i,temp->GetBinContent(bin));
+    }
+    delete temp;
+}
+
+void PPhysics::GoosyVuprom(TH1* hist)
+{
+    Int_t nBins = hist->GetNbinsX();
+
+    TH1* temp = (TH1D*) hist->Clone("temp");
+
+    Int_t bin;
+    for (Int_t i = 1; i <= nBins; i++)
+    {
+        if(i <= 12) bin = (2*i);
+        else if(i <= 24) bin = (1+(2*(i-13)));
         else bin = i;
 
         hist->SetBinContent(i,temp->GetBinContent(bin));
@@ -552,14 +570,23 @@ Bool_t 	PPhysics::InitTaggerScalers()
 
 Bool_t 	PPhysics::InitLiveTimeScalers()
 {
-    Int_t sc1, sc2;
+    Int_t sc1, sc2, sc3;
     string config = ReadConfig("Live-Time-Scalers");
-    if(sscanf( config.c_str(), "%d %d\n", &sc1, &sc2) == 2)
+    if(sscanf( config.c_str(), "%d %d %d\n", &sc1, &sc2, &sc3) == 2)
     {
         cout << "Setting live time scaler channels: clock is " << sc1 << " and inhibited is " << sc2 << endl;
         SetLT_scalers(sc1,sc2);
         AddScalerHist("LiveTimeScal",sc1,"Clock");
         AddScalerHist("LiveTimeScal",sc2,"Inhibited");
+        cout << endl;
+    }
+    else if(sscanf( config.c_str(), "%d %d %d\n", &sc1, &sc2, &sc3) == 3)
+    {
+        cout << "Setting live time scaler channels: clock is " << sc1 << ", inhibited is " << sc2 << ", and tagger inhibited is " << sc3 << endl;
+        SetLT_scalers(sc1,sc2,sc3);
+        AddScalerHist("LiveTimeScal",sc1,"Clock");
+        AddScalerHist("LiveTimeScal",sc2,"Inhibited");
+        AddScalerHist("LiveTimeScal",sc3,"Tagger Inhib");
         cout << endl;
     }
     else if(strcmp(config.c_str(), "nokey") != 0)

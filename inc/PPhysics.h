@@ -42,6 +42,7 @@ private:
 
     Int_t LT_scaler_clock;
     Int_t LT_scaler_inhib;
+    Int_t LT_scaler_tginh;
 
     TObjArray *scalerHists;
     std::vector<Int_t> nScalerSets;
@@ -94,9 +95,10 @@ public:
 	Int_t 	GetTC_scaler_min() { return TC_scaler_min;}
     Int_t 	GetTC_scaler_max() { return TC_scaler_max;}
 
-    void 	SetLT_scalers(Int_t clock, Int_t inhib) { LT_scaler_clock = clock; LT_scaler_inhib = inhib; }
+    void 	SetLT_scalers(Int_t clock, Int_t inhib, Int_t tginh=0) { LT_scaler_clock = clock; LT_scaler_inhib = inhib; LT_scaler_tginh = tginh; }
     Int_t 	GetLT_scaler_clock() { return LT_scaler_clock;}
     Int_t 	GetLT_scaler_inhib() { return LT_scaler_inhib;}
+    Int_t 	GetLT_scaler_tginh() { return LT_scaler_tginh;}
 
     void 	SetDecodeDoubles(Int_t decode) { IsDecodeDoubles = (Bool_t)decode; }
     Bool_t 	GetDecodeDoubles() { return IsDecodeDoubles;}
@@ -122,7 +124,8 @@ public:
     void AddScalerHist(const char* name, Int_t lo, Int_t hi);
     void AddScalerHist(const char* name, Int_t scal, const char* label);
     void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist, Int_t first_bin=1);
-    void GoosyScalers(TH1* hist);
+    void GoosyTagger(TH1* hist);
+    void GoosyVuprom(TH1* hist);
 
     TH1D* GetScalerHist(Int_t index) {return (TH1D*)scalerHists->At(index);}
     TH1D* GetScalerHist(const char* name) {return (TH1D*)scalerHists->At(scalerHists->IndexOf(scalerHists->FindObject(name)));}

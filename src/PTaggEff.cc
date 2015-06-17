@@ -45,7 +45,7 @@ Bool_t	PTaggEff::Start()
 
     TraverseValidEvents();
 
-    GoosyScalers(TaggerAccScal);
+    GoosyTagger(TaggerAccScal);
 
     TaggEffAllHits->Sumw2();
     TaggEffAllHits->Divide(TaggerAllHits,TaggerAccScal);
