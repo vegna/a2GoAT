@@ -17,6 +17,7 @@ GTreeManager::GTreeManager()    :
     readList(),
     readCorreleatedToScalerReadList(),
     writeList(),
+    isMC(0),
     countReconstructed(0),
     tracks(0),
     tagger(0),
@@ -267,6 +268,7 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
     {
         cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
+        isMC = true;
         TraverseEntries(0, GetNEntries());
         return true;
     }
@@ -274,6 +276,7 @@ Bool_t  GTreeManager::TraverseValidEvents_AcquTreeFile()
     {
         cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
+        isMC = true;
         TraverseEntries(0, GetNEntries());
         return true;
     }
@@ -356,6 +359,7 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
     {
         cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
+        isMC = true;
         TraverseEntries(0, GetNEntries());
         return true;
     }
@@ -363,6 +367,7 @@ Bool_t  GTreeManager::TraverseValidEvents_GoATTreeFile()
     {
         cout << "No Scaler tree available. Expect MC data. Loop over all events" << endl;
         cout << "\tProcess events from " << 0 << " to " << GetNEntries() << "."<< endl;
+        isMC = true;
         TraverseEntries(0, GetNEntries());
         return true;
     }

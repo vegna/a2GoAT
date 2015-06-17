@@ -40,6 +40,7 @@ private:
     TObjArray   readSingleReadList;
     TObjArray   writeList;
     Bool_t      isWritten;
+    Bool_t      isMC;
 
     UInt_t  currentScalerEntry;
 
@@ -160,6 +161,7 @@ public:
             Bool_t  IsAcquFile()    const;
             Bool_t  IsGoATFile()    const;
             Bool_t  IsPhysicsFile()    const;
+            Bool_t  IsMCFile()          const   {return isMC;}
             Bool_t  TraverseFiles();
             Bool_t  StartFile(const char* inputFileName, const char* outputFileName);
 
