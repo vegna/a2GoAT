@@ -87,6 +87,7 @@ public:
             Double_t        GetTime(const Int_t index)          const	{return time[index];}
     inline  TLorentzVector	GetVector(const Int_t index)        const;
     inline  TLorentzVector	GetVector(const Int_t index, const Double_t mass)   const;
+    inline  TVector3    	GetUnitVector(const Int_t index)        const;
     const	Double_t*       GetMWPC0Energy()                          const	{return MWPC0Energy;}
             Double_t        GetMWPC0Energy(const Int_t index)         const	{return MWPC0Energy[index];}
     const	Double_t*       GetMWPC1Energy()                          const	{return MWPC1Energy;}
@@ -180,6 +181,18 @@ TLorentzVector	GTreeTrack::GetVector(const Int_t index, const Double_t mass) con
     Double_t Pz = P* cos(th);
 
     return TLorentzVector(Px, Py, Pz, E);
+}
+
+TVector3	GTreeTrack::GetUnitVector(const Int_t index) const
+{
+    Double_t th = GetThetaRad(index);
+    Double_t ph = GetPhiRad(index);
+
+    Double_t Px = sin(th)*cos(ph);
+    Double_t Py = sin(th)*sin(ph);
+    Double_t Pz = cos(th);
+
+    return TVector3(Px, Py, Pz);
 }
 
 Int_t		GTreeTrack::GetNCB()	const
