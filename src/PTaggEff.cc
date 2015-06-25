@@ -2,12 +2,9 @@
 
 PTaggEff::PTaggEff()
 { 
-    TaggerAllHits = new TH1D("TaggerAllHits","Tagger - All Hits",352,0,352);
-    TaggerSingles = new TH1D("TaggerSingles","Tagger - Single Hits",352,0,352);
-    TaggerDoubles = new TH1D("TaggerDoubles","Tagger - Double Hits",352,0,352);
-    TaggEffAllHits = new TH1D("TaggEffAllHits","Tagging Efficiency - All Hits",352,0,352);
-    TaggEffSingles = new TH1D("TaggEffSingles","Tagging Efficiency - Single Hits",352,0,352);
-    TaggEffDoubles = new TH1D("TaggEffDoubles","Tagging Efficiency - Double Hits",352,0,352);
+    TaggerAllHits = new GH1("TaggerAllHits","Tagger - All Hits",352,0,352);
+    TaggerSingles = new GH1("TaggerSingles","Tagger - Single Hits",352,0,352);
+    TaggerDoubles = new GH1("TaggerDoubles","Tagger - Double Hits",352,0,352);
 }
 
 PTaggEff::~PTaggEff()
@@ -47,15 +44,6 @@ Bool_t	PTaggEff::Start()
 
     GoosyTagger(TaggerAccScal);
 
-    TaggEffAllHits->Sumw2();
-    TaggEffAllHits->Divide(TaggerAllHits,TaggerAccScal);
-
-    TaggEffSingles->Sumw2();
-    TaggEffSingles->Divide(TaggerSingles,TaggerAccScal);
-
-    TaggEffDoubles->Sumw2();
-    TaggEffDoubles->Divide(TaggerDoubles,TaggerAccScal);
-
     return kTRUE;
 }
 
@@ -65,15 +53,15 @@ void	PTaggEff::ProcessEvent()
 
     for (Int_t i = 0; i < GetTagger()->GetNTagged(); i++)
     {
-        TaggerAllHits->Fill(GetTagger()->GetTaggedChannel(i));
+        TaggerAllHits->Fill(GetTagger()->GetTaggedChannel(i),GetTagger()->GetTaggedTime(i));
         if(RejectTagged(i)) continue;
-        TaggerSingles->Fill(GetTagger()->GetTaggedChannel(i));
-        TaggerDoubles->Fill(GetTagger()->GetTaggedChannel(i));
+        TaggerSingles->Fill(GetTagger()->GetTaggedChannel(i),GetTagger()->GetTaggedTime(i));
+        TaggerDoubles->Fill(GetTagger()->GetTaggedChannel(i),GetTagger()->GetTaggedTime(i));
     }
     for (Int_t i = 0; i < GetTagger()->GetNDouble(); i++)
     {
         if(RejectDouble(i)) continue;
-        TaggerDoubles->Fill(GetTagger()->GetDoubleRandom(i));
+        TaggerDoubles->Fill(GetTagger()->GetDoubleRandom(i),GetTagger()->GetDoubleTime(i));
     }
 }
 
@@ -84,6 +72,41 @@ void	PTaggEff::ProcessScalerRead()
 
 Bool_t	PTaggEff::Write()
 {
+    TH1D *TempScal = (TH1D*)TaggerAccScal->Clone("TempScal");
+
     // Write all GH1's and TObjects defined in this class
-    return GTreeManager::Write();
+    if(!(GTreeManager::Write())) return false;
+
+    TH1D *TempAllHits = (TH1D*)TaggerAllHits->GetSum()->GetResult()->GetBuffer()->Clone("TempAllHits");
+    TH1D *TempSingles = (TH1D*)TaggerSingles->GetSum()->GetResult()->GetBuffer()->Clone("TempSingles");
+    TH1D *TempDoubles = (TH1D*)TaggerDoubles->GetSum()->GetResult()->GetBuffer()->Clone("TempDoubles");
+
+    TH1D *TaggEffAllHits = new TH1D("TaggEffAllHits","Tagging Efficiency - All Hits",352,0,352);
+    TH1D *TaggEffSingles = new TH1D("TaggEffSingles","Tagging Efficiency - Single Hits",352,0,352);
+    TH1D *TaggEffDoubles = new TH1D("TaggEffDoubles","Tagging Efficiency - Double Hits",352,0,352);
+
+    TaggEffAllHits->Sumw2();
+    TaggEffAllHits->Divide(TempAllHits,TempScal);
+
+    TaggEffSingles->Sumw2();
+    TaggEffSingles->Divide(TempSingles,TempScal);
+
+    TaggEffDoubles->Sumw2();
+    TaggEffDoubles->Divide(TempDoubles,TempScal);
+
+    TaggEffAllHits->Write();
+    TaggEffSingles->Write();
+    TaggEffDoubles->Write();
+
+    delete TempScal;
+
+    delete TempAllHits;
+    delete TempSingles;
+    delete TempDoubles;
+
+    delete TaggEffAllHits;
+    delete TaggEffSingles;
+    delete TaggEffDoubles;
+
+    return true;
 }
