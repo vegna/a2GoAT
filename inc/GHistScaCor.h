@@ -55,6 +55,7 @@ public:
     virtual void 	CalcResult()    {}
     virtual Int_t	Fill(const Double_t x)    {return buffer->Fill(x);}
     virtual Int_t   FillWeighted(const Double_t x, const Double_t weight)   {return buffer->Fill(x, weight);}
+    const   TH1*    GetBuffer()                 const   {return buffer;}
     const   TH1*    GetAccumulated()            const   {return accumulated;}
     const   TH1*    GetAccumulatedCorrected()   const   {return accumulatedCorrected;}
     const   char*   GetName()                   const   {return accumulatedCorrected->GetName();}

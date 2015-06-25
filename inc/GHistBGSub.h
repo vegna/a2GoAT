@@ -59,6 +59,7 @@ public:
     virtual Int_t   FillWeighted(const Double_t value, const Double_t weight)                                                                      {return result->FillWeighted(value, weight);}
     virtual Int_t   FillWeighted(const Double_t value, const Double_t weight, const Double_t taggerTime);
     virtual Int_t   FillWeighted(const Double_t value, const Double_t weight, const GTreeTagger& tagger);
+    const   GHistScaCor*    GetResult()            const   {return result;}
     static  Int_t   GetNRandCuts()   {return cutRandMin.size();}
     static  void    InitCuts(const Double_t PromptMin, const Double_t PromptMax, const Double_t RandMin, const Double_t RandMax);
     virtual Bool_t  IsEmpty();
