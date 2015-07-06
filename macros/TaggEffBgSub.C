@@ -1,6 +1,6 @@
 void TaggEffBgSub(TString sBeam, TString sBkg1, TString sBkg2="", Bool_t bFreeScal=false){
-  TFile fBeam(sBeam.Data(),"READ");
-  TFile fBkg1(sBkg1.Data(),"READ");  
+  TFile fBeam(sBeam,"READ");
+  TFile fBkg1(sBkg1,"READ");  
   gROOT->cd();
 
   TH1D *hBeamAllHits = (TH1D*)fBeam.Get("TaggerAllHits");
@@ -33,7 +33,10 @@ void TaggEffBgSub(TString sBeam, TString sBkg1, TString sBkg2="", Bool_t bFreeSc
     dBackInhib += hBkg2LiveTime->GetBinContent(hBkg2LiveTime->GetXaxis()->FindBin("Inhibited"));
   }
 
-  TFile fOut("TaggEff.root","RECREATE");
+  TString sOut = sBeam;
+  sOut.ReplaceAll("GoAT","BkgSub");
+
+  TFile fOut(sOut,"RECREATE");
 
   TH1D *hEffAllHits = (TH1D*)hBeamAllHits->Clone("TaggEffAllHits");
   TH1D *hEffSingles = (TH1D*)hBeamSingles->Clone("TaggEffSingles");
@@ -50,7 +53,22 @@ void TaggEffBgSub(TString sBeam, TString sBkg1, TString sBkg2="", Bool_t bFreeSc
   hEffAllHits->Divide(hEffAccScal);
   hEffSingles->Divide(hEffAccScal);
   hEffDoubles->Divide(hEffAccScal);
-		     
+
+  Double_t dMean = 0;
+  Int_t iMean = 0;
+  for(Int_t i=0; i<hEffAllHits->GetNbinsX(); i++){
+    if(hEffAllHits->GetBinContent(i+1) > 0){
+      dMean += hEffAllHits->GetBinContent(i+1);
+      iMean++;
+    }
+  }
+
+  dMean = 0.015*TMath::Nint(100*dMean/iMean);
+
+  hEffAllHits->GetYaxis()->SetRangeUser(0,dMean);
+  hEffSingles->GetYaxis()->SetRangeUser(0,dMean);
+  hEffDoubles->GetYaxis()->SetRangeUser(0,dMean);
+  
   fOut.Write();
   fOut.Close();
 }
