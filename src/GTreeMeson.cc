@@ -27,10 +27,10 @@ void    GTreeMeson::Clear()
 void    GTreeMeson::SetBranchAdresses()
 {
     GTreeParticle::SetBranchAdresses();
-    inputTree->SetBranchAddress("nSubParticles", nSubParticles);
-    inputTree->SetBranchAddress("nSubRootinos", nSubRootinos);
-    inputTree->SetBranchAddress("nSubPhotons", nSubPhotons);
-    inputTree->SetBranchAddress("nSubChargedPions", nSubChargedPions);
+    if(inputTree->GetBranch("nSubParticles")) inputTree->SetBranchAddress("nSubParticles", nSubParticles);
+    if(inputTree->GetBranch("nSubRootinos")) inputTree->SetBranchAddress("nSubRootinos", nSubRootinos);
+    if(inputTree->GetBranch("nSubPhotons")) inputTree->SetBranchAddress("nSubPhotons", nSubPhotons);
+    if(inputTree->GetBranch("nSubChargedPions")) inputTree->SetBranchAddress("nSubChargedPions", nSubChargedPions);
 }
 
 void    GTreeMeson::SetBranches()

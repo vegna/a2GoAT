@@ -82,126 +82,70 @@ GTreeSetupParameters::~GTreeSetupParameters()
 
 void    GTreeSetupParameters::SetBranchAdresses()
 {
-    inputTree->SetBranchAddress("nTagger", &nTagger);
-    inputTree->SetBranchAddress("TaggerGlobalOffset", &TaggerGlobalOffset);
-    inputTree->SetBranchAddress("TaggerTDCLoThr", TaggerTDCLoThr);
-    inputTree->SetBranchAddress("TaggerTDCHiThr", TaggerTDCHiThr);
-    inputTree->SetBranchAddress("TaggerTDCOffset", TaggerTDCOffset);
-    inputTree->SetBranchAddress("TaggerElectronEnergy", TaggerElectronEnergy);
-    inputTree->SetBranchAddress("TaggerPhotonEnergy", TaggerPhotonEnergy);
+    if(inputTree->GetBranch("nTagger")) inputTree->SetBranchAddress("nTagger", &nTagger);
+    if(inputTree->GetBranch("TaggerGlobalOffset")) inputTree->SetBranchAddress("TaggerGlobalOffset", &TaggerGlobalOffset);
+    if(inputTree->GetBranch("TaggerTDCLoThr")) inputTree->SetBranchAddress("TaggerTDCLoThr", TaggerTDCLoThr);
+    if(inputTree->GetBranch("TaggerTDCHiThr")) inputTree->SetBranchAddress("TaggerTDCHiThr", TaggerTDCHiThr);
+    if(inputTree->GetBranch("TaggerTDCOffset")) inputTree->SetBranchAddress("TaggerTDCOffset", TaggerTDCOffset);
+    if(inputTree->GetBranch("TaggerElectronEnergy")) inputTree->SetBranchAddress("TaggerElectronEnergy", TaggerElectronEnergy);
+    if(inputTree->GetBranch("TaggerPhotonEnergy")) inputTree->SetBranchAddress("TaggerPhotonEnergy", TaggerPhotonEnergy);
     if(inputTree->GetBranch("TaggerEnergyWidth"))
     {
         inputTree->SetBranchAddress("TaggerEnergyWidth", TaggerEnergyWidth);
         hasOverlaps = true;
     }
 
-    inputTree->SetBranchAddress("nNaI", &nNaI);
-    inputTree->SetBranchAddress("NaIGlobalOffset", &NaIGlobalOffset);
-    inputTree->SetBranchAddress("NaIGlobalScale", &NaIGlobalScale);
-    inputTree->SetBranchAddress("NaIMaxClusters", &NaIMaxClusters);
-    inputTree->SetBranchAddress("NaIClusterThr", &NaIClusterThr);
-    inputTree->SetBranchAddress("NaIADCLoThr", NaIADCLoThr);
-    inputTree->SetBranchAddress("NaIADCHiThr", NaIADCHiThr);
-    inputTree->SetBranchAddress("NaIADCGain", NaIADCGain);
-    inputTree->SetBranchAddress("NaITDCLoThr", NaITDCLoThr);
-    inputTree->SetBranchAddress("NaITDCHiThr", NaITDCHiThr);
-    inputTree->SetBranchAddress("NaITDCOffset", NaITDCOffset);
+    if(inputTree->GetBranch("nNaI")) inputTree->SetBranchAddress("nNaI", &nNaI);
+    if(inputTree->GetBranch("NaIGlobalOffset")) inputTree->SetBranchAddress("NaIGlobalOffset", &NaIGlobalOffset);
+    if(inputTree->GetBranch("NaIGlobalScale")) inputTree->SetBranchAddress("NaIGlobalScale", &NaIGlobalScale);
+    if(inputTree->GetBranch("NaIMaxClusters")) inputTree->SetBranchAddress("NaIMaxClusters", &NaIMaxClusters);
+    if(inputTree->GetBranch("NaIClusterThr")) inputTree->SetBranchAddress("NaIClusterThr", &NaIClusterThr);
+    if(inputTree->GetBranch("NaIADCLoThr")) inputTree->SetBranchAddress("NaIADCLoThr", NaIADCLoThr);
+    if(inputTree->GetBranch("NaIADCHiThr")) inputTree->SetBranchAddress("NaIADCHiThr", NaIADCHiThr);
+    if(inputTree->GetBranch("NaIADCGain")) inputTree->SetBranchAddress("NaIADCGain", NaIADCGain);
+    if(inputTree->GetBranch("NaITDCLoThr")) inputTree->SetBranchAddress("NaITDCLoThr", NaITDCLoThr);
+    if(inputTree->GetBranch("NaITDCHiThr")) inputTree->SetBranchAddress("NaITDCHiThr", NaITDCHiThr);
+    if(inputTree->GetBranch("NaITDCOffset")) inputTree->SetBranchAddress("NaITDCOffset", NaITDCOffset);
 
-    inputTree->SetBranchAddress("nPID", &nPID);
-    inputTree->SetBranchAddress("PIDGlobalOffset", &PIDGlobalOffset);
-    inputTree->SetBranchAddress("PIDADCLoThr", PIDADCLoThr);
-    inputTree->SetBranchAddress("PIDADCHiThr", PIDADCHiThr);
-    inputTree->SetBranchAddress("PIDADCPedestal", PIDADCPedestal);
-    inputTree->SetBranchAddress("PIDADCGain", PIDADCGain);
-    inputTree->SetBranchAddress("PIDTDCLoThr", PIDTDCLoThr);
-    inputTree->SetBranchAddress("PIDTDCHiThr", PIDTDCHiThr);
-    inputTree->SetBranchAddress("PIDTDCOffset", PIDTDCOffset);
-    inputTree->SetBranchAddress("PIDPhi", PIDPhi);
+    if(inputTree->GetBranch("nPID")) inputTree->SetBranchAddress("nPID", &nPID);
+    if(inputTree->GetBranch("PIDGlobalOffset")) inputTree->SetBranchAddress("PIDGlobalOffset", &PIDGlobalOffset);
+    if(inputTree->GetBranch("PIDADCLoThr")) inputTree->SetBranchAddress("PIDADCLoThr", PIDADCLoThr);
+    if(inputTree->GetBranch("PIDADCHiThr")) inputTree->SetBranchAddress("PIDADCHiThr", PIDADCHiThr);
+    if(inputTree->GetBranch("PIDADCPedestal")) inputTree->SetBranchAddress("PIDADCPedestal", PIDADCPedestal);
+    if(inputTree->GetBranch("PIDADCGain")) inputTree->SetBranchAddress("PIDADCGain", PIDADCGain);
+    if(inputTree->GetBranch("PIDTDCLoThr")) inputTree->SetBranchAddress("PIDTDCLoThr", PIDTDCLoThr);
+    if(inputTree->GetBranch("PIDTDCHiThr")) inputTree->SetBranchAddress("PIDTDCHiThr", PIDTDCHiThr);
+    if(inputTree->GetBranch("PIDTDCOffset")) inputTree->SetBranchAddress("PIDTDCOffset", PIDTDCOffset);
+    if(inputTree->GetBranch("PIDPhi")) inputTree->SetBranchAddress("PIDPhi", PIDPhi);
 
-    inputTree->SetBranchAddress("nBaF2", &nBaF2);
-    inputTree->SetBranchAddress("BaF2GlobalOffset", &BaF2GlobalOffset);
-    inputTree->SetBranchAddress("BaF2GlobalScale", &BaF2GlobalScale);
-    inputTree->SetBranchAddress("BaF2Distance", &BaF2Distance);
-    inputTree->SetBranchAddress("BaF2MaxClusters", &BaF2MaxClusters);
-    inputTree->SetBranchAddress("BaF2ClusterThr", &BaF2ClusterThr);
-    inputTree->SetBranchAddress("BaF2ADCLoThr", BaF2ADCLoThr);
-    inputTree->SetBranchAddress("BaF2ADCHiThr", BaF2ADCHiThr);
-    inputTree->SetBranchAddress("BaF2ADCPedestal", BaF2ADCPedestal);
-    inputTree->SetBranchAddress("BaF2ADCGain", BaF2ADCGain);
-    inputTree->SetBranchAddress("BaF2TDCLoThr", BaF2TDCLoThr);
-    inputTree->SetBranchAddress("BaF2TDCHiThr", BaF2TDCHiThr);
-    inputTree->SetBranchAddress("BaF2TDCOffset", BaF2TDCOffset);
-    inputTree->SetBranchAddress("BaF2TDCGain", BaF2TDCGain);
+    if(inputTree->GetBranch("nBaF2")) inputTree->SetBranchAddress("nBaF2", &nBaF2);
+    if(inputTree->GetBranch("BaF2GlobalOffset")) inputTree->SetBranchAddress("BaF2GlobalOffset", &BaF2GlobalOffset);
+    if(inputTree->GetBranch("BaF2GlobalScale")) inputTree->SetBranchAddress("BaF2GlobalScale", &BaF2GlobalScale);
+    if(inputTree->GetBranch("BaF2Distance")) inputTree->SetBranchAddress("BaF2Distance", &BaF2Distance);
+    if(inputTree->GetBranch("BaF2MaxClusters")) inputTree->SetBranchAddress("BaF2MaxClusters", &BaF2MaxClusters);
+    if(inputTree->GetBranch("BaF2ClusterThr")) inputTree->SetBranchAddress("BaF2ClusterThr", &BaF2ClusterThr);
+    if(inputTree->GetBranch("BaF2ADCLoThr")) inputTree->SetBranchAddress("BaF2ADCLoThr", BaF2ADCLoThr);
+    if(inputTree->GetBranch("BaF2ADCHiThr")) inputTree->SetBranchAddress("BaF2ADCHiThr", BaF2ADCHiThr);
+    if(inputTree->GetBranch("BaF2ADCPedestal")) inputTree->SetBranchAddress("BaF2ADCPedestal", BaF2ADCPedestal);
+    if(inputTree->GetBranch("BaF2ADCGain")) inputTree->SetBranchAddress("BaF2ADCGain", BaF2ADCGain);
+    if(inputTree->GetBranch("BaF2TDCLoThr")) inputTree->SetBranchAddress("BaF2TDCLoThr", BaF2TDCLoThr);
+    if(inputTree->GetBranch("BaF2TDCHiThr")) inputTree->SetBranchAddress("BaF2TDCHiThr", BaF2TDCHiThr);
+    if(inputTree->GetBranch("BaF2TDCOffset")) inputTree->SetBranchAddress("BaF2TDCOffset", BaF2TDCOffset);
+    if(inputTree->GetBranch("BaF2TDCGain")) inputTree->SetBranchAddress("BaF2TDCGain", BaF2TDCGain);
 
-    inputTree->SetBranchAddress("nVeto", &nVeto);
-    inputTree->SetBranchAddress("VetoGlobalOffset", &VetoGlobalOffset);
-    inputTree->SetBranchAddress("VetoDistance", &VetoDistance);
-    inputTree->SetBranchAddress("VetoADCLoThr", VetoADCLoThr);
-    inputTree->SetBranchAddress("VetoADCHiThr", VetoADCHiThr);
-    inputTree->SetBranchAddress("VetoADCPedestal", VetoADCPedestal);
-    inputTree->SetBranchAddress("VetoADCGain", VetoADCGain);
-    inputTree->SetBranchAddress("VetoTDCLoThr", VetoTDCLoThr);
-    inputTree->SetBranchAddress("VetoTDCHiThr", VetoTDCHiThr);
-    inputTree->SetBranchAddress("VetoTDCOffset", VetoTDCOffset);
+    if(inputTree->GetBranch("nVeto")) inputTree->SetBranchAddress("nVeto", &nVeto);
+    if(inputTree->GetBranch("VetoGlobalOffset")) inputTree->SetBranchAddress("VetoGlobalOffset", &VetoGlobalOffset);
+    if(inputTree->GetBranch("VetoDistance")) inputTree->SetBranchAddress("VetoDistance", &VetoDistance);
+    if(inputTree->GetBranch("VetoADCLoThr")) inputTree->SetBranchAddress("VetoADCLoThr", VetoADCLoThr);
+    if(inputTree->GetBranch("VetoADCHiThr")) inputTree->SetBranchAddress("VetoADCHiThr", VetoADCHiThr);
+    if(inputTree->GetBranch("VetoADCPedestal")) inputTree->SetBranchAddress("VetoADCPedestal", VetoADCPedestal);
+    if(inputTree->GetBranch("VetoADCGain")) inputTree->SetBranchAddress("VetoADCGain", VetoADCGain);
+    if(inputTree->GetBranch("VetoTDCLoThr")) inputTree->SetBranchAddress("VetoTDCLoThr", VetoTDCLoThr);
+    if(inputTree->GetBranch("VetoTDCHiThr")) inputTree->SetBranchAddress("VetoTDCHiThr", VetoTDCHiThr);
+    if(inputTree->GetBranch("VetoTDCOffset")) inputTree->SetBranchAddress("VetoTDCOffset", VetoTDCOffset);
 }
 
 void    GTreeSetupParameters::SetBranches()
 {
-    outputTree->Branch("nTagger", &nTagger, "nTagger/I");
-    outputTree->Branch("TaggerGlobalOffset", &TaggerGlobalOffset, "TaggerGlobalOffset/D");
-    outputTree->Branch("TaggerTDCLoThr", TaggerTDCLoThr, "TaggerTDCLoThr[nTagger]/D");
-    outputTree->Branch("TaggerTDCHiThr", TaggerTDCHiThr, "TaggerTDCHiThr[nTagger]/D");
-    outputTree->Branch("TaggerTDCOffset", TaggerTDCOffset, "TaggerTDCOffset[nTagger]/D");
-    outputTree->Branch("TaggerElectronEnergy", TaggerElectronEnergy, "TaggerElectronEnergy[nTagger]/D");
-    outputTree->Branch("TaggerPhotonEnergy", TaggerPhotonEnergy, "TaggerPhotonEnergy[nTagger]/D");
-    if(hasOverlaps) outputTree->Branch("TaggerEnergyWidth", TaggerEnergyWidth, "TaggerEnergyWidth[nTagger]/D");
-
-    outputTree->Branch("nNaI", &nNaI, "nNaI/I");
-    outputTree->Branch("NaIGlobalOffset", &NaIGlobalOffset, "NaIGlobalOffset/D");
-    outputTree->Branch("NaIGlobalScale", &NaIGlobalScale, "NaIGlobalScale/D");
-    outputTree->Branch("NaIMaxClusters", &NaIMaxClusters, "NaIMaxClusters/I");
-    outputTree->Branch("NaIClusterThr", &NaIClusterThr, "NaIClusterThr/D");
-    outputTree->Branch("NaIADCLoThr", NaIADCLoThr, "NaIADCLoThr[nNaI]/D");
-    outputTree->Branch("NaIADCHiThr", NaIADCHiThr, "NaIADCHiThr[nNaI]/D");
-    outputTree->Branch("NaIADCGain", NaIADCGain, "NaIADCGain[nNaI]/D");
-    outputTree->Branch("NaITDCLoThr", NaITDCLoThr, "NaITDCLoThr[nNaI]/D");
-    outputTree->Branch("NaITDCHiThr", NaITDCHiThr, "NaITDCHiThr[nNaI]/D");
-    outputTree->Branch("NaITDCOffset", NaITDCOffset, "NaITDCOffset[nNaI]/D");
-
-    outputTree->Branch("nPID", &nPID, "nPID/I");
-    outputTree->Branch("PIDGlobalOffset", &PIDGlobalOffset, "PIDGlobalOffset/D");
-    outputTree->Branch("PIDADCLoThr", PIDADCLoThr, "PIDADCLoThr[nPID]/D");
-    outputTree->Branch("PIDADCHiThr", PIDADCHiThr, "PIDADCHiThr[nPID]/D");
-    outputTree->Branch("PIDADCPedestal", PIDADCPedestal, "PIDADCPedestal[nPID]/D");
-    outputTree->Branch("PIDADCGain", PIDADCGain, "PIDADCGain[nPID]/D");
-    outputTree->Branch("PIDTDCLoThr", PIDTDCLoThr, "PIDTDCLoThr[nPID]/D");
-    outputTree->Branch("PIDTDCHiThr", PIDTDCHiThr, "PIDTDCHiThr[nPID]/D");
-    outputTree->Branch("PIDTDCOffset", PIDTDCOffset, "PIDTDCOffset[nPID]/D");
-    outputTree->Branch("PIDPhi", PIDPhi, "PIDPhi[nPID]/D");
-
-    outputTree->Branch("nBaF2", &nBaF2, "nBaF2/I");
-    outputTree->Branch("BaF2GlobalOffset", &BaF2GlobalOffset, "BaF2GlobalOffset/D");
-    outputTree->Branch("BaF2GlobalScale", &BaF2GlobalScale, "BaF2GlobalScale/D");
-    outputTree->Branch("BaF2Distance", &BaF2Distance, "BaF2Distance/D");
-    outputTree->Branch("BaF2MaxClusters", &BaF2MaxClusters, "BaF2MaxClusters/I");
-    outputTree->Branch("BaF2ClusterThr", &BaF2ClusterThr, "BaF2ClusterThr/D");
-    outputTree->Branch("BaF2ADCLoThr", BaF2ADCLoThr, "BaF2ADCLoThr[nBaF2]/D");
-    outputTree->Branch("BaF2ADCHiThr", BaF2ADCHiThr, "BaF2ADCHiThr[nBaF2]/D");
-    outputTree->Branch("BaF2ADCPedestal", BaF2ADCPedestal, "BaF2ADCPedestal[nBaF2]/D");
-    outputTree->Branch("BaF2ADCGain", BaF2ADCGain, "BaF2ADCGain[nBaF2]/D");
-    outputTree->Branch("BaF2TDCLoThr", BaF2TDCLoThr, "BaF2TDCLoThr[nBaF2]/D");
-    outputTree->Branch("BaF2TDCHiThr", BaF2TDCHiThr, "BaF2TDCHiThr[nBaF2]/D");
-    outputTree->Branch("BaF2TDCOffset", BaF2TDCOffset, "BaF2TDCOffset[nBaF2]/D");
-    outputTree->Branch("BaF2TDCGain", BaF2TDCGain, "BaF2TDCGain[nBaF2]/D");
-
-    outputTree->Branch("nVeto", &nVeto, "nVeto/I");
-    outputTree->Branch("VetoGlobalOffset", &VetoGlobalOffset, "VetoGlobalOffset/D");
-    outputTree->Branch("VetoDistance", &VetoDistance, "VetoDistance/D");
-    outputTree->Branch("VetoADCLoThr", VetoADCLoThr, "VetoADCLoThr[nVeto]/D");
-    outputTree->Branch("VetoADCHiThr", VetoADCHiThr, "VetoADCHiThr[nVeto]/D");
-    outputTree->Branch("VetoADCPedestal", VetoADCPedestal, "VetoADCPedestal[nVeto]/D");
-    outputTree->Branch("VetoADCGain", VetoADCGain, "VetoADCGain[nVeto]/D");
-    outputTree->Branch("VetoTDCLoThr", VetoTDCLoThr, "VetoTDCLoThr[nVeto]/D");
-    outputTree->Branch("VetoTDCHiThr", VetoTDCHiThr, "VetoTDCHiThr[nVeto]/D");
-    outputTree->Branch("VetoTDCOffset", VetoTDCOffset, "VetoTDCOffset[nVeto]/D");
+    outputTree = inputTree->CloneTree(0);
 }

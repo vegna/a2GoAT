@@ -29,9 +29,9 @@ GTreeTagger::~GTreeTagger()
 
 void    GTreeTagger::SetBranchAdresses()
 {
-    inputTree->SetBranchAddress("nTagged", 	   &nTagged);
-    inputTree->SetBranchAddress("taggedChannel", taggedChannel);
-    inputTree->SetBranchAddress("taggedTime",    taggedTime);
+    if(inputTree->GetBranch("nTagged")) inputTree->SetBranchAddress("nTagged", 	   &nTagged);
+    if(inputTree->GetBranch("taggedChannel")) inputTree->SetBranchAddress("taggedChannel", taggedChannel);
+    if(inputTree->GetBranch("taggedTime")) inputTree->SetBranchAddress("taggedTime",    taggedTime);
     if(inputTree->GetBranch("taggedEnergy"))
     {
         inputTree->SetBranchAddress("taggedEnergy",  taggedEnergy);
@@ -42,10 +42,7 @@ void    GTreeTagger::SetBranchAdresses()
 
 void    GTreeTagger::SetBranches()
 {
-    outputTree->Branch("nTagged",       &nTagged,      "nTagged/I");
-    outputTree->Branch("taggedChannel", taggedChannel, "taggedChannel[nTagged]/I");
-    outputTree->Branch("taggedTime",    taggedTime,    "taggedTime[nTagged]/D");
-    if(hasEnergy) outputTree->Branch("taggedEnergy",  taggedEnergy,  "taggedEnergy[nTagged]/D");
+    outputTree = inputTree->CloneTree(0);
 }
 
 void    GTreeTagger::DecodeDoubles(const Double_t timingRes, const Bool_t decodeChain)

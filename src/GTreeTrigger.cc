@@ -30,14 +30,14 @@ GTreeTrigger::~GTreeTrigger()
 
 void    GTreeTrigger::SetBranchAdresses()
 {
-    inputTree->SetBranchAddress("energySum", 	      &energySum);
-    inputTree->SetBranchAddress("multiplicity", 	  &multiplicity);
-    inputTree->SetBranchAddress("nTriggerPattern",  &nTriggerPattern);
-    inputTree->SetBranchAddress("triggerPattern",   triggerPattern);
-    inputTree->SetBranchAddress("nErrors", 	      &nErrors);
-    inputTree->SetBranchAddress("errorModuleID",    errorModuleID);
-    inputTree->SetBranchAddress("errorModuleIndex", errorModuleIndex);
-    inputTree->SetBranchAddress("errorCode",        errorCode);
+    if(inputTree->GetBranch("energySum")) inputTree->SetBranchAddress("energySum", 	      &energySum);
+    if(inputTree->GetBranch("multiplicity")) inputTree->SetBranchAddress("multiplicity", 	  &multiplicity);
+    if(inputTree->GetBranch("nTriggerPattern")) inputTree->SetBranchAddress("nTriggerPattern",  &nTriggerPattern);
+    if(inputTree->GetBranch("triggerPattern")) inputTree->SetBranchAddress("triggerPattern",   triggerPattern);
+    if(inputTree->GetBranch("nErrors")) inputTree->SetBranchAddress("nErrors", 	      &nErrors);
+    if(inputTree->GetBranch("errorModuleID")) inputTree->SetBranchAddress("errorModuleID",    errorModuleID);
+    if(inputTree->GetBranch("errorModuleIndex")) inputTree->SetBranchAddress("errorModuleIndex", errorModuleIndex);
+    if(inputTree->GetBranch("errorCode")) inputTree->SetBranchAddress("errorCode",        errorCode);
     if(inputTree->GetBranch("helicity"))
     {
         inputTree->SetBranchAddress("helicity",  &helicity);
@@ -53,17 +53,7 @@ void    GTreeTrigger::SetBranchAdresses()
 
 void    GTreeTrigger::SetBranches()
 {
-    outputTree->Branch("energySum",        &energySum,       "energySum/D");
-    outputTree->Branch("multiplicity",     &multiplicity,    "multiplicity/I");
-    outputTree->Branch("nTriggerPattern",  &nTriggerPattern, "nTriggerPattern/I");
-    outputTree->Branch("triggerPattern",   triggerPattern,   "triggerPattern[nTriggerPattern]/I");
-    outputTree->Branch("nErrors",          &nErrors,         "nErrors/I");
-    outputTree->Branch("errorModuleID",    errorModuleID,    "errorModuleID[nErrors]/I");
-    outputTree->Branch("errorModuleIndex", errorModuleIndex, "errorModuleIndex[nErrors]/I");
-    outputTree->Branch("errorCode",        errorCode,        "errorCode[nErrors]/I");
-    if(hasHelicity) outputTree->Branch("helicity",         &helicity,        "helicity/O");
-    if(hasMCID)     outputTree->Branch("mc_evt_id",        &MC_evt_id,       "mc_evt_id/L");
-    if(hasMCID)     outputTree->Branch("mc_rnd_id",        &MC_rnd_id,       "mc_rnd_id/L");
+    outputTree = inputTree->CloneTree(0);
 }
 
 

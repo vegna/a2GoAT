@@ -5,76 +5,45 @@
 
 void GTreeA2Geant::SetBranchAdresses()
 {
-    inputTree->SetBranchAddress("nhits",&fnhits);
-    inputTree->SetBranchAddress("npart",&fnpart);
-    inputTree->SetBranchAddress("ntaps",&fntaps);
-    inputTree->SetBranchAddress("nvtaps",&fnvtaps);
-    inputTree->SetBranchAddress("vhits",&fvhits);
-    inputTree->SetBranchAddress("plab",plab);
-    inputTree->SetBranchAddress("tctaps",tctaps);
-    inputTree->SetBranchAddress("vertex",fvertex);
-    inputTree->SetBranchAddress("beam",fbeam);
-    inputTree->SetBranchAddress("dircos",dircos);
-    inputTree->SetBranchAddress("ecryst",ecryst);
-    inputTree->SetBranchAddress("tcryst",tcryst);
-    inputTree->SetBranchAddress("ectapfs",ectapfs);
-    inputTree->SetBranchAddress("ectapsl",ectapsl);
-    inputTree->SetBranchAddress("elab",elab);
-    inputTree->SetBranchAddress("eleak",&feleak);
-    inputTree->SetBranchAddress("enai",&fenai);
-    inputTree->SetBranchAddress("etot",&fetot);
-    inputTree->SetBranchAddress("eveto",eveto);
-    inputTree->SetBranchAddress("tveto",tveto);
-    inputTree->SetBranchAddress("evtaps",evtaps);
-    inputTree->SetBranchAddress("icryst",icryst);
-    inputTree->SetBranchAddress("ictaps",ictaps);
-    inputTree->SetBranchAddress("ivtaps",ivtaps);
-    inputTree->SetBranchAddress("idpart",idpart);
-    inputTree->SetBranchAddress("iveto",iveto);
-    inputTree->SetBranchAddress("nmwpc",&fnmwpc);
-    inputTree->SetBranchAddress("imwpc",imwpc);
-    inputTree->SetBranchAddress("mposx",mposx);
-    inputTree->SetBranchAddress("mposy",mposy);
-    inputTree->SetBranchAddress("mposz",mposz);
-    inputTree->SetBranchAddress("emwpc",emwpc);
-    inputTree->SetBranchAddress("mc_evt_id",&mc_evt_id);
-    inputTree->SetBranchAddress("mc_rnd_id",&mc_evt_id);
+    if(inputTree->GetBranch("nhits")) inputTree->SetBranchAddress("nhits",&fnhits);
+    if(inputTree->GetBranch("npart")) inputTree->SetBranchAddress("npart",&fnpart);
+    if(inputTree->GetBranch("ntaps")) inputTree->SetBranchAddress("ntaps",&fntaps);
+    if(inputTree->GetBranch("nvtaps")) inputTree->SetBranchAddress("nvtaps",&fnvtaps);
+    if(inputTree->GetBranch("vhits")) inputTree->SetBranchAddress("vhits",&fvhits);
+    if(inputTree->GetBranch("plab")) inputTree->SetBranchAddress("plab",plab);
+    if(inputTree->GetBranch("tctaps")) inputTree->SetBranchAddress("tctaps",tctaps);
+    if(inputTree->GetBranch("vertex")) inputTree->SetBranchAddress("vertex",fvertex);
+    if(inputTree->GetBranch("beam")) inputTree->SetBranchAddress("beam",fbeam);
+    if(inputTree->GetBranch("dircos")) inputTree->SetBranchAddress("dircos",dircos);
+    if(inputTree->GetBranch("ecryst")) inputTree->SetBranchAddress("ecryst",ecryst);
+    if(inputTree->GetBranch("tcryst")) inputTree->SetBranchAddress("tcryst",tcryst);
+    if(inputTree->GetBranch("ectapfs")) inputTree->SetBranchAddress("ectapfs",ectapfs);
+    if(inputTree->GetBranch("ectapsl")) inputTree->SetBranchAddress("ectapsl",ectapsl);
+    if(inputTree->GetBranch("elab")) inputTree->SetBranchAddress("elab",elab);
+    if(inputTree->GetBranch("eleak")) inputTree->SetBranchAddress("eleak",&feleak);
+    if(inputTree->GetBranch("enai")) inputTree->SetBranchAddress("enai",&fenai);
+    if(inputTree->GetBranch("etot")) inputTree->SetBranchAddress("etot",&fetot);
+    if(inputTree->GetBranch("eveto")) inputTree->SetBranchAddress("eveto",eveto);
+    if(inputTree->GetBranch("tveto")) inputTree->SetBranchAddress("tveto",tveto);
+    if(inputTree->GetBranch("evtaps")) inputTree->SetBranchAddress("evtaps",evtaps);
+    if(inputTree->GetBranch("icryst")) inputTree->SetBranchAddress("icryst",icryst);
+    if(inputTree->GetBranch("ictaps")) inputTree->SetBranchAddress("ictaps",ictaps);
+    if(inputTree->GetBranch("ivtaps")) inputTree->SetBranchAddress("ivtaps",ivtaps);
+    if(inputTree->GetBranch("idpart")) inputTree->SetBranchAddress("idpart",idpart);
+    if(inputTree->GetBranch("iveto")) inputTree->SetBranchAddress("iveto",iveto);
+    if(inputTree->GetBranch("nmwpc")) inputTree->SetBranchAddress("nmwpc",&fnmwpc);
+    if(inputTree->GetBranch("imwpc")) inputTree->SetBranchAddress("imwpc",imwpc);
+    if(inputTree->GetBranch("mposx")) inputTree->SetBranchAddress("mposx",mposx);
+    if(inputTree->GetBranch("mposy")) inputTree->SetBranchAddress("mposy",mposy);
+    if(inputTree->GetBranch("mposz")) inputTree->SetBranchAddress("mposz",mposz);
+    if(inputTree->GetBranch("emwpc")) inputTree->SetBranchAddress("emwpc",emwpc);
+    if(inputTree->GetBranch("mc_evt_id")) inputTree->SetBranchAddress("mc_evt_id",&mc_evt_id);
+    if(inputTree->GetBranch("mc_rnd_id")) inputTree->SetBranchAddress("mc_rnd_id",&mc_evt_id);
 }
 
 void GTreeA2Geant::SetBranches()
 {
-    outputTree->Branch("nhits",&fnhits,"fnhits/I");
-    outputTree->Branch("npart",&fnpart,"fnpart/I");
-    outputTree->Branch("ntaps",&fntaps,"fntaps/I");
-    outputTree->Branch("nvtaps",&fnvtaps,"fnvtaps/I");
-    outputTree->Branch("vhits",&fvhits,"fvhits/I");
-    outputTree->Branch("plab",plab,"fplab[fnpart]/F");
-    outputTree->Branch("tctaps",tctaps,"ftctaps[fntaps]/F");
-    outputTree->Branch("vertex",fvertex,"fvertex[3]/F");
-    outputTree->Branch("beam",fbeam,"fbeam[5]/F");
-    outputTree->Branch("dircos",dircos,"fdircos[fnpart][3]/F");
-    outputTree->Branch("ecryst",ecryst,"fecryst[fnhits]/F");
-    outputTree->Branch("tcryst",tcryst,"ftcryst[fnhits]/F");
-    outputTree->Branch("ectapfs",ectapfs,"fectapfs[fntaps]/F");
-    outputTree->Branch("ectapsl",ectapsl,"fectapsl[fntaps]/F");
-    outputTree->Branch("elab",elab,"felab[fnpart]/F");
-    outputTree->Branch("eleak",&feleak,"feleak/F");
-    outputTree->Branch("enai",&fenai,"fenai/F");
-    outputTree->Branch("etot",&fetot,"fetot/F");
-    outputTree->Branch("eveto",eveto,"feveto[fvhits]/F");
-    outputTree->Branch("tveto",tveto,"ftveto[fvhits]/F");
-    outputTree->Branch("evtaps",evtaps,"fevtaps[fnvtaps]/F");
-    outputTree->Branch("icryst",icryst,"ficryst[fnhits]/I");
-    outputTree->Branch("ictaps",ictaps,"fictaps[fntaps]/I");
-    outputTree->Branch("ivtaps",ivtaps,"fictaps[fnvtaps]/I");
-    outputTree->Branch("idpart",idpart,"fidpart[fnpart]/I");
-    outputTree->Branch("iveto",iveto,"fiveto[fvhits]/I");
-    outputTree->Branch("nmwpc",&fnmwpc,"fnmwpc/I");
-    outputTree->Branch("imwpc",imwpc,"fimwpc[fnmwpc]/I");
-    outputTree->Branch("mposx",mposx,"fmposx[fnmwpc]/F");
-    outputTree->Branch("mposy",mposy,"fmposy[fnmwpc]/F");
-    outputTree->Branch("mposz",mposz,"fmposz[fnmwpc]/F");
-    outputTree->Branch("emwpc",emwpc,"femwpc[fnmwpc]/F");
+    outputTree = inputTree->CloneTree(0);
 }
 
 Double_t GTreeA2Geant::sumArray(const Float_t * const data, const Int_t size)

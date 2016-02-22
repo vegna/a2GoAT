@@ -23,20 +23,20 @@ GTreeParticle::~GTreeParticle()
 
 void    GTreeParticle::SetBranchAdresses()
 {
-    inputTree->SetBranchAddress("nParticles",&nParticles);
-    inputTree->SetBranchAddress("clusterEnergy",  clusterEnergy);
-    inputTree->SetBranchAddress("theta", theta);
-    inputTree->SetBranchAddress("phi",  phi);
-    inputTree->SetBranchAddress("mass", mass);
-    inputTree->SetBranchAddress("time", time);
-    inputTree->SetBranchAddress("clusterSize", clusterSize);
-    inputTree->SetBranchAddress("centralCrystal", centralCrystal);
-    inputTree->SetBranchAddress("centralVeto", centralVeto);
-    inputTree->SetBranchAddress("detectors", detectors);
-    inputTree->SetBranchAddress("vetoEnergy", vetoEnergy);
-    inputTree->SetBranchAddress("MWPC0Energy", MWPC0Energy);
-    inputTree->SetBranchAddress("MWPC1Energy", MWPC1Energy);
-    inputTree->SetBranchAddress("trackIndex", trackIndex);
+    if(inputTree->GetBranch("nParticles")) inputTree->SetBranchAddress("nParticles",&nParticles);
+    if(inputTree->GetBranch("clusterEnergy")) inputTree->SetBranchAddress("clusterEnergy",  clusterEnergy);
+    if(inputTree->GetBranch("theta")) inputTree->SetBranchAddress("theta", theta);
+    if(inputTree->GetBranch("phi")) inputTree->SetBranchAddress("phi",  phi);
+    if(inputTree->GetBranch("mass")) inputTree->SetBranchAddress("mass", mass);
+    if(inputTree->GetBranch("time")) inputTree->SetBranchAddress("time", time);
+    if(inputTree->GetBranch("clusterSize")) inputTree->SetBranchAddress("clusterSize", clusterSize);
+    if(inputTree->GetBranch("centralCrystal")) inputTree->SetBranchAddress("centralCrystal", centralCrystal);
+    if(inputTree->GetBranch("centralVeto")) inputTree->SetBranchAddress("centralVeto", centralVeto);
+    if(inputTree->GetBranch("detectors")) inputTree->SetBranchAddress("detectors", detectors);
+    if(inputTree->GetBranch("vetoEnergy")) inputTree->SetBranchAddress("vetoEnergy", vetoEnergy);
+    if(inputTree->GetBranch("MWPC0Energy")) inputTree->SetBranchAddress("MWPC0Energy", MWPC0Energy);
+    if(inputTree->GetBranch("MWPC1Energy")) inputTree->SetBranchAddress("MWPC1Energy", MWPC1Energy);
+    if(inputTree->GetBranch("trackIndex")) inputTree->SetBranchAddress("trackIndex", trackIndex);
 }
 
 void    GTreeParticle::SetBranches()

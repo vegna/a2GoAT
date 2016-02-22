@@ -20,20 +20,16 @@ GTreeScaler::~GTreeScaler()
 
 void    GTreeScaler::SetBranchAdresses()
 {
-    inputTree->SetBranchAddress("eventNumber", &eventNumber);
-    inputTree->SetBranchAddress("eventID", &eventID);
-    nScalers = inputTree->GetLeaf("scalers")->GetLen();
-    if(nScalers<=GTreeScaler_MAX)
+    if(inputTree->GetBranch("eventNumber")) inputTree->SetBranchAddress("eventNumber", &eventNumber);
+    if(inputTree->GetBranch("eventID")) inputTree->SetBranchAddress("eventID", &eventID);
+    if(inputTree->GetBranch("scalers")) nScalers = inputTree->GetLeaf("scalers")->GetLen();
+    if(nScalers<=GTreeScaler_MAX && nScalers>0)
         inputTree->SetBranchAddress("scalers", scalers);
 }
 
 void    GTreeScaler::SetBranches()
 {
-    outputTree->Branch("eventNumber", &eventNumber, "eventNumber/I");
-    outputTree->Branch("eventID", &eventID, "eventID/I");
-    Char_t str[256];
-    sprintf(str, "scalers[%d]/i", nScalers);
-    outputTree->Branch("scalers", scalers, str);
+    outputTree = inputTree->CloneTree(0);
 }
 
 
