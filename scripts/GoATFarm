@@ -3,6 +3,7 @@
 ConfigFile=$1
 ServerFile=$2
 JobName=$3
+Program=$4
 
 
 ####################################################
@@ -28,20 +29,31 @@ WALLTIME=24:00:00
 print_usage(){
     echo
     echo "Usage:"
-    echo "$exe <GoATConfig> <GoATServer> <JobName>"
+    echo "$exe <GoATConfig> <GoATServer> <JobName> <Program>"
     echo
     echo "<GoATConfig>:   Top level GoAT config file"
     echo "<GoATServer>:   Top level GoAT server file"
     echo "<JobName>:       A directory jobs/<JobName> will be created"
     echo "                 if it doesn't exist and scripts put there"
-    echo "Example: "
+    echo "<Program>:       Optional - Run the specified executable"
+    echo "                 instead of goat"
+    echo "Examples: "
     echo "$exe configfiles/GoAT-Compton.dat configfiles/GoAT-Server.dat myjob"
+    echo "$exe configfiles/GoAT-Compton.dat configfiles/GoAT-Server.dat myjob TaggEff"
 }
 
 #check that we have all the args, otherwise print use
-if [ $# -lt 3 ]; then
-    print_usage;
-    exit 0;
+if [ $# -lt 3 ]
+then
+    print_usage
+    exit 0
+elif [ $# -gt 4 ]
+then
+    print_usage
+    exit 0
+elif [ $# -lt 4 ]
+then
+    Program="goat"
 fi
 
 #Location and suffix for input files
@@ -109,6 +121,7 @@ do
     echo "export GoAT_INPUTFILE=\"$InputFile\""  >> $JobFile;
     echo "export GoAT_OUTPUTFILE=\"$OutputFile\""  >> $JobFile;
     echo "export GoAT_OUTPUTDIR=\"$OutputDir\""  >> $JobFile;
+    echo "export GoAT_PROGRAM=\"$Program\""  >> $JobFile;
     echo "#"  >> $JobFile;
     echo "#This is the executable that gets run on the node"  >> $JobFile;
     echo "GoATNode"  >> $JobFile;

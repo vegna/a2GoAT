@@ -8,7 +8,8 @@
 #GoAT_INPUTFILE:  Input root file
 #GoAT_OUTPUTFILE: Output root file
 #GoAT_OUTPUTDIR:  Where to put the output files on /local/raid
- 
+#GoAT_PROGRAM:    Program to run, i.e. 'goat' or 'TaggEff'
+
 cd $GoAT_MAINDIR
 
 dir=`dirname ${GoAT_OUTPUTFILE}`
@@ -25,8 +26,8 @@ mkdir -p "${GoAT_OUTPUTDIR}/root"
 LogFile="${GoAT_OUTPUTDIR}/log/${tag}.log"
 
 #Now run GoAT
-echo "goat $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile"
-goat $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile
+echo "$GoAT_PROGRAM $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile"
+$GoAT_PROGRAM $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile
 
 #list all the files in the output directory                                     
 echo
