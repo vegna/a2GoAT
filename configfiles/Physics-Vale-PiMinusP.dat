@@ -1,0 +1,36 @@
+#=======================================================================
+# Config file for a Pi0 Analysis of GoAT-Trees
+#=======================================================================
+#
+# Decode double hits in tagger?
+Decode-Doubles: 1
+#
+# Set prompt and random windows (standard library and GH1 library)
+Set-Prompt-Cut:	-20	30
+Add-Random-Cut:	-400	-100
+Add-Random-Cut:	100	400
+
+# Set target mass (for standard physics library)
+#Target-Mass: 938.272
+
+# cut on the tagger channel (for standard physics library)
+#Tagger-Channel-Cut: 200 300
+Tagger-Channel-Cut: 0 352
+
+# where are the tagger scalers?
+#Tagger-Scalers: 268 619
+#Tagger-Scalers:	400 752
+# Quella che segue e' la nuova numerazione dei canali scaler del tagger (Modificati da Susanna)
+Tagger-Scalers:	2864	2064	2576	2288	2000	2352	2640	2032	2320	2608	2896
+
+
+# where are the live time scalers?
+# first is clock, second is inhibited, third (optional) is tagger inhib
+Live-Time-Scalers: 191 190
+
+# where are the pair scalers? (Li ha aggiunti susanna)
+SumGated-Scalers:	2928	2160	2672	2384	2096	2448	2736	2128	2416	2704	2960
+SumGatedDly-Scalers:	2992	2256	2768	2480	2192	2544	2832	2224	2512	2800	3024
+SumOpen-Scalers:	2864	2064	2576	2288	2000	2352	2640	2032	2320	2608	2896
+
+Display-Scalers: AllScl 0 8705
