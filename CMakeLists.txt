@@ -135,6 +135,17 @@ add_executable(pi0-example
    )
 target_link_libraries(pi0-example ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(PiMinusProton
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/PiMinusProton.h
+   src/PiMinusProton.cc
+   src/PiMinusProton_main.cc
+   )
+target_link_libraries(PiMinusProton ${LIBS} ${ROOT_LIBRARIES})
+
 # install some scripts to the bin directory
 # by creating symlinks
 file(GLOB CORE_EXTRA_SCRIPTS "scripts/*")
