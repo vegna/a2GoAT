@@ -16,17 +16,44 @@ class	PiMinusProton  : public PPhysics
 {
 private:
 
-    TH1* tracks;
-    TH1* particles;
-    TH2* coplanarity;
-    TH2* coplanarity_tagliato;
-    TH1* timediff;
-    TH1* timediff_tagliato;
+    TH1* nTracks;
+    TH1* nParticles;
+    TH2* Coplanarity;
+    TH2* CoplanaritySelection;
+    TH1* TimeDiffBetweenCharged;
+    TH1* TimeDiffSelectionBetweenCharged;
 
+    TH1* nIncomingPhotonsAll;
+    TH1* nIncomingPhotonsInPromptPeak;
+    TH1* timeIncomingPhotons;
+    TH2* timeCorrelationIncomingPhotonVsChargedParticlesAll;
+    TH2* timeCorrelationIncomingPhotonVsChargedParticlesSelected;
+    TH1* energyIncomingPhotonsAll;
+    TH1* energyIncomingPhotonSelected;
+
+    TH2* PCalcDenum1VsPCalcDenum2;
+    TH1* PYConservation;
+    TH2* ChargedParticleHypothesis;
+
+
+//  counters to perform checks at the end of the analysis
     Int_t evtNum;
     Int_t nIncompatibleWithGoat;
     Int_t nBadCoplanarity;
     Int_t nBadTimeCorrelationBetweenChargedParticles;
+
+    Int_t nNoPhotonsInPromptPeak;
+    Int_t nTooManyPhotonsInPromptPeak;
+    Int_t nBadTimeCorrelationIncomingPhotonWithChargedParticles;
+
+    Int_t nAlgebraicalFailInCalcMomenta;
+
+    Int_t IndexIncomingPhoton;
+
+    TLorentzVector lvIncomingPhoton;
+    TLorentzVector lvTarget;
+    TLorentzVector lvRecoilProton;
+    TLorentzVector lvPiMinus;
 
 protected:
     virtual Bool_t  Start();
@@ -41,6 +68,8 @@ public:
 
     Bool_t CheckInitialConditions();
     Bool_t CheckChargedCorrelation(Int_t NSigmaCoplanarity, Int_t NSigmaTime);
+    Bool_t CheckTagger();
+    Bool_t CalcMomenta();
 //    void FillTracks(const GTreeTrack& tree, TH1* Hist);
 //    void FillParticles(const GTreeTrack& tree, TH1* Hist);
 /*
