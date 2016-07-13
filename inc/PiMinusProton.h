@@ -9,8 +9,9 @@
 #include "GTreeManager.h"
 #include "PPhysics.h"
 #include "TH2.h"
-#include "TH3.h"
-#include "TRandom3.h"
+//#include "TH3.h"
+//#include "TRandom3.h"
+#include <TCutG.h>
 
 class	PiMinusProton  : public PPhysics
 {
@@ -35,6 +36,14 @@ private:
     TH1* PYConservation;
     TH2* ChargedParticleHypothesis;
 
+    TH2* ProtonAnglesGCut;
+    TH2* PionAnglesGCut;
+    TH2* ProtoMomentumVsThetaGCut;
+    TH2* PionMomentumVsThetaGCut;
+    TH2* TargetMassGCut;
+
+    TCutG* Proton;
+    TCutG* Pion;
 
 //  counters to perform checks at the end of the analysis
     Int_t evtNum;

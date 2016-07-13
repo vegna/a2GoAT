@@ -18,7 +18,14 @@ PiMinusProton::PiMinusProton(){
 
     PCalcDenum1VsPCalcDenum2 = new TH2F("PCalcDenum1VsPCalcDenum2","Denum2 Vs Denum1 - Formulas for momentum P2 calculation",2.1,-1.05,1.05,101,-10.05,10.05);
     PYConservation = new TH1F("PYConservation","Momentum conservation along Y-Axis (P_Y^{Tot}) [MeV]",801,-400.5,400.5);
-    ChargedParticleHypothesis = new TH2F("ChargedParticleHypothesis","Energy conservation",751,-1.,3001.,751,-1.,3001);
+    ChargedParticleHypothesis = new TH2F("ChargedParticleHypothesis","Mass of the Target Particle [MeV]",751,-1.,3001.,751,-1.,3001);
+
+    ProtonAnglesGCut = new TH2F("ProtonAnglesGCut","Theta [deg] Vs Phi [deg] - Proton",361,-180.5,180.5,181,-0.5,180.5);
+    PionAnglesGCut = new TH2F("PionAnglesGCut","Theta [deg] Vs Phi [deg] - Pion",361,-180.5,180.5,181,-0.5,180.5);
+    ProtoMomentumVsThetaGCut = new TH2F("ProtoMomentumVsThetaGCut","Theta [deg] Vs Momentum [MeV] - Proton",1001,-1.,2001.,181,-0.5,180.5);
+    PionMomentumVsThetaGCut = new TH2F("PionMomentumVsThetaGCut","Theta [deg] Vs Momentum [MeV] - Pion",1001,-1.,2001.,181,-0.5,180.5);
+    TargetMassGCut = new TH2F("TargetMassGCut","Mass of the Target Particle [MeV]",751,-1.,3001.,751,-1.,3001);
+
 }
 
 PiMinusProton::~PiMinusProton(){
@@ -196,6 +203,9 @@ Bool_t PiMinusProton::CalcMomenta(){
     Double_t Theta2 = GetRootinos()->GetTheta(1)*TMath::DegToRad();
     Double_t Phi2   = GetRootinos()->GetPhi(1)*TMath::DegToRad();
 
+    Int_t NProtonsInCut = 0;
+    Int_t NPionsInCut = 0;
+
     Double_t Denum1 = TMath::Sin(Theta1)*TMath::Cos(Phi1);
     if (Denum1 ==0){
 	nAlgebraicalFailInCalcMomenta++;
@@ -224,6 +234,61 @@ Bool_t PiMinusProton::CalcMomenta(){
     Double_t Ene2_B = TMath::Sqrt(P2*P2 + 938*938); // charged 1 = proton
 
     ChargedParticleHypothesis->Fill(Ene1_A+Ene2_A-lvIncomingPhoton.E(),Ene1_B+Ene2_B-lvIncomingPhoton.E());
+
+    // hypothesis on the base of the graphical cut for the central detector
+
+    TCutG* IsItAProton;
+    TCutG* IsItAPion;
+
+    Int_t IndexProton, IndexPion;
+
+    TFile ProtonCut("/hsag/maritozzo/vale/Mainz/data/outPreSelection/proton.root","READ");
+    TFile PionCut("/hsag/maritozzo/vale/Mainz/data/outPreSelection/pion.root","READ");
+
+    if(!ProtonCut.IsOpen()){
+        cerr << "Can't open ProtonCut file! " << endl;
+    } else {
+	ProtonCut.GetObject("CUTG",IsItAProton);
+    }
+    if(!PionCut.IsOpen()){
+        cerr << "Can't open PionCut file! " << endl;
+    } else {
+	PionCut.GetObject("CUTG",IsItAPion);
+    }
+//    cout << "Charged particle number 1: ClEnergy: " << GetRootinos()->GetClusterEnergy(0) << "    Veto Energy : " << GetRootinos()->GetVetoEnergy(0) << endl;
+
+    if(IsItAProton->IsInside(GetRootinos()->GetClusterEnergy(0),GetRootinos()->GetVetoEnergy(0))){
+	NProtonsInCut++;
+	IndexProton=0;
+    } else {
+	if(IsItAPion->IsInside(GetRootinos()->GetClusterEnergy(0),GetRootinos()->GetVetoEnergy(0))){
+	    NPionsInCut++;
+	    IndexPion = 0;
+	}
+    }
+
+    if(IsItAProton->IsInside(GetRootinos()->GetClusterEnergy(1),GetRootinos()->GetVetoEnergy(1))){
+	NProtonsInCut++;
+	IndexProton=1;
+    } else {
+	if(IsItAPion->IsInside(GetRootinos()->GetClusterEnergy(1),GetRootinos()->GetVetoEnergy(1))){
+	    NPionsInCut++;
+	    IndexPion=1;
+	}
+    }
+
+    cout << "According with graphical cuts: NProtons = " << NProtonsInCut <<"     , NPions = " << NPionsInCut << endl;
+
+    if((NProtonsInCut==1)&&(NPionsInCut==1)){
+	ProtonAnglesGCut->Fill(GetRootinos()->GetPhi(IndexProton),GetRootinos()->GetTheta(IndexProton));
+	PionAnglesGCut->Fill(GetRootinos()->GetPhi(IndexPion),GetRootinos()->GetTheta(IndexPion));
+//	ProtoMomentumVsThetaGCut
+//    TH2* PionMomentumVsThetaGCut;
+//    TH2* TargetMassGCut;
+	
+
+    }
+
 
     return kTRUE;
 
