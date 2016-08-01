@@ -1,30 +1,94 @@
 #include "PiMinusProton.h"
 
 PiMinusProton::PiMinusProton(){ 
-    nTracks = new TH1F("nTracks","Number of tracks",11,-0.5,10.5);
-    nParticles = new TH1F("nParticles","Number of particles",11,-0.5,10.5);
-    Coplanarity = new TH2F("CoplanarityVsPhi1","(#phi_0 - #phi_1) [deg] Vs #phi_1 [deg]",361,-180.5,180.5,721.,-360.5,360.5);
-    CoplanaritySelection = new TH2F("CoplanaritySelectionVsPhi1","(#phi_0 - #phi_1) [deg] Vs #phi_1 [deg]",361,-180.5,180.5,721.,-360.5,360.5);
-    TimeDiffBetweenCharged = new TH1F("TimeDiffBetweenCharged","Time difference between the two charged particles [ns]",201,-100.5,100.5);
-    TimeDiffSelectionBetweenCharged = new TH1F("TimeDiffSelectionBetweenCharged","Time difference between the two charged particles [ns]",201,-100.5,100.5);
-    
-    nIncomingPhotonsAll = new TH1F("nIncomingPhotonsAll","Number of incoming photons - All",101,-0.5,100.5);
-    nIncomingPhotonsInPromptPeak = new TH1F("nIncomingPhotonsInPromptPeak","Number of incoming photons - Only in Prompt Peak",51,-0.5,50.5);
-    timeIncomingPhotons = new TH1F("timeIncomingPhotons","time of incoming photons [ns]",201,-100.5,100.5);
+    nTracks = new TH1F("nTracks","PreSelected events",11,-0.5,10.5);
+    nTracks->GetXaxis()->SetTitle("Number of Tracks");
+//    nTracks->GetYAxis()->SetTitle("counts");
+
+    nParticles = new TH1F("nParticles","PreSelected events",11,-0.5,10.5);
+    nParticles->GetXaxis()->SetTitle("Number of Particles");
+//    nParticles->GetYAxis()->SetTitle("counts");
+
+    Coplanarity = new TH2F("CoplanarityVsPhi1","Azimuthal correlation between the 2 charged particles",361,-180.5,180.5,721.,-360.5,360.5);
+    Coplanarity->GetXaxis()->SetTitle("#phi_2 [deg]");
+    Coplanarity->GetYaxis()->SetTitle("#phi_1 - #phi_2 [deg]");
+
+    CoplanaritySelection = new TH2F("CoplanaritySelectionVsPhi1","Azimuthal correlation between the 2 charged particles",361,-180.5,180.5,721.,-360.5,360.5);
+    CoplanaritySelection->GetXaxis()->SetTitle("#phi_2 [deg]");
+    CoplanaritySelection->GetYaxis()->SetTitle("#phi_1 - #phi_2 [deg]");
+
+
+    TimeDiffBetweenCharged = new TH1F("TimeDiffBetweenCharged","Time correlation between the two charged particles",201,-100.5,100.5);
+    TimeDiffBetweenCharged->GetXaxis()->SetTitle("time_1 - time_2 [ns]");
+
+    TimeDiffSelectionBetweenCharged = new TH1F("TimeDiffSelectionBetweenCharged","Time correlation between the two charged particles",201,-100.5,100.5);
+    TimeDiffSelectionBetweenCharged->GetXaxis()->SetTitle("time_1 - time_2 [ns]");
+
+    nIncomingPhotonsAll = new TH1F("nIncomingPhotonsAll","Tagger - All",101,-0.5,100.5);
+    nIncomingPhotonsAll->GetXaxis()->SetTitle("Number of #gamma");
+
+    nIncomingPhotonsInPromptPeak = new TH1F("nIncomingPhotonsInPromptPeak","Tagger - Prompt Peak",51,-0.5,50.5);
+    nIncomingPhotonsInPromptPeak->GetXaxis()->SetTitle("Number of #gamma");
+
+    timeIncomingPhotons = new TH1F("timeIncomingPhotons","Tagger - All",201,-100.5,100.5);
+    timeIncomingPhotons->GetXaxis()->SetTitle("time  of #gamma [ns]");
+
     timeCorrelationIncomingPhotonVsChargedParticlesAll = new TH2F("timeCorrelationIncomingPhotonVsChargedParticlesAll"," Timing between incoming photons and final state charged particles - All",301,-150.5,150.5,301,-150.5,150.5);
+    timeCorrelationIncomingPhotonVsChargedParticlesAll->GetXaxis()->SetTitle("time_#gamma - time_1 [ns]");
+    timeCorrelationIncomingPhotonVsChargedParticlesAll->GetYaxis()->SetTitle("time_#gamma - time_2 [ns]");
+
     timeCorrelationIncomingPhotonVsChargedParticlesSelected = new TH2F("timeCorrelationIncomingPhotonVsChargedParticlesSelected"," Timing between incoming photons and final state charged particles - Selected",81,-40.5,40.5,81,-40.5,40.5);
-    energyIncomingPhotonsAll = new TH1F("energyIncomingPhotonsAll","Incoming Photons Spectrum [MeV] - All Tagged Photons",751,-0.5,1500.5);
-    energyIncomingPhotonSelected = new TH1F("energyIncomingPhotonSelected","Incoming Photond Spectrum [MeV] - Selected Events (Only 1 inc #gamma)",751,-0.5,1500.5);
+    timeCorrelationIncomingPhotonVsChargedParticlesSelected->GetXaxis()->SetTitle("time_#gamma - time_1 [ns]");
+    timeCorrelationIncomingPhotonVsChargedParticlesSelected->GetXaxis()->SetTitle("time_#gamma - time_2 [ns]");
 
-    PCalcDenum1VsPCalcDenum2 = new TH2F("PCalcDenum1VsPCalcDenum2","Denum2 Vs Denum1 - Formulas for momentum P2 calculation",2.1,-1.05,1.05,101,-10.05,10.05);
-    PYConservation = new TH1F("PYConservation","Momentum conservation along Y-Axis (P_Y^{Tot}) [MeV]",801,-400.5,400.5);
-    ChargedParticleHypothesis = new TH2F("ChargedParticleHypothesis","Mass of the Target Particle [MeV]",751,-1.,3001.,751,-1.,3001);
+    energyIncomingPhotonsAll = new TH1F("energyIncomingPhotonsAll","Tagger - All",751,-0.5,1500.5);
+    energyIncomingPhotonsAll->GetXaxis()->SetTitle("Energy [MeV]");
 
-    ProtonAnglesGCut = new TH2F("ProtonAnglesGCut","Theta [deg] Vs Phi [deg] - Proton",361,-180.5,180.5,181,-0.5,180.5);
-    PionAnglesGCut = new TH2F("PionAnglesGCut","Theta [deg] Vs Phi [deg] - Pion",361,-180.5,180.5,181,-0.5,180.5);
-    ProtoMomentumVsThetaGCut = new TH2F("ProtoMomentumVsThetaGCut","Theta [deg] Vs Momentum [MeV] - Proton",1001,-1.,2001.,181,-0.5,180.5);
-    PionMomentumVsThetaGCut = new TH2F("PionMomentumVsThetaGCut","Theta [deg] Vs Momentum [MeV] - Pion",1001,-1.,2001.,181,-0.5,180.5);
-    TargetMassGCut = new TH2F("TargetMassGCut","Mass of the Target Particle [MeV]",751,-1.,3001.,751,-1.,3001);
+    energyIncomingPhotonSelected = new TH1F("energyIncomingPhotonSelected","Tagger - Selected (only 1 #gamma in Prompt Peak)",751,-0.5,1500.5);
+    energyIncomingPhotonSelected->GetXaxis()->SetTitle("Energy [MeV]");
+
+    PCalcDenum1VsPCalcDenum2 = new TH2F("PCalcDenum2VsPCalcDenum1","Checks formula for momenta P1 and P2 calculation",2.1,-1.05,1.05,101,-10.05,10.05);
+    PCalcDenum1VsPCalcDenum2->GetYaxis()->SetTitle("Denum2 = cos(#theta_2) - cos(#theta_1)*sin(#theta_2)*cos(#phi_2)/(Denum1)");
+    PCalcDenum1VsPCalcDenum2->GetXaxis()->SetTitle("Denum1 = sin(#theta_1)*cos(#phi_11)");
+
+    
+    PYConservation = new TH1F("PYConservation","Momentum conservation along Y-Axis",801,-400.5,400.5);
+    PYConservation->GetXaxis()->SetTitle("P^y_Tot = P^y_P + P^y_#pi [MeV]");
+
+    ChargedParticleHypothesis = new TH2F("ChargedParticleHypothesis","Calculated Mass of the Target Particle",751,-1.,3001.,751,-1.,3001);
+    ChargedParticleHypothesis->GetXaxis()->SetTitle("M_T [MeV] (if Proton = charged1 and Pion = charged2)");
+    ChargedParticleHypothesis->GetYaxis()->SetTitle("M _T[MeV] (if Proton = charged2 and Pion = charged1)");
+
+    ProtonAnglesGCut = new TH2F("ProtonAnglesGCut","Selection through graphical cut - Proton",361,-180.5,180.5,181,-0.5,180.5);
+    ProtonAnglesGCut->GetXaxis()->SetTitle("#phi_P [deg]");
+    ProtonAnglesGCut->GetXaxis()->SetTitle("#theta_P [deg]");
+
+    PionAnglesGCut = new TH2F("PionAnglesGCut","Selection through graphical cut - Pion",361,-180.5,180.5,181,-0.5,180.5);
+    PionAnglesGCut->GetXaxis()->SetTitle("#phi_#pi [deg]");
+    PionAnglesGCut->GetYaxis()->SetTitle("#theta_#pi [deg]");
+
+    ProtonMomentumVsThetaGCut = new TH2F("ProtonMomentumVsThetaGCut","Selection through graphical cut - Proton",1001,-1.,2001.,181,-0.5,180.5);
+    ProtonMomentumVsThetaGCut->GetXaxis()->SetTitle("momentum_P [MeV]");
+    ProtonMomentumVsThetaGCut->GetYaxis()->SetTitle("#theta_P [deg]");
+
+    PionMomentumVsThetaGCut = new TH2F("PionMomentumVsThetaGCut","Selection through graphical cut - Pion",1001,-1.,2001.,181,-0.5,180.5);
+    PionMomentumVsThetaGCut->GetYaxis()->SetTitle("momentum_#pi [MeV]");
+    PionMomentumVsThetaGCut->GetYaxis()->SetTitle("#theta_#pi [deg]");
+
+    TargetMassGCut = new TH1F("TargetMassGCut","Calculated Mass of the Target Particle",751,-1.,3001.);
+    TargetMassGCut->GetXaxis()->SetTitle("M_T [MeV] (if P and #pi selected with graphical cut)");
+
+    InvariantMassVSTargetMassGCut = new TH2F("InvariantMassVSTargetMassGCut","Mass of the Proton-Pion System [MeV] Vs Target Mass [MeV]",751,-1.,3001.,751,-1.,3001.);
+    InvariantMassVSTargetMassGCut->GetXaxis()->SetTitle("M_T [MeV] (if P and #pi selected with graphical cut)");
+    InvariantMassVSTargetMassGCut->GetYaxis()->SetTitle("M(P,#pi) [MeV]");
+
+    InvariantMassVSEGammaGCut = new TH2F("InvariantMassVSEGammaGCut","Mass of the Proton-Pion System [MeV] Vs  Incoming Photon Energy [MeV]",751,-1.,3001.,751,-1.,3001.);
+    InvariantMassVSEGammaGCut->GetXaxis()->SetTitle("Incoming Photon Energy E_#gamma [MeV]");
+    InvariantMassVSEGammaGCut->GetYaxis()->SetTitle("M(P,#pi) [MeV]");
+
+    TargetMassVSEGammaGCut = new TH2F("TargetMassVSEGammaGCut","Target Mass [MeV] Vs  Incoming Photon Energy [MeV]",751,-1.,3001.,751,-1.,3001.);
+    TargetMassVSEGammaGCut->GetXaxis()->SetTitle("Incoming Photon Energy E_#gamma [MeV]");
+    TargetMassVSEGammaGCut->GetYaxis()->SetTitle("M_T [MeV] (if P and #pi selected with graphical cut)");
 
 }
 
@@ -82,6 +146,7 @@ void PiMinusProton::ProcessEvent(){
 	    if (CheckTagger()){
 		lvIncomingPhoton.SetPxPyPzE(0.,0.,GetTagger()->GetTaggedEnergy(IndexIncomingPhoton),GetTagger()->GetTaggedEnergy(IndexIncomingPhoton));
 		if(CalcMomenta()){
+		    FillHistograms();
 		    evtNum++;
 		}  // close CalcMomenta
 	    }  // close CheckTagger
@@ -91,7 +156,7 @@ void PiMinusProton::ProcessEvent(){
 
 
 
-void	PiMinusProton::ProcessScalerRead(){
+void PiMinusProton::ProcessScalerRead(){
 /*
   // Fill Tagger Scalers
   //  FillScalers(GetTC_scaler_min(),GetTC_scaler_max(),TaggerAccScal);
@@ -197,6 +262,9 @@ Bool_t PiMinusProton::CalcMomenta(){
 
     Double_t P1 = -999.;  // magnitude of the 3-momentum of charged particle 0 --> it can not be negative!!!
     Double_t P2 = -999.;  // magnitude of the 3-momenutm of charged particle 1 --> it can not be negative!!!
+    
+    Double_t MProton = 938.272013;  // Proton Mass  in MeV
+    Double_t MPion = 139.57018; // Pion Mass in MeV
 
     Double_t Theta1 = GetRootinos()->GetTheta(0)*TMath::DegToRad();
     Double_t Phi1   = GetRootinos()->GetPhi(0)*TMath::DegToRad();
@@ -226,12 +294,12 @@ Bool_t PiMinusProton::CalcMomenta(){
     PYConservation->Fill(DeltaPY);
 
     // hypothesis A) charged 1 = proton; charged 2 = pion
-    Double_t Ene1_A = TMath::Sqrt(P1*P1 + 938*938); // charged 1 = proton
-    Double_t Ene2_A = TMath::Sqrt(P2*P2 + 139*139); // charged 2 = pion
+    Double_t Ene1_A = TMath::Sqrt(P1*P1 + MProton*MProton); // charged 1 = proton
+    Double_t Ene2_A = TMath::Sqrt(P2*P2 + MPion*MPion); // charged 2 = pion
 
     // hypothesis B) charged 1 = pion; charged 2 = proton
-    Double_t Ene1_B = TMath::Sqrt(P1*P1 + 139*139); // charged 2 = pion
-    Double_t Ene2_B = TMath::Sqrt(P2*P2 + 938*938); // charged 1 = proton
+    Double_t Ene1_B = TMath::Sqrt(P1*P1 + MPion*MPion); // charged 2 = pion
+    Double_t Ene2_B = TMath::Sqrt(P2*P2 + MProton*MProton); // charged 1 = proton
 
     ChargedParticleHypothesis->Fill(Ene1_A+Ene2_A-lvIncomingPhoton.E(),Ene1_B+Ene2_B-lvIncomingPhoton.E());
 
@@ -270,26 +338,55 @@ Bool_t PiMinusProton::CalcMomenta(){
     if(IsItAProton->IsInside(GetRootinos()->GetClusterEnergy(1),GetRootinos()->GetVetoEnergy(1))){
 	NProtonsInCut++;
 	IndexProton=1;
-    } else {
+    } else { 
 	if(IsItAPion->IsInside(GetRootinos()->GetClusterEnergy(1),GetRootinos()->GetVetoEnergy(1))){
 	    NPionsInCut++;
 	    IndexPion=1;
 	}
     }
 
-    cout << "According with graphical cuts: NProtons = " << NProtonsInCut <<"     , NPions = " << NPionsInCut << endl;
+//    cout << "According with graphical cuts: NProtons = " << NProtonsInCut <<"     , NPions = " << NPionsInCut << endl;
 
     if((NProtonsInCut==1)&&(NPionsInCut==1)){
-	ProtonAnglesGCut->Fill(GetRootinos()->GetPhi(IndexProton),GetRootinos()->GetTheta(IndexProton));
-	PionAnglesGCut->Fill(GetRootinos()->GetPhi(IndexPion),GetRootinos()->GetTheta(IndexPion));
-//	ProtoMomentumVsThetaGCut
-//    TH2* PionMomentumVsThetaGCut;
-//    TH2* TargetMassGCut;
-	
+	Double_t ThetaProton = GetRootinos()->GetTheta(IndexProton)*TMath::DegToRad();
+	Double_t PhiProton = GetRootinos()->GetPhi(IndexProton)*TMath::DegToRad();
+	Double_t ThetaPion = GetRootinos()->GetTheta(IndexPion)*TMath::DegToRad();
+	Double_t PhiPion = GetRootinos()->GetPhi(IndexPion)*TMath::DegToRad();
+ 
+// same algorithm as before. Now we call Proton what before was particle 2 and pion what before was particle 1
+
+	Double_t Factor1 = TMath::Sin(ThetaPion)*TMath::Cos(PhiPion);
+	Double_t Factor2 = TMath::Cos(ThetaProton) - TMath::Cos(ThetaPion)*TMath::Sin(ThetaProton)*TMath::Cos(PhiProton)/(Factor1);
+
+	Double_t PProton = lvIncomingPhoton.E()/Factor2;
+	Double_t PPion = -1. * PProton * TMath::Sin(ThetaProton)*TMath::Cos(PhiProton)/Denum1;
+
+	lvRecoilProton.SetPxPyPzE(PProton*TMath::Sin(ThetaProton)*TMath::Cos(PhiProton),
+				  PProton*TMath::Sin(ThetaProton)*TMath::Sin(PhiProton),
+				  PProton*TMath::Cos(ThetaProton),
+				  TMath::Sqrt(PProton*PProton+MProton*MProton));
+	lvPiMinus.SetPxPyPzE(PPion*TMath::Sin(ThetaPion)*TMath::Cos(PhiPion),
+			     PPion*TMath::Sin(ThetaPion)*TMath::Sin(PhiPion),
+			     PPion*TMath::Cos(ThetaPion),
+			     TMath::Sqrt(PPion*PPion+MPion*MPion));
+	lvTarget = lvRecoilProton + lvPiMinus - lvIncomingPhoton;
+	lvInvariantSystem = lvRecoilProton + lvPiMinus;
+
 
     }
 
-
     return kTRUE;
+}
 
+
+void PiMinusProton::FillHistograms(){
+
+	ProtonAnglesGCut->Fill(lvRecoilProton.Phi()*TMath::RadToDeg(),lvRecoilProton.Theta()*TMath::RadToDeg());
+	PionAnglesGCut->Fill(lvPiMinus.Phi()*TMath::RadToDeg(),lvPiMinus.Theta()*TMath::RadToDeg());
+	ProtonMomentumVsThetaGCut->Fill(lvRecoilProton.P(),lvRecoilProton.Theta()*TMath::RadToDeg());
+	PionMomentumVsThetaGCut->Fill(lvPiMinus.P(),lvPiMinus.Theta()*TMath::RadToDeg());
+	TargetMassGCut->Fill(lvTarget.M());
+	InvariantMassVSTargetMassGCut->Fill(lvTarget.M(),lvInvariantSystem.M());
+	InvariantMassVSEGammaGCut->Fill(lvIncomingPhoton.E(),lvInvariantSystem.M());
+	TargetMassVSEGammaGCut->Fill(lvIncomingPhoton.E(),lvTarget.M());
 }

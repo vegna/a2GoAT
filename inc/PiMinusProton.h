@@ -38,9 +38,12 @@ private:
 
     TH2* ProtonAnglesGCut;
     TH2* PionAnglesGCut;
-    TH2* ProtoMomentumVsThetaGCut;
+    TH2* ProtonMomentumVsThetaGCut;
     TH2* PionMomentumVsThetaGCut;
-    TH2* TargetMassGCut;
+    TH1* TargetMassGCut;
+    TH2* InvariantMassVSTargetMassGCut;
+    TH2* InvariantMassVSEGammaGCut;
+    TH2* TargetMassVSEGammaGCut;
 
     TCutG* Proton;
     TCutG* Pion;
@@ -63,6 +66,7 @@ private:
     TLorentzVector lvTarget;
     TLorentzVector lvRecoilProton;
     TLorentzVector lvPiMinus;
+    TLorentzVector lvInvariantSystem;
 
 protected:
     virtual Bool_t  Start();
@@ -79,6 +83,8 @@ public:
     Bool_t CheckChargedCorrelation(Int_t NSigmaCoplanarity, Int_t NSigmaTime);
     Bool_t CheckTagger();
     Bool_t CalcMomenta();
+    void FillHistograms();
+
 //    void FillTracks(const GTreeTrack& tree, TH1* Hist);
 //    void FillParticles(const GTreeTrack& tree, TH1* Hist);
 /*
