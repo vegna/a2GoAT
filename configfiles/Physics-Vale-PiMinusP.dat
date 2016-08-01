@@ -6,7 +6,7 @@
 Decode-Doubles: 1
 #
 # Set prompt and random windows (standard library and GH1 library)
-Set-Prompt-Cut:	-20	30
+Set-Prompt-Cut:	-10	30
 Add-Random-Cut:	-400	-100
 Add-Random-Cut:	100	400
 
