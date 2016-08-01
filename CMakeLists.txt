@@ -146,6 +146,17 @@ add_executable(PiMinusProton
    )
 target_link_libraries(PiMinusProton ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(NeutralsTimeCorrelations
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/NeutralsTimeCorrelations.h
+   src/NeutralsTimeCorrelations.cc
+   src/NeutralsTimeCorrelations_main.cc
+   )
+target_link_libraries(NeutralsTimeCorrelations ${LIBS} ${ROOT_LIBRARIES})
+
 # install some scripts to the bin directory
 # by creating symlinks
 file(GLOB CORE_EXTRA_SCRIPTS "scripts/*")
